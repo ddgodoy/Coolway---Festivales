@@ -1,0 +1,9 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+<div class="container-fluid" style="text-align: center;">
+    <h3 style="color: red;">ACCESO DENEGADO</h3>
+    <p>Opps! Ud. no tiene acceso a la acci&oacute;n solicitada, consulte al administrador del sistema para mas informaci&oacute;n.</p>
+    <p>Haz <a href="{{ path('admin_index') }}">click aqui</a> para regresar a la p&aacute;gina de inicio.</p>
+</div>
+{% endblock %}

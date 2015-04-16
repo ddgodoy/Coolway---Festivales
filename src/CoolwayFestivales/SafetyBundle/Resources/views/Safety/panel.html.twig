@@ -1,0 +1,83 @@
+{%extends "::layout.html.twig"%}
+
+{%block css_plugin%}
+<link rel="stylesheet" href="{{asset('css/chosen.css')}}" />
+{%endblock css_plugin%}
+
+{%block breadcrumbs%}
+    <ul class="breadcrumb">
+        <li><i class="icon-home"></i> <a href="{{path('dashboard')}}">Home</a><span class="divider"><i class="icon-angle-right"></i></span></li>
+        <li><a href="{{path('safety_dashboard')}}">Security dashboard</a><span class="divider"><i class="icon-angle-right"></i></span></li>
+        <li class="active"><i class="icon-lock"></i> Panel de permisos</li>
+    </ul>
+{%endblock breadcrumbs%}
+
+{%block contain%}
+
+<div class="row-fluid">
+    <div class="row-fluid">
+        <div class="span6">
+            <label for="user_select">Seleccione un usuario</label>
+            <select class="chzn-select" id="select_user" data-placeholder="Seleccione un usuario">
+                <option value=""></option>
+    {%render controller('SafetyBundle:User:select')%}
+            </select>
+        </div>
+        <div class="span6">
+             <div class="span6">
+            <label for="user_select">Seleccione un Rol</label>
+            <select class="chzn-select" id="select_role" data-placeholder="Seleccione un usuario">
+                <option value=""></option>
+    {%render controller('SafetyBundle:Role:select')%}
+            </select>
+        </div>
+        </div>
+    </div>
+        <hr>
+    <div class="row-fluid">
+        <table id="example-basic" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Recurso</th>
+            {%for permiso in permisos %}
+                        <th>{{permiso|trans}}</th>
+            {%endfor%}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+        {%for bundle in tree|keys%}
+                            <tr data-tt-id="{{bundle}}">
+                                <td>{{bundle|trans}}</td>
+            {%include "SafetyBundle:Safety:object_permission.html.twig" with{'permisos': permisos, 'clase': bundle}%}
+                            </tr>
+            {%for entity in tree[bundle]%}
+                            <tr data-tt-id="{{entity}}" data-tt-parent-id="{{bundle}}">
+                                <td>{{entity|trans}}</td>
+                    {%include "SafetyBundle:Safety:object_permission.html.twig" with{'permisos': permisos, 'clase': entity}%}
+                            </tr>
+            {%endfor%}
+        {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>    
+{%endblock contain%}
+
+
+{%block plugin_script%}
+            <script src="{{asset('js/jquery.treetable.js')}}" type="text/javascript"></script>
+            <script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+{%endblock plugin_script%}
+
+{%block inline_script%}
+            <script>
+                $(document).ready(function(){
+                    $("#select_user").chosen();
+                    $("#select_role").chosen();
+                });
+
+            $("#example-basic").treetable({expandable: true});
+                </script>
+
+{%endblock inline_script%}

@@ -1,2 +1,14 @@
-app_default:
-    resource: "@AppBundle/Resources/config/routing/default.yml"
+safety:
+    resource: "@SafetyBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+frontend:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+backend:
+    resource: "@BackendBundle/Controller/"
+    type:     annotation
+    prefix:   /

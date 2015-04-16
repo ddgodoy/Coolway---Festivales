@@ -1,0 +1,78 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	<h3>Permissions</h3>
+</div>
+<div class="modal-body">
+
+    <div class="tabbable">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a data-toggle="tab" href="#home"> Usuarios </a></li>
+            <li class=""><a data-toggle="tab" href="#profile">Roles</a></li>
+        </ul>
+            <div id="permissions_list" class="tab-content" style="height: 250px;overflow-y: scroll">
+            <div id="home" class="tab-pane active">
+                <select class="chzn-select" si="SafetyBundle:User" tipo="User" data-placeholder="Seleccione un usuario"> 
+                    <option tabindex="0">Seleccione</option> 
+                   {%render controller('SafetyBundle:User:select')%}
+                </select>
+                    <hr>
+                <div id="permissionsByUser"></div>
+            </div>
+            <div id="profile" class="tab-pane">
+                <select class="chzn-select" si="SafetyBundle:Role" tipo="Role" data-placeholder="Seleccione un usuario">
+                    <option tabindex="0">Seleccione</option> 
+                   {%render controller('SafetyBundle:Role:select')%}
+                </select>
+                    <hr>
+                    <div id="permissionsByRole"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  $(document).ready(function(){
+      $(".chzn-select").chosen();
+      $(".chzn-select").on("change", function(){
+          var si_id = $(this).val();
+          var si_class = $(this).attr("si");
+          var tipo = $(this).attr("tipo");
+          var si = si_class+"|"+si_id;
+          
+          $.ajax({
+              url: "{{path('permissions')}}",
+              data: {si:si, oi:"{{oi}}", ui: "{{ui}}"},
+              type: "post",
+              success: function(result){
+                $("#permissionsBy"+tipo).html(result);
+              }
+          });
+      });
+      
+    $("#permissions_list").on("change",".set_permission",function(){
+        var oi=$(this).attr('oi');
+        var si=$(this).attr('si');
+        var mask=$(this).attr('mask');
+        var action=$(this).prop("checked");
+        var si_class=$(this).attr('si_class');
+        var temp = si_class.split(":");
+        var si_type = temp[1];
+        
+        if(action){
+          action = "add";
+        }else
+          action = "revoke"; 
+
+        $.ajax({
+            url: "{{path('set_permissions')}}",
+            type: "post",
+            data: {oi: oi, si: si, mask: mask, action: action, ui:"list"},
+            success: function(result){
+               $("#permissionsBy"+si_type).html(result);
+            }
+            
+        });
+
+
+    });
+});
+</script>

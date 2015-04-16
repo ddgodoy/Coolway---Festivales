@@ -1,0 +1,20 @@
+{{sec_id}}
+{{dom_obj}}
+<tr>
+<td>{{user_id}}</td>
+{% for permission in all_permissions%}
+   {%if permission in allowed_permissions%}
+        <td>
+            <div class="span1">
+                <label><input type="checkbox" checked="true" class="ace-switch ace-switch-6" name="permission"><span class="lbl"></span></label>
+            </div>
+        </td>
+   {%else%}
+        <td>
+            <div class="span1">
+                <label><input type="checkbox" class="ace-switch ace-switch-6" name="permission"><span class="lbl"></span></label>
+            </div>
+        </td>
+   {%endif%}
+{% endfor %}
+</tr>

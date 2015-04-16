@@ -1,0 +1,12 @@
+services:
+  ACI.acl_manager:
+    class: CoolwayFestivales\SafetyBundle\Domain\AclManager
+    arguments:
+      securityContext: "@security.context"
+      aclProvider: "@security.acl.provider"
+      doctrine: "@doctrine"
+  acl.helper:
+    class: CoolwayFestivales\SafetyBundle\Domain\ACLHelper
+    arguments:
+      doctrine: "@doctrine"
+      securityContext: "@security.context"

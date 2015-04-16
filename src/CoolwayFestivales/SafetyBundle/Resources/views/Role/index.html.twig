@@ -1,0 +1,21 @@
+{% extends 'AdminBundle:includes:apptibase_metronic.html.twig' %}
+
+{%block breadcrumbs%}
+<ul class="breadcrumb">
+    <li><i class="icon-home"></i> <a href="{{path('dashboard')}}">Home</a><span class="divider"><i class="icon-angle-right"></i></span></li>
+    <li><a href="{{path('safety_dashboard')}}"> Security dashboard </a><span class="divider"><i class="icon-angle-right"></i></span></li>
+    <li class="active">Users</li>
+</ul>
+{%endblock breadcrumbs%}
+
+{% block contain -%}
+    {%include "AdminBundle:includes:apptibase_index.html.twig" with{'entity':"Role", 'bundle':"SafetyBundle", "admin": true}%}
+{% endblock %}
+
+{%block base_script%}
+{%endblock base_script%}
+
+{%block inline_script%}
+    {%include "AdminBundle:includes:apptibase_index.js.twig" with{'entity':"Role", 'bundle':"SafetyBundle", 'prefix_route': "admin_role"}%}
+{%endblock inline_script%}
+

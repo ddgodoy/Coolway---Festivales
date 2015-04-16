@@ -1,0 +1,2 @@
+{%set action=path('admin_role_create') %} 
+{%include "AdminBundle:includes:modal_form.html.twig" with{'type':'create', 'entity':"Role", 'prefix_route':"admin_role", 'form': form, 'action': action}%}

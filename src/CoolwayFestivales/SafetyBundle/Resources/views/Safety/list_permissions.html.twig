@@ -1,0 +1,30 @@
+{#{%extends "::layout.html.twig"%}
+{%block contain%}
+#}
+<table class="table table-striped">
+    <tr>
+        <th>Permiso</th>
+        <th>Acceso</th>
+    </tr>
+{% for permission in all_permissions%}
+<tr>
+    <td>{{permission|trans}}</td>
+   {%if permission in allowed_permissions%}
+        <td>
+            <div class="span1">
+                <label><input type="checkbox" si_class="{{sec_id.class}}" si="{{sec_id.class}}|{{sec_id.id}}" oi="{{dom_obj.class}}|{{dom_obj.id}}" mask="{{permission}}" action="revoke" checked="true" class="ace-switch ace-switch-6 set_permission"><span class="lbl"></span></label>
+            </div>
+        </td>
+   {%else%}
+        <td>
+            <div class="span1">
+                <label><input si_class="{{sec_id.class}}" type="checkbox" si="{{sec_id.class}}|{{sec_id.id}}" oi="{{dom_obj.class}}|{{dom_obj.id}}" mask="{{permission}}" action="add" class="ace-switch ace-switch-6 set_permission" ><span class="lbl"></span></label>
+            </div>
+        </td>
+   {%endif%}
+</tr>
+{% endfor %}
+</table>
+
+
+{#{%endblock contain%}#}

@@ -1,0 +1,4 @@
+apptibase.security.mask.view: ver
+apptibase.security.mask.create: crear
+apptibase.security.mask.delete: eliminar
+apptibase.security.mask.operator: operador

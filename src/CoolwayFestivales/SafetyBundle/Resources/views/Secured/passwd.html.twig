@@ -1,0 +1,56 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h3 class="muted">Cambiar Contraseña</h3>
+</div>
+
+<div class="modal-body">
+    <form id="form-login-passwd" action="{{ path('_update_passwd') }}" method="post">
+        <input type="hidden" name="_method" value="PUT" />
+        {{ form_widget(passwd_form) }}
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+    <a action="accept-login" class="btn green" >Aceptar</a>
+</div>
+
+<script type="text/javascript">    
+    $('#form-login-passwd').ajaxForm({
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                $('#index-modal').modal('destroy');
+                toastr.success(response.message);
+            } else {
+                if (response.error.cause === 'Invalid') {    
+                    $.each(response.error.errors, function(i, error) {
+                        $("#" + error.field).css('border', '1px solid red');
+                        $("#" + error.field).after('<div class="alert alert-error fade in"><strong>Opss!</strong> ' + error.message + ' </div>');
+                    });
+                } else {
+                    toastr.error(response.error.message);
+                }
+            }
+        }
+    });
+
+    $('a[action=accept-login]').on('click', function() {    
+        var requireds = $('#form-login-passwd').find('input[required=required]');
+        
+        var flag = true;
+        requireds.each(function(i, f) {
+            if (f.value === null || f.value === "") {
+                $(f).css('border', '1px solid red');                
+                flag = false;
+            }
+        });
+        
+        if (flag) {
+            $('#form-login-passwd').submit();
+        } else {
+            toastr.error('Opss! Debe llenar los campos requeridos.');
+        }
+    });
+    
+</script>

@@ -1,0 +1,8 @@
+{%set action=path('admin_user_update', { 'id': entity.id }) %} 
+{%include "AdminBundle:includes:modal_form.html.twig" 
+with{'type':'update', 
+     'entity':'User',
+     'prefix_route':"admin_user",
+     'action': action,
+     'form':edit_form}
+%}

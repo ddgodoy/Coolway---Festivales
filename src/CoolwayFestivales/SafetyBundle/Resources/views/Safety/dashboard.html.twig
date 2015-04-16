@@ -1,0 +1,33 @@
+{%extends "::layout.html.twig"%}
+
+
+{%block breadcrumbs%}
+    <ul class="breadcrumb">
+        <li><i class="icon-home"></i> <a href="{{path('dashboard')}}">Home</a><span class="divider"><i class="icon-angle-right"></i></span></li>
+        <li class="active"><i class="icon-lock"></i> Security dashboard </li>
+    </ul>
+{%endblock breadcrumbs%}
+
+{%block contain%}
+<div class="row-fluid">
+	<h3 class="header smaller lighter green">Admin dashboard</h3>
+	<p>
+		<a href="{{path('panel')}}" class="btn btn-app btn-success radius-4">
+		<i class="icon-lock"></i>
+		Permisos
+		</a>
+		
+		
+                <a href="{{path('admin_user')}}" class="btn btn-app btn-primary no-radius">
+		<i class="icon-user"></i>
+		Usuarios
+		</a>
+                
+                <a href="{{path('admin_role')}}" class="btn btn-app btn-inverse no-radius">
+		<i class="icon-group"></i>
+		Roles
+		</a>
+
+	</p>
+</div>
+{%endblock%}
