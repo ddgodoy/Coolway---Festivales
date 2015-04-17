@@ -5,6 +5,7 @@ namespace CoolwayFestivales\AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\AsseticBundle\AsseticBundle;
 
 class FrontendController extends Controller {
 
@@ -14,7 +15,7 @@ class FrontendController extends Controller {
      */
     public function indexAction() {
 
-        return $this->render("AppBundle:Frontend:home.html.twig");
+        return $this->render("AppBundle:Frontend:index.html.twig");
     }
 
     /**

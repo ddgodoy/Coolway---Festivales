@@ -22,7 +22,8 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "gregwar/image-bundle": "dev-master",
         "doctrine/doctrine-fixtures-bundle": "~2.2",
-        "symfony/dom-crawler": "~2.6"
+        "symfony/dom-crawler": "~2.6",
+        "doctrine/doctrine-fixtures-bundle": "2.2.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

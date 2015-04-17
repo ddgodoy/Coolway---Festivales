@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping\JoinTable;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use CoolwayFestivales\BackendBundle\Entity\Feast;
 
 /**
  * @ORM\Entity(repositoryClass="CoolwayFestivales\SafetyBundle\Repository\UserRepository")
@@ -35,6 +36,11 @@ class User implements AdvancedUserInterface, \Serializable {
      * @ORM\Column(type="string", length=100)
      */
     protected $name;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $token_phone;
 
     /**
      * @Assert\Email()
@@ -81,10 +87,20 @@ class User implements AdvancedUserInterface, \Serializable {
      */
     protected $user_roles;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="CoolwayFestivales\BackendBundle\Entity\Feast")
+     * @ORM\JoinTable(name="user_feasts",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="feast_id", referencedColumnName="id")}
+     * )
+     */
+    protected $user_feasts;
+
     public function __construct() {
         $this->user_roles = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $this->user_feasts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enabled = true;
+        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->accountNonExpired = true;
         $this->accountNonLocked = true;
         $this->credentialsNonExpired = true;
@@ -93,7 +109,7 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -111,7 +127,7 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername() {
         return $this->username;
@@ -129,7 +145,7 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName() {
         return $this->name;
@@ -147,7 +163,7 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail() {
         return $this->email;
@@ -165,7 +181,7 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * Get accountNonExpired
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAccountNonExpired() {
         return $this->accountNonExpired;
@@ -183,7 +199,7 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * Get credentialsNonExpired
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getCredentialsNonExpired() {
         return $this->credentialsNonExpired;
@@ -201,28 +217,18 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * Get accountNonLocked
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAccountNonLocked() {
         return $this->accountNonLocked;
     }
 
-    /**
-     * Set enabled
-     *
-     * @param boolean $enabled
-     */
-    public function setEnabled($enabled) {
-        $this->enabled = $enabled;
+    function getToken_phone() {
+        return $this->token_phone;
     }
 
-    /**
-     * Get enabled
-     *
-     * @return boolean 
-     */
-    public function getEnabled() {
-        return $this->enabled;
+    function setToken_phone($token_phone) {
+        $this->token_phone = $token_phone;
     }
 
     /**
@@ -244,7 +250,7 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword() {
         return $this->password;
@@ -262,7 +268,7 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * Get salt
      *
-     * @return string 
+     * @return string
      */
     public function getSalt() {
         return $this->salt;
@@ -272,7 +278,7 @@ class User implements AdvancedUserInterface, \Serializable {
      * {@inheritdoc}
      */
     function eraseCredentials() {
-        
+
     }
 
     /**
@@ -342,7 +348,7 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * Get user_roles
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getUserRoles() {
         return $this->user_roles;
@@ -352,7 +358,7 @@ class User implements AdvancedUserInterface, \Serializable {
         $this->user_roles = $user_roles;
     }
 
-//Para apptibasse    
+//Para apptibasse
     public function getClass() {
         return "SafetyBundle:User";
     }
@@ -369,17 +375,15 @@ class User implements AdvancedUserInterface, \Serializable {
         return "avatar.png";
     }
 
-
     /**
      * Add user_roles
      *
      * @param \CoolwayFestivales\SafetyBundle\Entity\Role $userRoles
      * @return User
      */
-    public function addUserRole(\CoolwayFestivales\SafetyBundle\Entity\Role $userRoles)
-    {
+    public function addUserRole(\CoolwayFestivales\SafetyBundle\Entity\Role $userRoles) {
         $this->user_roles[] = $userRoles;
-    
+
         return $this;
     }
 
@@ -388,19 +392,88 @@ class User implements AdvancedUserInterface, \Serializable {
      *
      * @param \CoolwayFestivales\SafetyBundle\Entity\Role $userRoles
      */
-    public function removeUserRole(\CoolwayFestivales\SafetyBundle\Entity\Role $userRoles)
-    {
+    public function removeUserRole(\CoolwayFestivales\SafetyBundle\Entity\Role $userRoles) {
         $this->user_roles->removeElement($userRoles);
     }
 
-    public function serialize()
-    {
-           return serialize($this->id);
+    public function serialize() {
+        return serialize($this->id);
     }
 
-    public function unserialize($data)
-    {
-           $this->id = unserialize($data);
-    }  
-  
+    public function unserialize($data) {
+        $this->id = unserialize($data);
+    }
+
+    /**
+     * Set token_phone
+     *
+     * @param string $tokenPhone
+     * @return User
+     */
+    public function setTokenPhone($tokenPhone) {
+        $this->token_phone = $tokenPhone;
+
+        return $this;
+    }
+
+    /**
+     * Get token_phone
+     *
+     * @return string
+     */
+    public function getTokenPhone() {
+        return $this->token_phone;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return User
+     */
+    public function setEnabled($enabled) {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean
+     */
+    public function getEnabled() {
+        return $this->enabled;
+    }
+
+    /**
+     * Add user_feasts
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\Feast $userFeasts
+     * @return User
+     */
+    public function addUserFeast(\CoolwayFestivales\BackendBundle\Entity\Feast $userFeasts) {
+        $this->user_feasts[] = $userFeasts;
+
+        return $this;
+    }
+
+    /**
+     * Remove user_feasts
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\Feast $userFeasts
+     */
+    public function removeUserFeast(\CoolwayFestivales\BackendBundle\Entity\Feast $userFeasts) {
+        $this->user_feasts->removeElement($userFeasts);
+    }
+
+    /**
+     * Get user_feasts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserFeasts() {
+        return $this->user_feasts;
+    }
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace CoolwayFestivales\AppBundle\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -8,10 +9,9 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
+class DefaultController extends Controller {
 
-class DefaultController extends Controller
-{
-   /**
+    /**
      * Displays a form to create a new Customer entity.
      *
      * @Route("/login", name="login")
@@ -164,7 +164,6 @@ class DefaultController extends Controller
         return array();
     }
 
-    
     // codificar el passwd
     private function setSecurePassword(&$entity) {
         $confg = Yaml::parse(__DIR__ . '/../../../../app/config/security.yml');
@@ -182,7 +181,5 @@ class DefaultController extends Controller
         $password = $encoder->encodePassword($entity->getPasswordForgot(), $entity->getSalt());
         $entity->setPassword($password);
     }
-
-    
 
 }

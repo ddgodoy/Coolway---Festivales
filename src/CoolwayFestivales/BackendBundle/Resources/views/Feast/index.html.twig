@@ -1,0 +1,140 @@
+{%extends "::dashboardBase.html.twig"%}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{%block content%}
+    <h3 class="page-title">
+        Panel de control
+    </h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="{{path("admin_dashboard")}}">Panel de control</a>
+                <i class="fa fa-angle-right"></i>
+
+            </li>
+            <li>
+                <a href="{{path("admin_feast")}}">Gestionar Festivales</a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="portlet box blue-madison">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-globe"></i>Gestionar Festivales
+
+                    </div>
+
+                </div>
+                <div class="portlet-body">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-9">
+
+                                <a data-toggle="modal" data-target="#ajax" href="{{path("admin_feast_new")}}" class=" btn green">
+                                    Nuevo <i class="fa fa-plus"></i></a>
+                                <button data-toggle="modal" id="ajax-demo" class=" btn blue" >
+                                    Editar <i class="fa fa-pencil"></i></button>
+                                <button data-toggle="modal" id="ajax-demo" class=" btn red">
+                                    Eliminar <i class="fa fa-trash-o"></i></button>
+
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover" id="sample_1">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%">
+                                    Secuencial Autom&aacute;tico
+                                </th>
+                                <th>
+                                    Nombre
+                                </th>
+                                <th>
+                                    Longitud
+                                </th>
+                                <th>
+                                    Latitud
+                                </th>
+                                <th>
+                                    Desde
+                                </th>
+                                <th>
+                                    Hasta
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for entity in entities%}
+
+                                <tr>
+                                    <td>
+                                        {{entity.id}}
+                                    </td>
+                                    <td>
+                                        {{entity.name}}
+                                    </td>
+                                    <td>
+                                        {{entity.longitud}}
+                                    </td>
+                                    <td>
+                                        {{entity.latitude}}
+                                    </td>
+                                    <td>
+                                        {{entity.date_from | date('dd-MM-yyyy')}}
+                                    </td>
+                                    <td>
+                                        {{entity.date_to | date('dd-MM-yyyy')}}
+                                    </td>
+
+                                </tr>
+
+                            {%endfor%}
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" id="ajax" role="basic" aria-hidden="true">
+        <div class="page-loading page-loading-boxed">
+            <img src="{{asset('assets/global/img/loading-spinner-grey.gif')}}" alt="" class="loading">
+            <span>
+                &nbsp;&nbsp;Loading... </span>
+        </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+{%endblock%}
+
+
+{%block base_script%}
+    {{parent()}}
+{%endblock%}
+{%block inline_script%}
+
+    {{parent()}}
+    <script>
+        TableAdvanced.init();
+    </script>
+{%endblock%}
+

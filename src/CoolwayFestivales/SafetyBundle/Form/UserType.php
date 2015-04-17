@@ -8,16 +8,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 class UserType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('username')
-                ->add('name')
-                ->add('email')
-                ->add('enabled')
-                ->add('password')
+        $builder
+                ->add('username', null, array('label' => 'Usuario'))
+                ->add('name', null, array('label' => 'Nombre'))
+                ->add('email', null, array('label' => 'Correo'))
+                ->add('password', null, array('label' => 'Contraseña'))
 //                ->add('password', 'repeated', array(
 //                    'first_name' => 'password',
 //                    'second_name' => 'confirmar',
 //                    'type' => 'password'))
-                ->add('user_roles');
+                ->add('user_roles', null, array('label' => 'Roles'))
+                ->add('user_feasts', null, array('label' => 'Festivales'));
     }
 
     public function getName() {
