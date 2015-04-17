@@ -4,6 +4,7 @@ namespace CoolwayFestivales\BackendBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  * CoolwayFestivales\BackendBundle\Entity\Feast
@@ -51,8 +52,18 @@ class Feast {
      */
     private $date_to;
 
+    /**
+     * @OneToMany(targetEntity="FeastStage", mappedBy="feast", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
+     */
+    public $feast_stages;
+
+    /**
+     * @OneToMany(targetEntity="UserFeastData", mappedBy="feast", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
+     */
+    public $feast_userdfeastdata;
+
     public function __construct() {
-        $this->user_feasts = new \Doctrine\Common\Collections\ArrayCollection();
+
     }
 
     /**
@@ -159,4 +170,67 @@ class Feast {
         return $this->date_to;
     }
 
+    /**
+     * Add feast_stages
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStages
+     * @return Feast
+     */
+    public function addFeastStage(\CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStages) {
+        $this->feast_stages[] = $feastStages;
+
+        return $this;
+    }
+
+    /**
+     * Remove feast_stages
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStages
+     */
+    public function removeFeastStage(\CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStages) {
+        $this->feast_stages->removeElement($feastStages);
+    }
+
+    /**
+     * Get feast_stages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFeastStages() {
+        return $this->feast_stages;
+    }
+
+
+    /**
+     * Add feast_userdfeastdata
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\UserFeastData $feastUserdfeastdata
+     * @return Feast
+     */
+    public function addFeastUserdfeastdatum(\CoolwayFestivales\BackendBundle\Entity\UserFeastData $feastUserdfeastdata)
+    {
+        $this->feast_userdfeastdata[] = $feastUserdfeastdata;
+
+        return $this;
+    }
+
+    /**
+     * Remove feast_userdfeastdata
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\UserFeastData $feastUserdfeastdata
+     */
+    public function removeFeastUserdfeastdatum(\CoolwayFestivales\BackendBundle\Entity\UserFeastData $feastUserdfeastdata)
+    {
+        $this->feast_userdfeastdata->removeElement($feastUserdfeastdata);
+    }
+
+    /**
+     * Get feast_userdfeastdata
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFeastUserdfeastdata()
+    {
+        return $this->feast_userdfeastdata;
+    }
 }

@@ -7,11 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OneToMany;
 
 /**
- * CoolwayFestivales\BackendBundle\Entity\Stage
- * @ORM\Table(name="stage")
- * @ORM\Entity(repositoryClass="CoolwayFestivales\BackendBundle\Repository\StageRepository")
+ * CoolwayFestivales\BackendBundle\Entity\Artist
+ * @ORM\Table(name="artist")
+ * @ORM\Entity(repositoryClass="CoolwayFestivales\BackendBundle\Repository\ArtistRepository")
  */
-class Stage {
+class Artist {
 
     /**
      * @var bigint $id
@@ -29,9 +29,9 @@ class Stage {
     private $name;
 
     /**
-     * @OneToMany(targetEntity="FeastStage", mappedBy="stage", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
+     * @OneToMany(targetEntity="FeastStageArtist", mappedBy="artist", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
      */
-    public $feast_stages;
+    public $feast_stages_artist;
 
     public function __construct() {
 
@@ -50,7 +50,7 @@ class Stage {
      * Set name
      *
      * @param string $name
-     * @return Stage
+     * @return Artist
      */
     public function setName($name) {
         $this->name = $name;
@@ -69,35 +69,35 @@ class Stage {
 
 
     /**
-     * Add feast_stages
+     * Add feast_stages_artist
      *
-     * @param \CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStages
-     * @return Stage
+     * @param \CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist
+     * @return Artist
      */
-    public function addFeastStage(\CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStages)
+    public function addFeastStagesArtist(\CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist)
     {
-        $this->feast_stages[] = $feastStages;
+        $this->feast_stages_artist[] = $feastStagesArtist;
 
         return $this;
     }
 
     /**
-     * Remove feast_stages
+     * Remove feast_stages_artist
      *
-     * @param \CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStages
+     * @param \CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist
      */
-    public function removeFeastStage(\CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStages)
+    public function removeFeastStagesArtist(\CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist)
     {
-        $this->feast_stages->removeElement($feastStages);
+        $this->feast_stages_artist->removeElement($feastStagesArtist);
     }
 
     /**
-     * Get feast_stages
+     * Get feast_stages_artist
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getFeastStages()
+    public function getFeastStagesArtist()
     {
-        return $this->feast_stages;
+        return $this->feast_stages_artist;
     }
 }

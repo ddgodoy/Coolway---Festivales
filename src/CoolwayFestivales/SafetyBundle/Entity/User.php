@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use CoolwayFestivales\BackendBundle\Entity\Feast;
+use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  * @ORM\Entity(repositoryClass="CoolwayFestivales\SafetyBundle\Repository\UserRepository")
@@ -88,17 +89,29 @@ class User implements AdvancedUserInterface, \Serializable {
     protected $user_roles;
 
     /**
-     * @ORM\ManyToMany(targetEntity="CoolwayFestivales\BackendBundle\Entity\Feast")
-     * @ORM\JoinTable(name="user_feasts",
-     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="feast_id", referencedColumnName="id")}
-     * )
+     * @OneToMany(targetEntity="\CoolwayFestivales\BackendBundle\Entity\UserFeastData", mappedBy="user", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
      */
-    protected $user_feasts;
+    public $user_userdfeastdata;
+
+    /**
+     * @OneToMany(targetEntity="\CoolwayFestivales\BackendBundle\Entity\UserFavorites", mappedBy="user", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
+     */
+    public $user_global;
+
+    /**
+     * @OneToMany(targetEntity="\CoolwayFestivales\BackendBundle\Entity\UserFavorites", mappedBy="user", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
+     */
+    public $user_favorite;
+
+    /**
+     * @OneToMany(targetEntity="\CoolwayFestivales\BackendBundle\Entity\ArtistFavorites", mappedBy="user", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
+     */
+    public $user_artistfavorites;
 
     public function __construct() {
         $this->user_roles = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->user_feasts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->user_artistfavorites = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->user_userdfeastdata = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enabled = true;
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->accountNonExpired = true;
@@ -476,4 +489,130 @@ class User implements AdvancedUserInterface, \Serializable {
         return $this->user_feasts;
     }
 
+    /**
+     * Add user_userdfeastdata
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\UserFeastData $userUserdfeastdata
+     * @return User
+     */
+    public function addUserUserdfeastdatum(\CoolwayFestivales\BackendBundle\Entity\UserFeastData $userUserdfeastdata) {
+        $this->user_userdfeastdata[] = $userUserdfeastdata;
+
+        return $this;
+    }
+
+    /**
+     * Remove user_userdfeastdata
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\UserFeastData $userUserdfeastdata
+     */
+    public function removeUserUserdfeastdatum(\CoolwayFestivales\BackendBundle\Entity\UserFeastData $userUserdfeastdata) {
+        $this->user_userdfeastdata->removeElement($userUserdfeastdata);
+    }
+
+    /**
+     * Get user_userdfeastdata
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserUserdfeastdata() {
+        return $this->user_userdfeastdata;
+    }
+
+    /**
+     * Add user_artistfavorites
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\ArtistFavorites $userArtistfavorites
+     * @return User
+     */
+    public function addUserArtistfavorite(\CoolwayFestivales\BackendBundle\Entity\ArtistFavorites $userArtistfavorites) {
+        $this->user_artistfavorites[] = $userArtistfavorites;
+
+        return $this;
+    }
+
+    /**
+     * Remove user_artistfavorites
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\ArtistFavorites $userArtistfavorites
+     */
+    public function removeUserArtistfavorite(\CoolwayFestivales\BackendBundle\Entity\ArtistFavorites $userArtistfavorites) {
+        $this->user_artistfavorites->removeElement($userArtistfavorites);
+    }
+
+    /**
+     * Get user_artistfavorites
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserArtistfavorites() {
+        return $this->user_artistfavorites;
+    }
+
+
+    /**
+     * Add user_global
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\UserFavorites $userGlobal
+     * @return User
+     */
+    public function addUserGlobal(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userGlobal)
+    {
+        $this->user_global[] = $userGlobal;
+
+        return $this;
+    }
+
+    /**
+     * Remove user_global
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\UserFavorites $userGlobal
+     */
+    public function removeUserGlobal(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userGlobal)
+    {
+        $this->user_global->removeElement($userGlobal);
+    }
+
+    /**
+     * Get user_global
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserGlobal()
+    {
+        return $this->user_global;
+    }
+
+    /**
+     * Add user_favorite
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\UserFavorites $userFavorite
+     * @return User
+     */
+    public function addUserFavorite(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userFavorite)
+    {
+        $this->user_favorite[] = $userFavorite;
+
+        return $this;
+    }
+
+    /**
+     * Remove user_favorite
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\UserFavorites $userFavorite
+     */
+    public function removeUserFavorite(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userFavorite)
+    {
+        $this->user_favorite->removeElement($userFavorite);
+    }
+
+    /**
+     * Get user_favorite
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserFavorite()
+    {
+        return $this->user_favorite;
+    }
 }
