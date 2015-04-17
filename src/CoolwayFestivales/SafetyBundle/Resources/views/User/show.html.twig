@@ -1,36 +1,26 @@
-<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-	<h3>Detalles del usuario</h3>
-</div>
-<div class="modal-body">
+
 
 <table class="table table-striped">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Usuario</th>
-                <td>{{ entity.username }}</td>
-            </tr>
-            <tr>
-                <th>Nombre</th>
-                <td>{{ entity.name }}</td>
-            </tr>
-            <tr>
-                <th>Correo electrónico</th>
-                <td>{{ entity.email }}</td>
-            </tr>
-            <tr>
-                <th>Habilitado</th>
-                <td>{{ entity.enabled }}</td>
-            </tr>
-        </tbody>
-    </table>
-    
-    </div>
-
-<div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">{%trans%}Cerrar{%endtrans%}</button>
-</div>
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Usuario</th>
+            <td>{{ entity.username }}</td>
+        </tr>
+        <tr>
+            <th>Nombre</th>
+            <td>{{ entity.name }}</td>
+        </tr>
+        <tr>
+            <th>Correo electrónico</th>
+            <td>{{ entity.email }}</td>
+        </tr>
+        <tr>
+            <th>Habilitado</th>
+            <td>{{ entity.enabled }}</td>
+        </tr>
+    </tbody>
+</table>

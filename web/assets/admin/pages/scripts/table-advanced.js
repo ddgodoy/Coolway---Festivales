@@ -32,8 +32,17 @@ var TableAdvanced = function () {
 
             "tableTools": {
                 "sSwfPath": "../../assets/global/plugins/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-                "aButtons": []
+                "aButtons": [],
+                "sRowSelect": "multi",
+                "fnRowSelected": function (node) {
+
+                },
+                "fnRowDeselected": function (node) {
+
+
+                }
             }
+
         });
 
         var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
