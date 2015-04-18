@@ -38,6 +38,8 @@
             <link href="{{asset('assets/admin/layout/css/themes/grey.css')}}" rel="stylesheet" type="text/css" id="style_color"/>
             <link href="{{asset('assets/admin/layout/css/custom.css')}}" rel="stylesheet" type="text/css"/>
             <link href="{{asset('assets/toastr/toastr.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{asset('assets/global/plugins/bootstrap-datepicker/css/datepicker3.css')}}" rel="stylesheet" type="text/css"/>
+
         {% endblock %}
         <!-- END THEME STYLES -->
         <link rel="shortcut icon" href="favicon.ico"/>
@@ -134,8 +136,23 @@
                                 </li>
                                 <li class="active">
                                     <a href="{{path("admin_feast")}}">
-                                        <i class="icon-check"></i>
+                                        <i class="icon-magic-wand"></i>
                                         Gestionar festivales</a>
+                                </li>
+                                <li class="active">
+                                    <a href="{{path("admin_artist")}}">
+                                        <i class="icon-star"></i>
+                                        Gestionar artistas</a>
+                                </li>
+                                <li class="active">
+                                    <a href="{{path("admin_stage")}}">
+                                        <i class="icon-list"></i>
+                                        Gestionar etapas</a>
+                                </li>
+                                <li class="active">
+                                    <a href="{{path("admin_step")}}">
+                                        <i class="fa fa-steam "></i>
+                                        Gestionar steps</a>
                                 </li>
 
                             </ul>
@@ -635,22 +652,12 @@
             <script src="{{asset('assets/global/plugins/jquery.cokie.min.js')}}" type="text/javascript"></script>
             <script src="{{asset('assets/global/plugins/uniform/jquery.uniform.min.js')}}" type="text/javascript"></script>
             <script src="{{asset('assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/flot/jquery.flot.min.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/flot/jquery.flot.resize.min.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/flot/jquery.flot.categories.min.js')}}" type="text/javascript"></script>
+
             <script src="{{asset('assets/global/plugins/jquery.pulsate.min.js')}}" type="text/javascript"></script>
             <script src="{{asset('assets/global/plugins/bootstrap-daterangepicker/moment.min.js')}}" type="text/javascript"></script>
+            <script src="{{asset('assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}" type="text/javascript"></script>
             <script src="{{asset('assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js')}}" type="text/javascript"></script>
             <script src="{{asset('assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js')}}" type="text/javascript"></script>
-            <script src="{{asset('assets/global/plugins/jquery.sparkline.min.js')}}" type="text/javascript"></script>
             <script src="{{asset('assets/global/plugins/gritter/js/jquery.gritter.js')}}" type="text/javascript"></script>
             <script src="{{asset('assets/global/plugins/select2/select2.min.js')}}" type="text/javascript"></script>
             <script src="{{asset('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}" type="text/javascript"></script>

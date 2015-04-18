@@ -195,8 +195,7 @@ class UserController extends Controller {
      * Edits an existing User entity.
      *
      * @Route("/{id}", name="admin_user_update")
-     * @Method("POST")
-     * @Template("SafetyBundle:User:edit.html.twig")
+     * @Method("PUT")
      */
     public function updateAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
@@ -216,7 +215,7 @@ class UserController extends Controller {
             $em->flush();
 
             $result['success'] = true;
-            $result['mensaje'] = 'Editado correctamente';
+            $result['message'] = 'Transacci&oacute;n realizada satisfactoriamente.';
         }
 
         echo json_encode($result);
@@ -233,6 +232,9 @@ class UserController extends Controller {
         $peticion = $this->getRequest();
         $ids = $peticion->get("ids", 0, true);
 
+        $ids = explode(",", $ids);
+
+
         $em = $this->getDoctrine()->getManager();
 
         $repo_user = $this->getDoctrine()->getRepository('SafetyBundle:User');
@@ -240,6 +242,7 @@ class UserController extends Controller {
         foreach ($ids as $id) {
             $entity = $repo_user->find($id);
             try {
+
                 $em->remove($entity);
             } catch (\Exception $e) {
                 $response = array("success" => false, "message" => "no se puede eliminar este elemento");
@@ -250,7 +253,7 @@ class UserController extends Controller {
 
         try {
             $em->flush();
-            $response = array("success" => true, "message" => "Eliminados correctamente");
+            $response = array("success" => true, "message" => "Transacción realizada satisfactoriamente.");
         } catch (\Exception $e) {
             $response = array("success" => false, "message" => "No puede completar esta petición Error code: " . $e->getCode() . " Detalles:" . $e->getMessage());
         }

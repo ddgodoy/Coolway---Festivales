@@ -52,9 +52,8 @@
         },
         success: function (response) {
             if (response.success) {
-                toastr.success("Transacción realizada exitosamente.");
+                toastr.success("Transacción realizada satisfactoriamente.");
                 window.location.href = "{{path('admin_'~module)}}";
-                $('#modal').modal('toggle');
             } else {
                 if (response.error.cause === 'Invalid') {
                     $.each(response.error.errors, function (i, error) {

@@ -8,36 +8,36 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use CoolwayFestivales\BackendBundle\Form\FeastType;
+use CoolwayFestivales\BackendBundle\Form\StepType;
 
 /**
- * Feast controller.
+ * Step controller.
  *
- * @Route("/admin/feast")
+ * @Route("/admin/step")
  */
-class FeastController extends Controller {
+class StepController extends Controller {
 
     /**
-     * Lists all Feast entities.
+     * Lists all Step entities.
      *
-     * @Route("/", name="admin_feast")
+     * @Route("/", name="admin_step")
      * @Template()
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findAll();
-        return $this->render('BackendBundle:Feast:index.html.twig', array("entities" => $entities));
+        $entities = $this->getDoctrine()->getRepository('BackendBundle:Step')->findAll();
+        return $this->render('BackendBundle:Step:index.html.twig', array("entities" => $entities));
     }
 
     /**
-     * Lists all Feast entities.
+     * Lists all Step entities.
      *
-     * @Route("/list", name="admin_feast_list")
+     * @Route("/list", name="admin_step_list")
      * @Template()
      */
     public function listAction() {
         $this->_datatable();
-        return $this->render('BackendBundle:Feast:list.html.twig');
+        return $this->render('BackendBundle:Step:list.html.twig');
     }
 
     /**
@@ -46,7 +46,7 @@ class FeastController extends Controller {
      */
     private function _datatable() {
         $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
-        $qb->from("BackendBundle:Feast", "entity")
+        $qb->from("BackendBundle:Step", "entity")
                 ->orderBy("entity.id", "desc");
         $datatable = $this->get('datatable')
                 ->setFields(
@@ -63,7 +63,7 @@ class FeastController extends Controller {
     }
 
     /**
-     * @Route("/admin_feast_grid", name="admin_feast_grid")
+     * @Route("/admin_step_grid", name="admin_step_grid")
      * @Template()
      */
     public function gridAction() {
@@ -71,23 +71,23 @@ class FeastController extends Controller {
     }
 
     /**
-     * @Route("/datatable", name="datatable_feast")
+     * @Route("/datatable", name="datatable_step")
      * @Template()
      */
     public function datatableAction() {
         $this->_datatable();
-        return $this->render('BackendBundle:Feast:index.html.twig');
+        return $this->render('BackendBundle:Step:index.html.twig');
     }
 
     /**
-     * Crea una nueva feast
+     * Crea una nueva step
      *
-     * @Route("/create", name="admin_feast_create")
+     * @Route("/create", name="admin_step_create")
      * @Method("post")
      */
     public function createAction(Request $request) {
-        $entity = new \CoolwayFestivales\BackendBundle\Entity\Feast();
-        $form = $this->createForm(new FeastType(), $entity);
+        $entity = new \CoolwayFestivales\BackendBundle\Entity\Step();
+        $form = $this->createForm(new StepType(), $entity);
         $form->bind($request);
         $result = array();
 
@@ -117,15 +117,15 @@ class FeastController extends Controller {
     }
 
     /**
-     * Displays a form to create a new Feast entity.
+     * Displays a form to create a new Step entity.
      *
-     * @Route("/new", name="admin_feast_new")
+     * @Route("/new", name="admin_step_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction() {
-        $entity = new \CoolwayFestivales\BackendBundle\Entity\Feast();
-        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\FeastType(), $entity);
+        $entity = new \CoolwayFestivales\BackendBundle\Entity\Step();
+        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\StepType(), $entity);
 
         return array(
             'entity' => $entity,
@@ -134,9 +134,9 @@ class FeastController extends Controller {
     }
 
     /**
-     * Finds and displays a feast entity.
+     * Finds and displays a step entity.
      *
-     * @Route("/show", name="admin_feast_show")
+     * @Route("/show", name="admin_step_show")
      * @Method("GET")
      * @Template()
      */
@@ -144,10 +144,10 @@ class FeastController extends Controller {
         $id = $this->getRequest()->get("id");
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('BackendBundle:Feast')->find($id);
+        $entity = $em->getRepository('BackendBundle:Step')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Feast entity.');
+            throw $this->createNotFoundException('Unable to find Step entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -159,9 +159,9 @@ class FeastController extends Controller {
     }
 
     /**
-     * Displays a form to edit an existing feast entity.
+     * Displays a form to edit an existing step entity.
      *
-     * @Route("/edit", name="admin_feast_edit")
+     * @Route("/edit", name="admin_step_edit")
      * @Method("GET")
      * @Template()
      */
@@ -169,13 +169,13 @@ class FeastController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $id = $this->getRequest()->get("id");
 
-        $entity = $em->getRepository('BackendBundle:Feast')->find($id);
+        $entity = $em->getRepository('BackendBundle:Step')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find feast entity.');
+            throw $this->createNotFoundException('Unable to find step entity.');
         }
 
-        $editForm = $this->createForm(new FeastType(), $entity);
+        $editForm = $this->createForm(new StepType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -188,19 +188,19 @@ class FeastController extends Controller {
     /**
      * Edits an existing User entity.
      *
-     * @Route("/{id}", name="admin_feast_update")
+     * @Route("/{id}", name="admin_step_update")
      * @Method("PUT")
      */
     public function updateAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('BackendBundle:Feast')->find($id);
+        $entity = $em->getRepository('BackendBundle:Step')->find($id);
         $result = array();
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Feast entity.');
+            throw $this->createNotFoundException('Unable to find Step entity.');
         }
-        $editForm = $this->createForm(new FeastType(), $entity);
+        $editForm = $this->createForm(new StepType(), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
@@ -222,9 +222,9 @@ class FeastController extends Controller {
     }
 
     /**
-     * Deletes a Feast entity.
+     * Deletes a Step entity.
      *
-     * @Route("/{id}", name="admin_feast_delete")
+     * @Route("/{id}", name="admin_step_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id) {
@@ -233,21 +233,21 @@ class FeastController extends Controller {
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('BackendBundle:Feast')->find($id);
+            $entity = $em->getRepository('BackendBundle:Step')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Feast entity.');
+                throw $this->createNotFoundException('Unable to find Step entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('admin_feast'));
+        return $this->redirect($this->generateUrl('admin_step'));
     }
 
     /**
-     * Creates a form to delete a Feast entity by id.
+     * Creates a form to delete a Step entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -261,9 +261,9 @@ class FeastController extends Controller {
     }
 
     /**
-     * Elimina a petición feast entities.
+     * Elimina a petición step entities.
      * dado un array de ids
-     * @Route("/bachdelete", name="admin_feast_batchdelete")
+     * @Route("/bachdelete", name="admin_step_batchdelete")
      * @Template()
      */
     public function batchdeleteAction() {
@@ -273,14 +273,14 @@ class FeastController extends Controller {
 
         $em = $this->getDoctrine()->getManager();
 
-        $repo_feast = $this->getDoctrine()->getRepository('BackendBundle:Feast');
+        $repo_step = $this->getDoctrine()->getRepository('BackendBundle:Step');
 
         foreach ($ids as $id) {
-            $entity = $repo_feast->find($id);
+            $entity = $repo_step->find($id);
             try {
                 $em->remove($entity);
             } catch (\Exception $e) {
-                $response = array("success" => false, "message" => "no se puede eliminar este feasto");
+                $response = array("success" => false, "message" => "no se puede eliminar este stepo");
                 $result = json_encode($response);
                 return new \Symfony\Component\HttpFoundation\Response($result);
             }

@@ -134,119 +134,6 @@ class Step {
     }
 
     /**
-     * Set path
-     *
-     * @param string $path
-     * @return User
-     */
-    public function setPath($path) {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    /**
-     * Get path
-     *
-     * @return string
-     */
-    public function getPath() {
-        return $this->path;
-    }
-
-    /**
-     * Set image.
-     *
-     * @param UploadedFile $image
-     * @return User
-     */
-    public function setImage(UploadedFile $image = null) {
-        $this->image = $image;
-        // check if we have an old image path
-        if (isset($this->path)) {
-            // store the old name to delete after the update
-            $this->temp = $this->path;
-            $this->path = null;
-        } else {
-            $this->path = 'initial';
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return UploadedFile
-     */
-    public function getImage() {
-        return $this->image;
-    }
-
-    protected function getUploadDir() {
-        return 'uploads/user/';
-    }
-
-    protected function getUploadRootDir() {
-        return __DIR__ . '/../../../web/' . $this->getUploadDir();
-    }
-
-    public function getAbsolutePath() {
-        return null === $this->path ? null : $this->getUploadRootDir() . $this->path;
-    }
-
-    public function getWebPath() {
-        return null === $this->path ? null : $this->getUploadDir() . $this->path;
-    }
-
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
-    public function preUpload() {
-        if (NULL !== $this->image) {
-            $this->path = uniqid($this->username . '_') . '.' . $this->getImage()->guessExtension();
-        }
-    }
-
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
-    public function upload() {
-        if (null === $this->image) {
-            return;
-        }
-
-        if (isset($this->temp)) {
-            try {
-                unlink($this->getUploadRootDir() . $this->temp);
-            } catch (\Exception $e) {
-                // nothing to do
-            }
-            $this->temp = null;
-        }
-
-        $this->image->move($this->getUploadRootDir(), $this->path);
-        $this->image = null;
-    }
-
-    /**
-     * @ORM\PostRemove()
-     */
-    public function removeUpload() {
-        try {
-            $path = $this->getAbsolutePath();
-
-            if (file_exists($path) && !is_dir($path)) {
-                unlink($path);
-            }
-        } catch (\Exception $e) {
-            // nothing to do
-        }
-    }
-
-    /**
      * Set name
      *
      * @param string $name
@@ -309,15 +196,13 @@ class Step {
         return $this->terms_conditions;
     }
 
-
     /**
      * Set steps
      *
      * @param integer $steps
      * @return Step
      */
-    public function setSteps($steps)
-    {
+    public function setSteps($steps) {
         $this->steps = $steps;
 
         return $this;
@@ -326,10 +211,9 @@ class Step {
     /**
      * Get steps
      *
-     * @return integer 
+     * @return integer
      */
-    public function getSteps()
-    {
+    public function getSteps() {
         return $this->steps;
     }
 
@@ -339,8 +223,7 @@ class Step {
      * @param string $text
      * @return Step
      */
-    public function setText($text)
-    {
+    public function setText($text) {
         $this->text = $text;
 
         return $this;
@@ -349,10 +232,10 @@ class Step {
     /**
      * Get text
      *
-     * @return string 
+     * @return string
      */
-    public function getText()
-    {
+    public function getText() {
         return $this->text;
     }
+
 }

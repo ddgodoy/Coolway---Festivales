@@ -8,36 +8,36 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use CoolwayFestivales\BackendBundle\Form\FeastType;
+use CoolwayFestivales\BackendBundle\Form\ArtistType;
 
 /**
- * Feast controller.
+ * Artist controller.
  *
- * @Route("/admin/feast")
+ * @Route("/admin/artist")
  */
-class FeastController extends Controller {
+class ArtistController extends Controller {
 
     /**
-     * Lists all Feast entities.
+     * Lists all Artist entities.
      *
-     * @Route("/", name="admin_feast")
+     * @Route("/", name="admin_artist")
      * @Template()
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findAll();
-        return $this->render('BackendBundle:Feast:index.html.twig', array("entities" => $entities));
+        $entities = $this->getDoctrine()->getRepository('BackendBundle:Artist')->findAll();
+        return $this->render('BackendBundle:Artist:index.html.twig', array("entities" => $entities));
     }
 
     /**
-     * Lists all Feast entities.
+     * Lists all Artist entities.
      *
-     * @Route("/list", name="admin_feast_list")
+     * @Route("/list", name="admin_artist_list")
      * @Template()
      */
     public function listAction() {
         $this->_datatable();
-        return $this->render('BackendBundle:Feast:list.html.twig');
+        return $this->render('BackendBundle:Artist:list.html.twig');
     }
 
     /**
@@ -46,7 +46,7 @@ class FeastController extends Controller {
      */
     private function _datatable() {
         $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
-        $qb->from("BackendBundle:Feast", "entity")
+        $qb->from("BackendBundle:Artist", "entity")
                 ->orderBy("entity.id", "desc");
         $datatable = $this->get('datatable')
                 ->setFields(
@@ -63,7 +63,7 @@ class FeastController extends Controller {
     }
 
     /**
-     * @Route("/admin_feast_grid", name="admin_feast_grid")
+     * @Route("/admin_artist_grid", name="admin_artist_grid")
      * @Template()
      */
     public function gridAction() {
@@ -71,23 +71,23 @@ class FeastController extends Controller {
     }
 
     /**
-     * @Route("/datatable", name="datatable_feast")
+     * @Route("/datatable", name="datatable_artist")
      * @Template()
      */
     public function datatableAction() {
         $this->_datatable();
-        return $this->render('BackendBundle:Feast:index.html.twig');
+        return $this->render('BackendBundle:Artist:index.html.twig');
     }
 
     /**
-     * Crea una nueva feast
+     * Crea una nueva artist
      *
-     * @Route("/create", name="admin_feast_create")
+     * @Route("/create", name="admin_artist_create")
      * @Method("post")
      */
     public function createAction(Request $request) {
-        $entity = new \CoolwayFestivales\BackendBundle\Entity\Feast();
-        $form = $this->createForm(new FeastType(), $entity);
+        $entity = new \CoolwayFestivales\BackendBundle\Entity\Artist();
+        $form = $this->createForm(new ArtistType(), $entity);
         $form->bind($request);
         $result = array();
 
@@ -117,15 +117,15 @@ class FeastController extends Controller {
     }
 
     /**
-     * Displays a form to create a new Feast entity.
+     * Displays a form to create a new Artist entity.
      *
-     * @Route("/new", name="admin_feast_new")
+     * @Route("/new", name="admin_artist_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction() {
-        $entity = new \CoolwayFestivales\BackendBundle\Entity\Feast();
-        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\FeastType(), $entity);
+        $entity = new \CoolwayFestivales\BackendBundle\Entity\Artist();
+        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\ArtistType(), $entity);
 
         return array(
             'entity' => $entity,
@@ -134,9 +134,9 @@ class FeastController extends Controller {
     }
 
     /**
-     * Finds and displays a feast entity.
+     * Finds and displays a artist entity.
      *
-     * @Route("/show", name="admin_feast_show")
+     * @Route("/show", name="admin_artist_show")
      * @Method("GET")
      * @Template()
      */
@@ -144,10 +144,10 @@ class FeastController extends Controller {
         $id = $this->getRequest()->get("id");
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('BackendBundle:Feast')->find($id);
+        $entity = $em->getRepository('BackendBundle:Artist')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Feast entity.');
+            throw $this->createNotFoundException('Unable to find Artist entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -159,9 +159,9 @@ class FeastController extends Controller {
     }
 
     /**
-     * Displays a form to edit an existing feast entity.
+     * Displays a form to edit an existing artist entity.
      *
-     * @Route("/edit", name="admin_feast_edit")
+     * @Route("/edit", name="admin_artist_edit")
      * @Method("GET")
      * @Template()
      */
@@ -169,13 +169,13 @@ class FeastController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $id = $this->getRequest()->get("id");
 
-        $entity = $em->getRepository('BackendBundle:Feast')->find($id);
+        $entity = $em->getRepository('BackendBundle:Artist')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find feast entity.');
+            throw $this->createNotFoundException('Unable to find artist entity.');
         }
 
-        $editForm = $this->createForm(new FeastType(), $entity);
+        $editForm = $this->createForm(new ArtistType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -188,19 +188,19 @@ class FeastController extends Controller {
     /**
      * Edits an existing User entity.
      *
-     * @Route("/{id}", name="admin_feast_update")
+     * @Route("/{id}", name="admin_artist_update")
      * @Method("PUT")
      */
     public function updateAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('BackendBundle:Feast')->find($id);
+        $entity = $em->getRepository('BackendBundle:Artist')->find($id);
         $result = array();
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Feast entity.');
+            throw $this->createNotFoundException('Unable to find Artist entity.');
         }
-        $editForm = $this->createForm(new FeastType(), $entity);
+        $editForm = $this->createForm(new ArtistType(), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
@@ -222,9 +222,9 @@ class FeastController extends Controller {
     }
 
     /**
-     * Deletes a Feast entity.
+     * Deletes a Artist entity.
      *
-     * @Route("/{id}", name="admin_feast_delete")
+     * @Route("/{id}", name="admin_artist_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id) {
@@ -233,21 +233,21 @@ class FeastController extends Controller {
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('BackendBundle:Feast')->find($id);
+            $entity = $em->getRepository('BackendBundle:Artist')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Feast entity.');
+                throw $this->createNotFoundException('Unable to find Artist entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('admin_feast'));
+        return $this->redirect($this->generateUrl('admin_artist'));
     }
 
     /**
-     * Creates a form to delete a Feast entity by id.
+     * Creates a form to delete a Artist entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -261,9 +261,9 @@ class FeastController extends Controller {
     }
 
     /**
-     * Elimina a petición feast entities.
+     * Elimina a petición artist entities.
      * dado un array de ids
-     * @Route("/bachdelete", name="admin_feast_batchdelete")
+     * @Route("/bachdelete", name="admin_artist_batchdelete")
      * @Template()
      */
     public function batchdeleteAction() {
@@ -273,14 +273,14 @@ class FeastController extends Controller {
 
         $em = $this->getDoctrine()->getManager();
 
-        $repo_feast = $this->getDoctrine()->getRepository('BackendBundle:Feast');
+        $repo_artist = $this->getDoctrine()->getRepository('BackendBundle:Artist');
 
         foreach ($ids as $id) {
-            $entity = $repo_feast->find($id);
+            $entity = $repo_artist->find($id);
             try {
                 $em->remove($entity);
             } catch (\Exception $e) {
-                $response = array("success" => false, "message" => "no se puede eliminar este feasto");
+                $response = array("success" => false, "message" => "no se puede eliminar este artisto");
                 $result = json_encode($response);
                 return new \Symfony\Component\HttpFoundation\Response($result);
             }

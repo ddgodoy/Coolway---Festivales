@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     {{parent()}}
+
 {% endblock %}
 
 {%block content%}
@@ -17,7 +18,7 @@
 
             </li>
             <li>
-                <a href="{{path("admin_user")}}">Gestionar Usuarios</a>
+                <a href="{{path("admin_artist")}}">Gestionar Artistas</a>
             </li>
 
         </ul>
@@ -31,7 +32,7 @@
             <div class="portlet box blue-madison">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-users"></i>Gestionar Usuarios
+                        <i class="icon-star"></i>Gestionar Artistas
 
                     </div>
 
@@ -41,7 +42,7 @@
                         <div class="row">
                             <div class="col-md-9">
 
-                                <a data-toggle="modal" data-target="#ajax" href="{{path("admin_user_new")}}" class=" btn green">
+                                <a data-toggle="modal" data-target="#ajax" href="{{path("admin_artist_new")}}" class=" btn green">
                                     Nuevo <i class="fa fa-plus"></i></a>
                                 <a data-toggle="modal" data-target="#modalEdit" href="javascript:void(0)" id="btnedit" class="btn blue" disabled="disabled">
                                     Editar <i class="fa fa-pencil"></i></a>
@@ -65,12 +66,7 @@
                                 <th>
                                     Nombre
                                 </th>
-                                <th>
-                                    Email
-                                </th>
-                                <th>
-                                    Tel&eacute;fono
-                                </th>
+
 
 
                             </tr>
@@ -85,12 +81,7 @@
                                     <td>
                                         {{entity.name}}
                                     </td>
-                                    <td>
-                                        {{entity.email}}
-                                    </td>
-                                    <td>
-                                        {{entity.token_phone}}
-                                    </td>
+
 
                                 </tr>
 
@@ -236,24 +227,24 @@
         initTable1();
 
         $("#modalDetail").on("show.bs.modal", function (e) {
-            var link = "{{path("admin_user_show")}}";
+            var link = "{{path("admin_artist_show")}}";
             $(this).find(".modal-body").load(link + "?id=" + columnas[0]);
         });
         $("#modalEdit").on("show.bs.modal", function (e) {
-            var link = "{{path("admin_user_edit")}}";
+            var link = "{{path("admin_artist_edit")}}";
             $(this).find(".modal-content").load(link + "?id=" + columnas[0]);
         });
 
         $("#btndelete").on("click", function () {
             $.ajax({
-                url: "{{path("admin_user_batchdelete")}}",
+                url: "{{path("admin_artist_batchdelete")}}",
                 data: {"ids": columnas.toString()},
                 dataType: "json",
                 context: document.body
             }).done(function (data) {
                 if (data.success) {
                     toastr.success(data.message);
-                    window.location.href = "{{path('admin_user')}}";
+                    window.location.href = "{{path('admin_artist')}}";
                 }
                 else
                     toastr.error(data.message);

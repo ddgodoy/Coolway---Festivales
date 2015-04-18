@@ -1,0 +1,61 @@
+{% set module = module | lower %}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">Editar {{ label }}</h4>
+</div>
+<div class="modal-body">
+    <form id="form-{{ module }}-edit" action="{{ path('admin_'~module~'_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+        <input type="hidden" name="_method" value="PUT" />
+        {{ form_widget(edit_form) }}
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn default" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+    <a action="accept-{{ module }}" class="btn btn-success">Aceptar</a>
+</div>
+<script src="{{asset('assets/js/jquery.form.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+    $("input").addClass("form-control");
+    $("select").addClass("form-control");
+    $("textarea").addClass("form-control");
+    $('#form-{{ module }}-edit').ajaxForm({
+        dataType: 'json',
+        beforeSubmit: function () {
+            $('.alert').remove();
+        },
+        success: function (response) {
+            if (response.success) {
+                toastr.success(response.message);
+                window.location.href = "{{path('admin_'~module)}}";
+            } else {
+                if (response.error.cause === 'Invalid') {
+                    $.each(response.error.errors, function (i, error) {
+                        $("#" + error.field).css('border', '1px solid red');
+                        $("#" + error.field).after('<div class="alert alert-error fade in"><strong>Opss!</strong> ' + error.message + ' </div>');
+                    });
+                } else {
+                    toastr.error(response.error.message);
+                }
+            }
+        }
+    });
+    $('a[action=accept-{{ module }}]').on('click', function () {
+
+        var fields = $('#form-{{ module }}-edit').find('input[required=required]');
+        var flag = true;
+        fields.each(function (i, f) {
+            if (f.value === null || f.value === "") {
+                $(f).css('border', '1px solid red');
+                flag = false;
+            }
+        });
+        if (flag) {
+            $('#form-{{ module }}-edit').submit();
+        } else {
+            toastr.error('Opss! Debe llenar los campos requeridos.');
+        }
+    });
+
+</script>

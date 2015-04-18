@@ -82,7 +82,7 @@ class User implements AdvancedUserInterface, \Serializable {
     /**
      * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\JoinTable(name="user_roles",
-     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      * )
      */
@@ -549,15 +549,13 @@ class User implements AdvancedUserInterface, \Serializable {
         return $this->user_artistfavorites;
     }
 
-
     /**
      * Add user_global
      *
      * @param \CoolwayFestivales\BackendBundle\Entity\UserFavorites $userGlobal
      * @return User
      */
-    public function addUserGlobal(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userGlobal)
-    {
+    public function addUserGlobal(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userGlobal) {
         $this->user_global[] = $userGlobal;
 
         return $this;
@@ -568,18 +566,16 @@ class User implements AdvancedUserInterface, \Serializable {
      *
      * @param \CoolwayFestivales\BackendBundle\Entity\UserFavorites $userGlobal
      */
-    public function removeUserGlobal(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userGlobal)
-    {
+    public function removeUserGlobal(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userGlobal) {
         $this->user_global->removeElement($userGlobal);
     }
 
     /**
      * Get user_global
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUserGlobal()
-    {
+    public function getUserGlobal() {
         return $this->user_global;
     }
 
@@ -589,8 +585,7 @@ class User implements AdvancedUserInterface, \Serializable {
      * @param \CoolwayFestivales\BackendBundle\Entity\UserFavorites $userFavorite
      * @return User
      */
-    public function addUserFavorite(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userFavorite)
-    {
+    public function addUserFavorite(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userFavorite) {
         $this->user_favorite[] = $userFavorite;
 
         return $this;
@@ -601,18 +596,17 @@ class User implements AdvancedUserInterface, \Serializable {
      *
      * @param \CoolwayFestivales\BackendBundle\Entity\UserFavorites $userFavorite
      */
-    public function removeUserFavorite(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userFavorite)
-    {
+    public function removeUserFavorite(\CoolwayFestivales\BackendBundle\Entity\UserFavorites $userFavorite) {
         $this->user_favorite->removeElement($userFavorite);
     }
 
     /**
      * Get user_favorite
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUserFavorite()
-    {
+    public function getUserFavorite() {
         return $this->user_favorite;
     }
+
 }

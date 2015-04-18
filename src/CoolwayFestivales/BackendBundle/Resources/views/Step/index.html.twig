@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     {{parent()}}
+
 {% endblock %}
 
 {%block content%}
@@ -17,7 +18,7 @@
 
             </li>
             <li>
-                <a href="{{path("admin_user")}}">Gestionar Usuarios</a>
+                <a href="{{path("admin_step")}}">Gestionar Step</a>
             </li>
 
         </ul>
@@ -31,7 +32,7 @@
             <div class="portlet box blue-madison">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-users"></i>Gestionar Usuarios
+                        <i class="icon-list"></i>Gestionar Step
 
                     </div>
 
@@ -41,7 +42,7 @@
                         <div class="row">
                             <div class="col-md-9">
 
-                                <a data-toggle="modal" data-target="#ajax" href="{{path("admin_user_new")}}" class=" btn green">
+                                <a data-toggle="modal" data-target="#ajax" href="{{path("admin_step_new")}}" class=" btn green">
                                     Nuevo <i class="fa fa-plus"></i></a>
                                 <a data-toggle="modal" data-target="#modalEdit" href="javascript:void(0)" id="btnedit" class="btn blue" disabled="disabled">
                                     Editar <i class="fa fa-pencil"></i></a>
@@ -63,14 +64,18 @@
                                     Secuencial Autom&aacute;tico
                                 </th>
                                 <th>
-                                    Nombre
+                                    Paso
                                 </th>
                                 <th>
-                                    Email
+                                    Festival
                                 </th>
                                 <th>
-                                    Tel&eacute;fono
+                                    Texto
                                 </th>
+                                <th>
+                                    Habilitado
+                                </th>
+
 
 
                             </tr>
@@ -83,14 +88,18 @@
                                         {{entity.id}}
                                     </td>
                                     <td>
-                                        {{entity.name}}
+                                        {{entity.steps}}
                                     </td>
                                     <td>
-                                        {{entity.email}}
+                                        {{entity.feast}}
                                     </td>
                                     <td>
-                                        {{entity.token_phone}}
+                                        {{entity.text}}
                                     </td>
+                                    <td>
+                                        {{entity.enabled}}
+                                    </td>
+
 
                                 </tr>
 
@@ -236,24 +245,24 @@
         initTable1();
 
         $("#modalDetail").on("show.bs.modal", function (e) {
-            var link = "{{path("admin_user_show")}}";
+            var link = "{{path("admin_step_show")}}";
             $(this).find(".modal-body").load(link + "?id=" + columnas[0]);
         });
         $("#modalEdit").on("show.bs.modal", function (e) {
-            var link = "{{path("admin_user_edit")}}";
+            var link = "{{path("admin_step_edit")}}";
             $(this).find(".modal-content").load(link + "?id=" + columnas[0]);
         });
 
         $("#btndelete").on("click", function () {
             $.ajax({
-                url: "{{path("admin_user_batchdelete")}}",
+                url: "{{path("admin_step_batchdelete")}}",
                 data: {"ids": columnas.toString()},
                 dataType: "json",
                 context: document.body
             }).done(function (data) {
                 if (data.success) {
                     toastr.success(data.message);
-                    window.location.href = "{{path('admin_user')}}";
+                    window.location.href = "{{path('admin_step')}}";
                 }
                 else
                     toastr.error(data.message);

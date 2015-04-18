@@ -66,6 +66,10 @@ class Feast {
 
     }
 
+    public function __toString() {
+        return $this->name;
+    }
+
     /**
      * Get id
      *
@@ -200,15 +204,13 @@ class Feast {
         return $this->feast_stages;
     }
 
-
     /**
      * Add feast_userdfeastdata
      *
      * @param \CoolwayFestivales\BackendBundle\Entity\UserFeastData $feastUserdfeastdata
      * @return Feast
      */
-    public function addFeastUserdfeastdatum(\CoolwayFestivales\BackendBundle\Entity\UserFeastData $feastUserdfeastdata)
-    {
+    public function addFeastUserdfeastdatum(\CoolwayFestivales\BackendBundle\Entity\UserFeastData $feastUserdfeastdata) {
         $this->feast_userdfeastdata[] = $feastUserdfeastdata;
 
         return $this;
@@ -219,18 +221,17 @@ class Feast {
      *
      * @param \CoolwayFestivales\BackendBundle\Entity\UserFeastData $feastUserdfeastdata
      */
-    public function removeFeastUserdfeastdatum(\CoolwayFestivales\BackendBundle\Entity\UserFeastData $feastUserdfeastdata)
-    {
+    public function removeFeastUserdfeastdatum(\CoolwayFestivales\BackendBundle\Entity\UserFeastData $feastUserdfeastdata) {
         $this->feast_userdfeastdata->removeElement($feastUserdfeastdata);
     }
 
     /**
      * Get feast_userdfeastdata
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFeastUserdfeastdata()
-    {
+    public function getFeastUserdfeastdata() {
         return $this->feast_userdfeastdata;
     }
+
 }
