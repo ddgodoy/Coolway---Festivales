@@ -1,0 +1,27 @@
+
+
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Artista</th>
+            <td>{{ entity.artist }}</td>
+        </tr>
+        <tr>
+            <th>Etapa</th>
+            <td>{{ entity.getFeastStage }}</td>
+        </tr>
+        <tr>
+            <th>Fecha</th>
+            <td>{{entity.date | date("d-m-Y")}}</td>
+        </tr>
+        <tr>
+            <th>Hora</th>
+            <td>{{entity.time | date('h:m')}}</td>
+        </tr>
+
+    </tbody>
+</table>

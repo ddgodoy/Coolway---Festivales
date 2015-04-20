@@ -1,0 +1,274 @@
+{%extends "::dashboardBase.html.twig"%}
+
+{% block stylesheets %}
+    {{parent()}}
+
+{% endblock %}
+
+{%block content%}
+    <h3 class="page-title">
+        Panel de control
+    </h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="{{path("admin_dashboard")}}">Panel de control</a>
+                <i class="fa fa-angle-right"></i>
+
+            </li>
+            <li>
+                <a href="{{path("admin_award")}}">Gestionar Premios</a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="portlet box blue-madison">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-magic"></i>Gestionar Premios
+
+                    </div>
+
+                </div>
+                <div class="portlet-body">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-9">
+
+                                <a data-toggle="modal" data-target="#ajax" href="{{path("admin_award_new")}}" class=" btn green">
+                                    Nuevo <i class="fa fa-plus"></i></a>
+                                <a data-toggle="modal" data-target="#modalEdit" href="javascript:void(0)" id="btnedit" class="btn blue" disabled="disabled">
+                                    Editar <i class="fa fa-pencil"></i></a>
+                                <button id="btndelete" class=" btn red" disabled="disabled">
+                                    Eliminar <i class="fa fa-trash-o" ></i></button>
+                                <a data-toggle="modal" data-target="#modalDetail" id="btndetail" href="javascript:void(0)" class=" btn blue" disabled="disabled">
+                                    Detalles <i class="fa fa-list"></i></a>
+
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover" id="sample_1">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%">
+                                    Secuencial Autom&aacute;tico
+                                </th>
+                                <th>
+                                    Nombre
+                                </th>
+                                <th>
+                                    Festival
+                                </th>
+                                <th>
+                                    T&eacute;rminos y Condiciones
+                                </th>
+                                <th>
+                                    Habilitado
+                                </th>
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for entity in entities%}
+
+                                <tr>
+                                    <td>
+                                        {{entity.id}}
+                                    </td>
+                                    <td>
+                                        {{entity.name}}
+                                    </td>
+                                    <td>
+                                        {{entity.feast}}
+                                    </td>
+                                    <td>
+                                        {{entity.getTermsConditions}}
+                                    </td>
+                                    <td>
+                                        {{entity.enabled}}
+                                    </td>
+
+
+                                </tr>
+
+                            {%endfor%}
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" id="ajax" role="basic" aria-hidden="true">
+        <div class="page-loading page-loading-boxed">
+            <img src="{{asset('assets/global/img/loading-spinner-grey.gif')}}" alt="" class="loading">
+            <span>
+                &nbsp;&nbsp;Cargando... </span>
+        </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Detalles</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalEdit" role="basic" aria-hidden="true">
+        <div class="page-loading page-loading-boxed">
+            <img src="{{asset('assets/global/img/loading-spinner-grey.gif')}}" alt="" class="loading">
+            <span>
+                &nbsp;&nbsp;Cargando... </span>
+        </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+{%endblock%}
+
+
+{%block base_script%}
+    {{parent()}}
+{%endblock%}
+{%block inline_script%}
+
+    {{parent()}}
+    <script>
+        var columnas = new Array();
+        var counter = 0;
+
+        function Inspector(data) {
+            var btndetails = $('#btndetail');
+            var btnedit = $('#btnedit');
+            var btndelete = $('#btndelete');
+            if (data == 1) {
+                btndetails.removeAttr('disabled');
+                btnedit.removeAttr('disabled');
+
+            } else {
+                btnedit.attr('disabled', 'disabled');
+                btndetails.attr('disabled', 'disabled');
+            }
+
+            if (data > 0) {
+                btndelete.removeAttr('disabled');
+            }
+            else
+                btndelete.attr('disabled', 'disabled');
+        }
+        var initTable1 = function () {
+            var table = $('#sample_1');
+
+
+            $.extend(true, $.fn.DataTable.TableTools.classes, {
+                "container": "btn-group tabletools-dropdown-on-portlet",
+                "buttons": {
+                    "normal": "btn btn-sm default",
+                    "disabled": "btn btn-sm default disabled"
+                },
+                "collection": {
+                    "container": "DTTT_dropdown dropdown-menu tabletools-dropdown-menu"
+                }
+            });
+
+            var oTable = table.dataTable({
+                "order": [
+                    [0, 'asc']
+                ],
+                "lengthMenu": [
+                    [5, 15, 20, -1],
+                    [5, 15, 20, "All"] // change per page values here
+                ],
+                // set the initial value
+                "pageLength": 10,
+                "dom": "<'row' <'col-md-12'T>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
+
+                "tableTools": {
+                    "sSwfPath": "../../assets/global/plugins/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                    "aButtons": [],
+                    "sRowSelect": "multi",
+                    "fnRowSelected": function (node) {
+                        counter++;
+                        var value = oTable.dataTable().fnGetData(node);
+                        columnas.push(value[0]);
+                        Inspector(counter);
+                    },
+                    "fnRowDeselected": function (node) {
+                        counter--;
+                        var value = oTable.dataTable().fnGetData(node);
+                        Inspector(counter);
+                        var index = columnas.indexOf(value[0]);
+                        if (index > -1) {
+                            columnas.splice(index, 1);
+                        }
+
+                    }
+                },
+                "language": {
+                    "url": "{{asset('assets/js/i18n/Spanish.json')}}"
+                }
+
+            });
+
+            var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
+
+            tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
+        }
+
+        initTable1();
+
+        $("#modalDetail").on("show.bs.modal", function (e) {
+            var link = "{{path("admin_award_show")}}";
+            $(this).find(".modal-body").load(link + "?id=" + columnas[0]);
+        });
+        $("#modalEdit").on("show.bs.modal", function (e) {
+            var link = "{{path("admin_award_edit")}}";
+            $(this).find(".modal-content").load(link + "?id=" + columnas[0]);
+        });
+
+        $("#btndelete").on("click", function () {
+            $.ajax({
+                url: "{{path("admin_award_batchdelete")}}",
+                data: {"ids": columnas.toString()},
+                dataType: "json",
+                context: document.body
+            }).done(function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    window.location.href = "{{path('admin_award')}}";
+                }
+                else
+                    toastr.error(data.message);
+
+            });
+        })
+    </script>
+{%endblock%}
+

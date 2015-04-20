@@ -24,17 +24,17 @@ class FeastStage {
     private $id;
 
     /**
-     * @ManyToOne(targetEntity="Feast", cascade={"all"}, fetch="EAGER")
+     * @ManyToOne(targetEntity="Feast", fetch="EAGER")
      */
     private $feast;
 
     /**
-     * @ManyToOne(targetEntity="Stage", cascade={"all"}, fetch="EAGER")
+     * @ManyToOne(targetEntity="Stage",fetch="EAGER")
      */
     private $stage;
 
     /**
-     * @OneToMany(targetEntity="FeastStageArtist", mappedBy="feast_stage", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
+     * @OneToMany(targetEntity="FeastStageArtist", mappedBy="feast_stage",  orphanRemoval=true)
      */
     public $feast_stages_artist;
 
@@ -49,6 +49,10 @@ class FeastStage {
      */
     public function getId() {
         return $this->id;
+    }
+
+    public function __toString() {
+        return $this->feast . "-" . $this->stage;
     }
 
     /**
@@ -93,15 +97,13 @@ class FeastStage {
         return $this->stage;
     }
 
-
     /**
      * Add feast_stages_artist
      *
      * @param \CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist
      * @return FeastStage
      */
-    public function addFeastStagesArtist(\CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist)
-    {
+    public function addFeastStagesArtist(\CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist) {
         $this->feast_stages_artist[] = $feastStagesArtist;
 
         return $this;
@@ -112,18 +114,17 @@ class FeastStage {
      *
      * @param \CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist
      */
-    public function removeFeastStagesArtist(\CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist)
-    {
+    public function removeFeastStagesArtist(\CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist) {
         $this->feast_stages_artist->removeElement($feastStagesArtist);
     }
 
     /**
      * Get feast_stages_artist
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFeastStagesArtist()
-    {
+    public function getFeastStagesArtist() {
         return $this->feast_stages_artist;
     }
+
 }

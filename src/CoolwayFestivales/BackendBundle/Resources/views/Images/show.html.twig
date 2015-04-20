@@ -1,0 +1,27 @@
+
+
+<table class="table table-striped">
+    <tbody>
+        <tr>
+
+            <td colspan="2"><img class="img-responsive" src="{{asset(entity.getWebPath)}}" /></td>
+        </tr>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Festival</th>
+            <td>{{ entity.feast }}</td>
+        </tr>
+        <tr>
+            <th>Nombre de c&oacute;digo</th>
+            <td>{{ entity.getCodeName }}</td>
+        </tr>
+        <tr>
+            <th>Dance</th>
+            <td>{{ entity.enabled }}</td>
+        </tr>
+
+    </tbody>
+</table>

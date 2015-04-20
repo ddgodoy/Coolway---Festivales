@@ -23,12 +23,12 @@ class UserFeastData {
     private $id;
 
     /**
-     * @ManyToOne(targetEntity="Feast", cascade={"all"}, fetch="EAGER")
+     * @ManyToOne(targetEntity="Feast", fetch="EAGER")
      */
     private $feast;
 
     /**
-     * @ManyToOne(targetEntity="\CoolwayFestivales\SafetyBundle\Entity\User", cascade={"all"}, fetch="EAGER")
+     * @ManyToOne(targetEntity="\CoolwayFestivales\SafetyBundle\Entity\User",  fetch="EAGER")
      */
     private $user;
 
@@ -102,15 +102,13 @@ class UserFeastData {
         return $this->feast;
     }
 
-
     /**
      * Set total
      *
      * @param float $total
      * @return UserFeastData
      */
-    public function setTotal($total)
-    {
+    public function setTotal($total) {
         $this->total = $total;
 
         return $this;
@@ -119,10 +117,9 @@ class UserFeastData {
     /**
      * Get total
      *
-     * @return float 
+     * @return float
      */
-    public function getTotal()
-    {
+    public function getTotal() {
         return $this->total;
     }
 
@@ -132,8 +129,7 @@ class UserFeastData {
      * @param float $dance
      * @return UserFeastData
      */
-    public function setDance($dance)
-    {
+    public function setDance($dance) {
         $this->dance = $dance;
 
         return $this;
@@ -142,10 +138,9 @@ class UserFeastData {
     /**
      * Get dance
      *
-     * @return float 
+     * @return float
      */
-    public function getDance()
-    {
+    public function getDance() {
         return $this->dance;
     }
 
@@ -155,8 +150,7 @@ class UserFeastData {
      * @param float $music
      * @return UserFeastData
      */
-    public function setMusic($music)
-    {
+    public function setMusic($music) {
         $this->music = $music;
 
         return $this;
@@ -165,10 +159,9 @@ class UserFeastData {
     /**
      * Get music
      *
-     * @return float 
+     * @return float
      */
-    public function getMusic()
-    {
+    public function getMusic() {
         return $this->music;
     }
 
@@ -178,8 +171,7 @@ class UserFeastData {
      * @param integer $totalShare
      * @return UserFeastData
      */
-    public function setTotalShare($totalShare)
-    {
+    public function setTotalShare($totalShare) {
         $this->total_share = $totalShare;
 
         return $this;
@@ -188,10 +180,9 @@ class UserFeastData {
     /**
      * Get total_share
      *
-     * @return integer 
+     * @return integer
      */
-    public function getTotalShare()
-    {
+    public function getTotalShare() {
         return $this->total_share;
     }
 
@@ -201,8 +192,7 @@ class UserFeastData {
      * @param string $latitude
      * @return UserFeastData
      */
-    public function setLatitude($latitude)
-    {
+    public function setLatitude($latitude) {
         $this->latitude = $latitude;
 
         return $this;
@@ -211,10 +201,9 @@ class UserFeastData {
     /**
      * Get latitude
      *
-     * @return string 
+     * @return string
      */
-    public function getLatitude()
-    {
+    public function getLatitude() {
         return $this->latitude;
     }
 
@@ -224,8 +213,7 @@ class UserFeastData {
      * @param string $longitude
      * @return UserFeastData
      */
-    public function setLongitude($longitude)
-    {
+    public function setLongitude($longitude) {
         $this->longitude = $longitude;
 
         return $this;
@@ -234,10 +222,9 @@ class UserFeastData {
     /**
      * Get longitude
      *
-     * @return string 
+     * @return string
      */
-    public function getLongitude()
-    {
+    public function getLongitude() {
         return $this->longitude;
     }
 
@@ -247,8 +234,7 @@ class UserFeastData {
      * @param \CoolwayFestivales\SafetyBundle\Entity\User $user
      * @return UserFeastData
      */
-    public function setUser(\CoolwayFestivales\SafetyBundle\Entity\User $user = null)
-    {
+    public function setUser(\CoolwayFestivales\SafetyBundle\Entity\User $user = null) {
         $this->user = $user;
 
         return $this;
@@ -257,10 +243,10 @@ class UserFeastData {
     /**
      * Get user
      *
-     * @return \CoolwayFestivales\SafetyBundle\Entity\User 
+     * @return \CoolwayFestivales\SafetyBundle\Entity\User
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->user;
     }
+
 }

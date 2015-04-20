@@ -23,18 +23,18 @@ class FeastStageArtist {
     private $id;
 
     /**
-     * @ManyToOne(targetEntity="FeastStage", cascade={"all"}, fetch="EAGER")
+     * @ManyToOne(targetEntity="FeastStage",  fetch="EAGER")
      */
     private $feast_stage;
 
     /**
-     * @ManyToOne(targetEntity="Artist", cascade={"all"}, fetch="EAGER")
+     * @ManyToOne(targetEntity="Artist",  fetch="EAGER")
      */
     private $artist;
 
     /**
-     * @var string $date
-     * @ORM\Column(name="date", type="date")
+     * @var \DateTime
+     * @ORM\Column(name="date_from", type="datetime",  nullable=true)
      */
     private $date;
 
@@ -99,15 +99,13 @@ class FeastStageArtist {
         return $this->stage;
     }
 
-
     /**
      * Set date
      *
      * @param \DateTime $date
      * @return FeastStageArtist
      */
-    public function setDate($date)
-    {
+    public function setDate($date) {
         $this->date = $date;
 
         return $this;
@@ -116,10 +114,9 @@ class FeastStageArtist {
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
-    public function getDate()
-    {
+    public function getDate() {
         return $this->date;
     }
 
@@ -129,8 +126,7 @@ class FeastStageArtist {
      * @param \DateTime $time
      * @return FeastStageArtist
      */
-    public function setTime($time)
-    {
+    public function setTime($time) {
         $this->time = $time;
 
         return $this;
@@ -139,10 +135,9 @@ class FeastStageArtist {
     /**
      * Get time
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
-    public function getTime()
-    {
+    public function getTime() {
         return $this->time;
     }
 
@@ -152,8 +147,7 @@ class FeastStageArtist {
      * @param \CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStage
      * @return FeastStageArtist
      */
-    public function setFeastStage(\CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStage = null)
-    {
+    public function setFeastStage(\CoolwayFestivales\BackendBundle\Entity\FeastStage $feastStage = null) {
         $this->feast_stage = $feastStage;
 
         return $this;
@@ -162,10 +156,9 @@ class FeastStageArtist {
     /**
      * Get feast_stage
      *
-     * @return \CoolwayFestivales\BackendBundle\Entity\FeastStage 
+     * @return \CoolwayFestivales\BackendBundle\Entity\FeastStage
      */
-    public function getFeastStage()
-    {
+    public function getFeastStage() {
         return $this->feast_stage;
     }
 
@@ -175,8 +168,7 @@ class FeastStageArtist {
      * @param \CoolwayFestivales\BackendBundle\Entity\Artist $artist
      * @return FeastStageArtist
      */
-    public function setArtist(\CoolwayFestivales\BackendBundle\Entity\Artist $artist = null)
-    {
+    public function setArtist(\CoolwayFestivales\BackendBundle\Entity\Artist $artist = null) {
         $this->artist = $artist;
 
         return $this;
@@ -185,10 +177,10 @@ class FeastStageArtist {
     /**
      * Get artist
      *
-     * @return \CoolwayFestivales\BackendBundle\Entity\Artist 
+     * @return \CoolwayFestivales\BackendBundle\Entity\Artist
      */
-    public function getArtist()
-    {
+    public function getArtist() {
         return $this->artist;
     }
+
 }

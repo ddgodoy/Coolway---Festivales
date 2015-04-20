@@ -6,6 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\HttpFoundation\Image\UploadedImage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -26,7 +27,7 @@ class Award {
     private $id;
 
     /**
-     * @ManyToOne(targetEntity="Feast", cascade={"all"}, fetch="EAGER")
+     * @ManyToOne(targetEntity="Feast", fetch="EAGER")
      */
     private $feast;
 
@@ -42,20 +43,16 @@ class Award {
     protected $enabled;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="path", type="string", length=255, nullable=true)
+     * @var string $path
+     * @ORM\Column(name="path", type="string", nullable=true)
      */
     private $path;
     private $temp;
 
     /**
-     * @Assert\Image(
-     *      maxSize ="1M",
-     *      mimeTypes = {"image/jpg","image/png","image/gif","image/jpeg"}
-     * )
+     * @Assert\Image(maxSize ="1M", mimeTypes = {"image/jpg","image/png","image/gif","image/jpeg"})
      */
-    private $image;
+    protected $image;
 
     /**
      * @var string $terms_conditions
@@ -172,7 +169,7 @@ class Award {
     /**
      * Set image.
      *
-     * @param UploadedFile $image
+     * @param UploadedImage $image
      * @return User
      */
     public function setImage(UploadedFile $image = null) {
@@ -192,26 +189,26 @@ class Award {
     /**
      * Get image
      *
-     * @return UploadedFile
+     * @return UploadedImage
      */
     public function getImage() {
         return $this->image;
     }
 
     protected function getUploadDir() {
-        return 'uploads/award/';
+        return 'uploads/awards/';
     }
 
     protected function getUploadRootDir() {
-        return __DIR__ . '/../../../web/' . $this->getUploadDir();
+        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
     }
 
     public function getAbsolutePath() {
-        return null === $this->path ? null : $this->getUploadRootDir() . $this->path;
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
     public function getWebPath() {
-        return null === $this->path ? null : $this->getUploadDir() . $this->path;
+        return null === $this->path ? null : $this->getUploadDir() . '/' . $this->path;
     }
 
     /**
@@ -220,7 +217,7 @@ class Award {
      */
     public function preUpload() {
         if (NULL !== $this->image) {
-            $this->path = uniqid($this->username . '_') . '.' . $this->getImage()->guessExtension();
+            $this->path = uniqid() . '.' . $this->getImage()->guessExtension();
         }
     }
 
@@ -229,20 +226,18 @@ class Award {
      * @ORM\PostUpdate()
      */
     public function upload() {
-        if (null === $this->image) {
+        if (null === $this->getImage()) {
             return;
         }
-
         if (isset($this->temp)) {
             try {
-                unlink($this->getUploadRootDir() . $this->temp);
+                unlink($this->getUploadRootDir() . '/' . $this->temp);
             } catch (\Exception $e) {
                 // nothing to do
             }
             $this->temp = null;
         }
-
-        $this->image->move($this->getUploadRootDir(), $this->path);
+        $this->getImage()->move($this->getUploadRootDir(), $this->path);
         $this->image = null;
     }
 
@@ -250,12 +245,10 @@ class Award {
      * @ORM\PostRemove()
      */
     public function removeUpload() {
+        $path = $this->getAbsolutePath();
         try {
-            $path = $this->getAbsolutePath();
-
-            if (file_exists($path) && !is_dir($path)) {
+            if (file_exists($path) && !is_dir($path))
                 unlink($path);
-            }
         } catch (\Exception $e) {
             // nothing to do
         }

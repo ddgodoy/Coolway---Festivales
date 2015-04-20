@@ -67,6 +67,9 @@ class Artist {
         return $this->name;
     }
 
+    public function __toString() {
+        return $this->getName();
+    }
 
     /**
      * Add feast_stages_artist
@@ -74,8 +77,7 @@ class Artist {
      * @param \CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist
      * @return Artist
      */
-    public function addFeastStagesArtist(\CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist)
-    {
+    public function addFeastStagesArtist(\CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist) {
         $this->feast_stages_artist[] = $feastStagesArtist;
 
         return $this;
@@ -86,18 +88,17 @@ class Artist {
      *
      * @param \CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist
      */
-    public function removeFeastStagesArtist(\CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist)
-    {
+    public function removeFeastStagesArtist(\CoolwayFestivales\BackendBundle\Entity\FeastStageArtist $feastStagesArtist) {
         $this->feast_stages_artist->removeElement($feastStagesArtist);
     }
 
     /**
      * Get feast_stages_artist
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFeastStagesArtist()
-    {
+    public function getFeastStagesArtist() {
         return $this->feast_stages_artist;
     }
+
 }

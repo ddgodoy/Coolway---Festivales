@@ -23,12 +23,12 @@ class ArtistFavorites {
     private $id;
 
     /**
-     * @ManyToOne(targetEntity="Artist", cascade={"all"}, fetch="EAGER")
+     * @ManyToOne(targetEntity="Artist",  fetch="EAGER")
      */
     private $artist;
 
     /**
-     * @ManyToOne(targetEntity="\CoolwayFestivales\SafetyBundle\Entity\User", cascade={"all"}, fetch="EAGER")
+     * @ManyToOne(targetEntity="\CoolwayFestivales\SafetyBundle\Entity\User", fetch="EAGER")
      */
     private $user;
 
@@ -66,15 +66,13 @@ class ArtistFavorites {
         return $this->artist;
     }
 
-
     /**
      * Set user
      *
      * @param \CoolwayFestivales\SafetyBundle\Entity\User $user
      * @return ArtistFavorites
      */
-    public function setUser(\CoolwayFestivales\SafetyBundle\Entity\User $user = null)
-    {
+    public function setUser(\CoolwayFestivales\SafetyBundle\Entity\User $user = null) {
         $this->user = $user;
 
         return $this;
@@ -83,10 +81,10 @@ class ArtistFavorites {
     /**
      * Get user
      *
-     * @return \CoolwayFestivales\SafetyBundle\Entity\User 
+     * @return \CoolwayFestivales\SafetyBundle\Entity\User
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->user;
     }
+
 }

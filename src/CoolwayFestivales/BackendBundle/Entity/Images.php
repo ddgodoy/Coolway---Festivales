@@ -26,7 +26,7 @@ class Images {
     private $id;
 
     /**
-     * @ManyToOne(targetEntity="Feast", cascade={"all"}, fetch="EAGER")
+     * @ManyToOne(targetEntity="Feast",fetch="EAGER")
      */
     private $feast;
 
@@ -197,7 +197,7 @@ class Images {
     }
 
     protected function getUploadRootDir() {
-        return __DIR__ . '/../../../web/' . $this->getUploadDir();
+        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
     }
 
     public function getAbsolutePath() {
@@ -214,7 +214,7 @@ class Images {
      */
     public function preUpload() {
         if (NULL !== $this->image) {
-            $this->path = uniqid($this->username . '_') . '.' . $this->getImage()->guessExtension();
+            $this->path = uniqid($this->code_name . '_') . '.' . $this->getImage()->guessExtension();
         }
     }
 
