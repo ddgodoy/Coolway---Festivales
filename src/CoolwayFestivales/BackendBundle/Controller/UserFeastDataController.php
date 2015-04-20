@@ -32,6 +32,17 @@ class UserFeastDataController extends Controller {
     /**
      * Lists all UserFeastData entities.
      *
+     * @Route("/userfeastdatapotlet", name="admin_userfeastdataportlet")
+     * @Template()
+     */
+    public function userfeastdatapotletAction() {
+        $entities = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findAll();
+        return $this->render('BackendBundle:Backend:userfeastdata.html.twig', array("entities" => $entities));
+    }
+
+    /**
+     * Lists all UserFeastData entities.
+     *
      * @Route("/list", name="admin_userfeastdata_list")
      * @Template()
      */
