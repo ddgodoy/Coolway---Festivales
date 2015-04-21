@@ -15,7 +15,7 @@ class FeastStageType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('feast', null, array('label' => 'Festival'))
-                ->add('stage', null, array('label' => 'Etapa'))
+                ->add('stage', null, array('label' => 'Escenario'))
         ;
     }
 

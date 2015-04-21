@@ -15,7 +15,7 @@ class FeastStageArtistType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('artist', null, array('label' => 'Artista'))
-                ->add('feast_stage', null, array('label' => 'Etapa de Festival'))
+                ->add('feast_stage', null, array('label' => 'Escenario de Festival'))
                 ->add('date', null, array('label' => 'Fecha', 'format' => 'MM/dd/yyyy', 'widget' => 'single_text', 'attr' => array('class' => 'datepicker')))
                 ->add('time', 'time', array(
                     'input' => 'datetime',

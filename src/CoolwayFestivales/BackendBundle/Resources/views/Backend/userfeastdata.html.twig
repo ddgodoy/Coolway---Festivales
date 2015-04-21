@@ -1,0 +1,91 @@
+<div class="col-md-6 col-sm-6">
+    <div class="portlet box blue-steel">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-bell-o"></i>Datos recolectados en las fiestas
+            </div>
+
+        </div>
+        <div class="portlet-body">
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 300px;"><div data-rail-visible="0" data-always-visible="1" style="height: 300px; overflow: hidden; width: auto;" class="scroller" data-initialized="1">
+                    <table class="table table-striped table-bordered table-hover" id="sample_1">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Festival
+                                </th>
+                                <th>
+                                    Usuario
+                                </th>
+                                <th>
+                                    Total
+                                </th>
+                                <th>
+                                    Dance
+                                </th>
+                                <th>
+                                    Musica
+                                </th>
+                                <th>
+                                    Total Share
+                                </th>
+                                <th>
+                                    Latitud
+                                </th>
+                                <th>
+                                    Longitud
+                                </th>
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for entity in entities%}
+
+                                <tr>
+                                    <td>
+                                        {{entity.feast}}
+                                    </td>
+                                    <td>
+                                        {{entity.user}}
+                                    </td>
+                                    <td>
+                                        {{entity.total}}
+                                    </td>
+                                    <td>
+                                        {{entity.dance}}
+                                    </td>
+                                    <td>
+                                        {{entity.music}}
+                                    </td>
+                                    <td>
+                                        {{entity.getTotalShare}}
+                                    </td>
+                                    <td>
+                                        {{entity.latitude}}
+                                    </td>
+                                    <td>
+                                        {{entity.longitude}}
+                                    </td>
+
+
+                                </tr>
+
+                            {%endfor%}
+
+
+                        </tbody>
+                    </table>
+                </div><div class="slimScrollBar" style="background: none repeat scroll 0% 0% rgb(187, 187, 187); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px; height: 188.679px;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: none repeat scroll 0% 0% rgb(234, 234, 234); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

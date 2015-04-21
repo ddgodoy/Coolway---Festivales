@@ -51,12 +51,12 @@
             <!-- BEGIN HEADER INNER -->
             <div class="page-header-inner">
                 <!-- BEGIN LOGO -->
-                <div class="page-logo">
+                <div class="page-logo1" style="float: left;">
                     <a href="{{path("admin_dashboard")}}">
                         <img src="{{asset('assets/admin/layout/img/logo_small.png')}}" alt="logo" class="logo-default img-responsive"/>
                     </a>
                     <div class="menu-toggler sidebar-toggler hide">
-                        <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+
                     </div>
                 </div>
                 <!-- END LOGO -->
@@ -147,22 +147,17 @@
                                 <li class="active">
                                     <a href="{{path("admin_stage")}}">
                                         <i class="icon-list"></i>
-                                        Etapas</a>
+                                        Escenarios</a>
                                 </li>
                                 <li class="active">
                                     <a href="{{path("admin_step")}}">
                                         <i class="fa fa-steam "></i>
-                                        Steps</a>
+                                        Slider Bienvenida</a>
                                 </li>
                                 <li class="active">
                                     <a href="{{path("admin_award")}}">
                                         <i class="fa fa-magic "></i>
                                         Premios</a>
-                                </li>
-                                <li class="active">
-                                    <a href="{{path("admin_userfeastdata")}}">
-                                        <i class="fa fa-cube "></i>
-                                        UserFeastData</a>
                                 </li>
                                 <li class="active">
                                     <a href="{{path("admin_images")}}">
@@ -177,11 +172,11 @@
                                 <li class="active">
                                     <a href="{{path("admin_feaststage")}}">
                                         <i class="fa fa-cubes "></i>
-                                        Etapa de Festival</a>
+                                        Escenario de Festival</a>
                                 </li>
                                 <li class="active">
                                     <a href="{{path("admin_feaststageartist")}}">
-                                        <i class="fa fa-star-o"></i>Artista - Etapa de Festival</a>
+                                        <i class="fa fa-star-o"></i>Artista - Escenario de Festival</a>
                                 </li>
 
                             </ul>
@@ -204,27 +199,7 @@
             <div class="page-content-wrapper">
                 <div class="page-content">
                     {% block content %}
-                        <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 
-
-                        <h3 class="page-title">
-                            Panel de control
-                        </h3>
-                        <div class="page-bar">
-                            <ul class="page-breadcrumb">
-                                <li>
-                                    <i class="fa fa-home"></i>
-                                    <a href="index.html">Panel de control</a>
-
-                                </li>
-
-                            </ul>
-
-                        </div>
-                        <!-- END PAGE HEADER-->
-                        <!-- BEGIN DASHBOARD STATS -->
-
-                        <!-- END DASHBOARD STATS -->
 
                     {%endblock %}
                 </div>
