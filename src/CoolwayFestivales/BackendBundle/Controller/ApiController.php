@@ -73,6 +73,7 @@ class ApiController extends Controller {
                 $ranking[] = array(
                     'id' => $r['user_id'],
                     'position' => $i,
+                    'point'=>$r['user_id']*100;
                     'name' => $r['user'],
                     'favorite' => isset($favorites[$r['user_id']]) || $r['user_id'] == $user->getId() ? 1 : 0,
                 );
