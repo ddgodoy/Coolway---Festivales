@@ -54,7 +54,7 @@ security:
 #                lifetime:   86400
 
         backend:
-            pattern:        ^/
+            pattern:        ^/admin
             provider:       usuarios
             form_login:
                 login_path: /admin/login

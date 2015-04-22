@@ -68,6 +68,12 @@ class UserFeastData {
      */
     private $longitude;
 
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="date_from", type="datetime",  nullable=true)
+     */
+    private $date;
+
     public function __construct() {
 
     }
@@ -247,6 +253,27 @@ class UserFeastData {
      */
     public function getUser() {
         return $this->user;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return FeastStageArtist
+     */
+    public function setDate($date) {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate() {
+        return $this->date;
     }
 
 }

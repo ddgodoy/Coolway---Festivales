@@ -12,4 +12,27 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserFeastDataRepository extends EntityRepository {
 
+	public function findRanking($id) {
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT u.name as user, u.id as user_id, SUM( fd.total ) as total  FROM BackendBundle:UserFeastData fd
+			LEFT JOIN SafetyBundle:User u WITH fd.user = u.id
+			WHERE fd.feast = $id 
+			GROUP BY fd.user
+			ORDER BY total DESC"
+		);
+		
+		return $q->getResult();
+	}
+
+	public function findTimeline($feast_id,$user_id ) {
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT SUM(fd.total) as total, SUM(fd.dance) as dance, SUM(fd.music) as music, fd.date  FROM BackendBundle:UserFeastData fd
+			WHERE fd.feast = $feast_id  AND fd.user = $user_id
+			GROUP BY fd.date
+			ORDER BY fd.date DESC"
+		);
+		
+		return $q->getResult();
+	}
+
 }

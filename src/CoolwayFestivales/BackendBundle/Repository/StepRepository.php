@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class StepRepository extends EntityRepository {
 
+	public function findSlider($feast_id) {
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT s FROM BackendBundle:Step s
+			WHERE s.feast = $feast_id 
+			ORDER BY s.steps ASC"
+		);
+		
+		return $q->getResult();
+	}
 }
