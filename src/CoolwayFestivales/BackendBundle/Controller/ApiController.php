@@ -73,7 +73,7 @@ class ApiController extends Controller {
                 $ranking[] = array(
                     'id' => $r['user_id'],
                     'position' => $i,
-                    'point'=>$r['total']*100;
+                    'point'=>$r['total']*100,
                     'name' => $r['user'],
                     'favorite' => isset($favorites[$r['user_id']]) || $r['user_id'] == $user->getId() ? 1 : 0,
                 );
@@ -103,67 +103,62 @@ class ApiController extends Controller {
     public function lineupAction() {
 
         $data = $this->getData();
-        if($user = $this->checkToken($data))
-        {
+        $user = $this->checkToken($data);
 
-            $feastStageArtist = $this->getDoctrine()->getRepository('BackendBundle:FeastStageArtist')->getLineup();
-
+        $feastStageArtist = $this->getDoctrine()->getRepository('BackendBundle:FeastStageArtist')->getLineup();
+        if($user)
             $favorite_list = $this->getDoctrine()->getRepository('BackendBundle:ArtistFavorites')->findByUser($user);
+        else {
+            $favorite_list = array();
+        }
 
-            $favorites = array();
-            foreach($favorite_list as $f)
-                $favorites[$f->getArtist()->getId()] = $f->getArtist()->getId();
+        $favorites = array();
+        foreach($favorite_list as $f)
+            $favorites[$f->getArtist()->getId()] = $f->getArtist()->getId();
 
-            $lineup = array(); 
-            $last_date = '';
-            $last_stage = '';
-            $i = 0-1;
-            $j = 0-1;
-            foreach( $feastStageArtist as $f )
-            {
-                $date = $f['date']->format('Y-m-d');
-                $stage = $f['stage_id'];
+        $lineup = array();
+        $last_date = '';
+        $last_stage = '';
+        $i = 0-1;
+        $j = 0-1;
+        foreach( $feastStageArtist as $f )
+        {
+            $date = $f['date']->format('Y-m-d');
+            $stage = $f['stage_id'];
 
-                if($date != $last_date) {
-                    $i++;
-                    $lineup[$i] = array(
-                        'date' => $this->days[$f['date']->format('N')].', '.$f['date']->format('j').' '.$this->months[$f['date']->format('n')].' '.$f['date']->format('Y') ,
-                        'stages' => array()
-                    );
-                }
-
-                if($stage != $last_stage)
-                {
-                    $j++;
-                    $lineup[$i]['stages'][$j] = array(
-                        'name' => $f['stage'],
-                        'artist' => array()
-                    );
-                }
-
-                $lineup[$i]['stages'][$j]['artist'][] = array(
-                    'id' => $f['artist_id'],
-                    'name' => $f['artist'],
-                    'hour' => $f['time']->format('H:i'),
-                    'favorite' => isset($favorites[$f['artist_id']]) ? '1' : '0'
+            if($date != $last_date) {
+                $i++;
+                $lineup[$i] = array(
+                    'date' => $this->days[$f['date']->format('N')].', '.$f['date']->format('j').' '.$this->months[$f['date']->format('n')].' '.$f['date']->format('Y') ,
+                    'stages' => array()
                 );
-
-                $last_date = $date;
-                $last_stage = $stage;
-
             }
 
-            $data = array(
-                'status' => 'success',
-                'data' => $lineup
+            if($stage != $last_stage)
+            {
+                $j++;
+                $lineup[$i]['stages'][$j] = array(
+                    'name' => $f['stage'],
+                    'artist' => array()
+                );
+            }
+
+            $lineup[$i]['stages'][$j]['artist'][] = array(
+                'id' => $f['artist_id'],
+                'name' => $f['artist'],
+                'hour' => $f['time']->format('H:i'),
+                'favorite' => isset($favorites[$f['artist_id']]) ? '1' : '0'
             );
+
+            $last_date = $date;
+            $last_stage = $stage;
+
         }
-        else {
-            $data = array(
-                'status' => 'error',
-                'message' => 'lineup'
-            );
-        }
+
+        $data = array(
+            'status' => 'success',
+            'data' => $lineup
+        );
 
         return $this->setResponse($data);
     }
@@ -176,8 +171,8 @@ class ApiController extends Controller {
      */
     public function timelineAction() {
         $data = $this->getData();
-
-        if($user = $this->checkToken($data))
+        $user = $this->checkToken($data);
+        if($user)
         {
             $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
             $timeline_list = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTimeline($feast->getId(),$user->getId());
@@ -247,18 +242,16 @@ class ApiController extends Controller {
      * @Template()
      */
     public function mapAction() {
-        $data = $this->getData();
-        if($user = $this->checkToken($data))
-        {
-            $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
 
-            $img = $this->getDoctrine()->getRepository('BackendBundle:Images')->findOneBy(array(
-                'feast'=>$feast->getId(),
-                'code_name' => 'plano'
-            ));
+        $img = $this->getDoctrine()->getRepository('BackendBundle:Images')->findOneBy(array(
+            'feast'=>$feast->getId(),
+            'code_name' => 'plano'
+        ));
 
+        if($img) {
             $images = array(
-                'image' => 'http://local.coolway/uploads/images/'.$img->getPath(),
+                'image' => 'http://festivales.icox.mobi/uploads/images/'.$img->getPath(),
                 'title' => $feast->getName()
             );
 
@@ -266,7 +259,6 @@ class ApiController extends Controller {
                 'status' => 'success',
                 'data' => $images
             );
-
         }
         else {
             $data = array(
@@ -279,24 +271,22 @@ class ApiController extends Controller {
     }
 
     /**
-     * Map
+     * Awards
      *
      * @Route("/awards", name="api_awards")
      * @Template()
      */
-    public function awardsAction() {
-        $data = $this->getData();
-        $data = array('token'=>'1429625735362.7905');
-        if($user = $this->checkToken($data))
+    public function awardsAction() {       
+            
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        $a = $this->getDoctrine()->getRepository('BackendBundle:Award')->findOneBy(array(
+            'feast'=>$feast->getId()
+        ));
+
+        if($a)
         {
-            $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-
-            $a = $this->getDoctrine()->getRepository('BackendBundle:Award')->findOneBy(array(
-                'feast'=>$feast->getId()
-            ));
-
             $award = array (
-                'image' => 'http://local.coolway/uploads/awards/'.$a->getPath(),
+                'image' => 'http://festivales.icox.mobi/uploads/awards/'.$a->getPath(),
                 'title' => $a->getName(),
                 'text' => $a->getTermsConditions()
             );
@@ -305,12 +295,47 @@ class ApiController extends Controller {
                 'status' => 'success',
                 'data' => $award
             );
-
         }
         else {
             $data = array(
                 'status' => 'error',
-                'message' => 'map'
+                'message' => 'awards'
+            );
+        }
+
+        return $this->setResponse($data);
+    }
+
+    /**
+     * Terms
+     *
+     * @Route("/terms", name="api_terms")
+     * @Template()
+     */
+    public function termsAction() {       
+            
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        $a = $this->getDoctrine()->getRepository('BackendBundle:Award')->findOneBy(array(
+            'feast'=>$feast->getId()
+        ));
+
+        if($a)
+        {
+            $award = array (
+                'image' => 'http://festivales.icox.mobi/uploads/awards/'.$a->getPath(),
+                'title' => $a->getName(),
+                'text' => $a->getTermsConditions()
+            );
+
+            $data = array(
+                'status' => 'success',
+                'data' => $award
+            );
+        }
+        else {
+            $data = array(
+                'status' => 'error',
+                'message' => 'awards'
             );
         }
 
@@ -323,7 +348,7 @@ class ApiController extends Controller {
     	{
     		$em = $this->getDoctrine()->getManager();
         	if($user = $this->getDoctrine()->getRepository('SafetyBundle:User')->findOneBy(array('token_phone'=>$token)))
-        		return $user;
+        		return true;
             if(!$create)
                 return false;
         	
