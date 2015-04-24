@@ -120,7 +120,6 @@ class ApiController extends Controller {
         $last_date = '';
         $last_stage = '';
         $i = 0-1;
-        $j = 0-1;
         foreach( $feastStageArtist as $f )
         {
             $date = $f['date']->format('Y-m-d');
@@ -128,6 +127,7 @@ class ApiController extends Controller {
 
             if($date != $last_date) {
                 $i++;
+                $j = 0-1;
                 $lineup[$i] = array(
                     'date' => $this->days[$f['date']->format('N')].', '.$f['date']->format('j').' '.$this->months[$f['date']->format('n')].' '.$f['date']->format('Y') ,
                     'stages' => array()
@@ -251,7 +251,7 @@ class ApiController extends Controller {
 
         if($img) {
             $images = array(
-                'image' => 'http://festivales.icox.mobi/uploads/images/'.$img->getPath(),
+                'image' => $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/images/'.$img->getPath(),
                 'title' => $feast->getName()
             );
 
@@ -286,7 +286,7 @@ class ApiController extends Controller {
         if($a)
         {
             $award = array (
-                'image' => 'http://festivales.icox.mobi/uploads/awards/'.$a->getPath(),
+                'image' => $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/awards/'.$a->getPath(),
                 'title' => $a->getName(),
                 'text' => $a->getTermsConditions()
             );
@@ -322,7 +322,7 @@ class ApiController extends Controller {
         if($a)
         {
             $award = array (
-                'image' => 'http://festivales.icox.mobi/uploads/awards/'.$a->getPath(),
+                'image' => $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/awards/'.$a->getPath(),
                 'title' => $a->getName(),
                 'text' => $a->getTermsConditions()
             );
@@ -335,7 +335,70 @@ class ApiController extends Controller {
         else {
             $data = array(
                 'status' => 'error',
-                'message' => 'awards'
+                'message' => 'terms'
+            );
+        }
+
+        return $this->setResponse($data);
+    }
+
+    /**
+     * Profile
+     *
+     * @Route("/profile", name="api_profile")
+     * @Template()
+     */
+    public function profileAction() {
+        $data = $this->getData();
+        if($user = $this->checkToken($data))
+        {
+            $profile = array(
+                'name' => $user->getName(),
+                'email' => $user->getEmail()
+            );
+
+            $data = array(
+                'status' => 'success',
+                'data' => $profile
+            );
+        }
+        else {
+            $data = array(
+                'status' => 'error',
+                'message' => 'profile'
+            );
+        }
+
+        return $this->setResponse($data);
+    }
+
+    /**
+     * UpdateProfile
+     *
+     * @Route("/profile/update", name="api_profile_update")
+     * @Template()
+     */
+    public function profileUpdateAction() {
+        $data = $this->getData();
+        if($user = $this->checkToken($data))
+        {
+            $em = $this->getDoctrine()->getManager();
+            
+            $user->setName($data['name']);
+            $user->setEmail($data['email']);
+            
+            $em->persist($user);
+            $em->flush();
+
+            $data = array(
+                'status' => 'success',
+                'data' => 'data saved'
+            );
+        }
+        else {
+            $data = array(
+                'status' => 'error',
+                'message' => 'profile'
             );
         }
 
@@ -348,7 +411,7 @@ class ApiController extends Controller {
     	{
     		$em = $this->getDoctrine()->getManager();
         	if($user = $this->getDoctrine()->getRepository('SafetyBundle:User')->findOneBy(array('token_phone'=>$token)))
-        		return true;
+        		return $user;
             if(!$create)
                 return false;
         	
