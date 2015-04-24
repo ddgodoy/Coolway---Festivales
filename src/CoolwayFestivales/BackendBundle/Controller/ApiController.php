@@ -10,6 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use CoolwayFestivales\SafetyBundle\Entity\User;
+use CoolwayFestivales\BackendBundle\Entity\UserFavorites;
+use CoolwayFestivales\BackendBundle\Entity\ArtistFavorites;
 
 /**
  * API controller.
@@ -95,6 +97,64 @@ class ApiController extends Controller {
     }
 
     /**
+     * Ranking Favorite
+     *
+     * @Route("/ranking/favorite", name="api_ranking_favorite")
+     * @Template()
+     */
+    public function rankingFavoriteAction() {
+        $data = $this->getData();
+        if($user = $this->checkToken($data))
+        {
+            if( $data['is_favorite'] && $user->getId() != $data['id'] ) {
+                $favorite = $this->getDoctrine()->getRepository('BackendBundle:UserFavorites')->findOneBy(array('user'=> $user->getId(),'user_favorite'=>$data['id']));
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($favorite);
+                $em->flush();
+
+                $data = array(
+                    'status' => 'success',
+                    'data' => 'ranking favorite'
+                );
+            }
+            else if( $user->getId() != $data['id'] )
+            {
+                $userFavorite = $this->getDoctrine()->getRepository('SafetyBundle:User')->findOneBy(array('id'=> $data['id']));
+                if($userFavorite)
+                {
+                    $favorite = new UserFavorites();
+                    $favorite->setUser($user);
+
+                    $favorite->setUserFavorite($userFavorite);
+                    
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($favorite);
+                    $em->flush();
+                }
+
+                $data = array(
+                    'status' => 'success',
+                    'data' => 'ranking favorite'
+                );
+            }
+            else
+            {
+                $data = array(
+                    'status' => 'error',
+                    'message' => 'ranking favorite'
+                );    
+            }
+        }
+        else {
+            $data = array(
+                'status' => 'error',
+                'message' => 'ranking favorite'
+            );
+        }
+        return $this->setResponse($data);
+    }
+
+    /**
      * Lineup
      *
      * @Route("/lineup", name="api_lineup")
@@ -160,6 +220,64 @@ class ApiController extends Controller {
             'data' => $lineup
         );
 
+        return $this->setResponse($data);
+    }
+
+    /**
+     * Lineup Favorite
+     *
+     * @Route("/lineup/favorite", name="api_lineup_favorite")
+     * @Template()
+     */
+    public function lineupFavoriteAction() {
+        $data = $this->getData();
+        if($user = $this->checkToken($data))
+        {
+            if( $data['is_favorite'] && $user->getId() != $data['id'] ) {
+                $favorite = $this->getDoctrine()->getRepository('BackendBundle:ArtistFavorites')->findOneBy(array('user'=> $user->getId(),'artist'=>$data['id']));
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($favorite);
+                $em->flush();
+
+                $data = array(
+                    'status' => 'success',
+                    'data' => 'lineup favorite'
+                );
+            }
+            else if( $user->getId() != $data['id'] )
+            {
+                $artist = $this->getDoctrine()->getRepository('BackendBundle:Artist')->findOneBy(array('id'=> $data['id']));
+                if($artist)
+                {
+                    $favorite = new ArtistFavorites();
+                    $favorite->setUser($user);
+
+                    $favorite->setArtist($artist);
+                    
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($favorite);
+                    $em->flush();
+                }
+
+                $data = array(
+                    'status' => 'success',
+                    'data' => 'lineup favorite'
+                );
+            }
+            else
+            {
+                $data = array(
+                    'status' => 'error',
+                    'message' => 'lineup favorite'
+                );    
+            }
+        }
+        else {
+            $data = array(
+                'status' => 'error',
+                'message' => 'lineup favorite'
+            );
+        }
         return $this->setResponse($data);
     }
 
