@@ -29,6 +29,11 @@ class User implements AdvancedUserInterface, \Serializable {
     protected $id;
 
     /**
+     * @ORM\Column(type="text", length=255,nullable=true)
+     */
+    protected $notificationId;
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     protected $username;
@@ -126,6 +131,24 @@ class User implements AdvancedUserInterface, \Serializable {
      */
     public function getId() {
         return $this->id;
+    }
+
+    /**
+     * Set notificationId
+     *
+     * @param string $notificationId
+     */
+    public function setNotificationId($notificationId) {
+        $this->notificationId = $notificationId;
+    }
+
+    /**
+     * Get notificationId
+     *
+     * @return string
+     */
+    public function getnotificationId() {
+        return $this->notificationId;
     }
 
     /**

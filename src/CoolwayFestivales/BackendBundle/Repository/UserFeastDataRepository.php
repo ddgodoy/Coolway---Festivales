@@ -26,13 +26,57 @@ class UserFeastDataRepository extends EntityRepository {
 
 	public function findTimeline($feast_id,$user_id ) {
 		$q = $this->getEntityManager()->createQuery(
-			"SELECT SUM(fd.total) as total, SUM(fd.dance) as dance, SUM(fd.music) as music, fd.date  FROM BackendBundle:UserFeastData fd
+			"SELECT  Date(fd.date) as fecha,SUM(fd.total) as total, SUM(fd.dance) as dance, SUM(fd.music) as music, fd.date  FROM BackendBundle:UserFeastData fd
 			WHERE fd.feast = $feast_id  AND fd.user = $user_id
-			GROUP BY fd.date
+			GROUP BY fecha
 			ORDER BY fd.date DESC"
 		);
 		
 		return $q->getResult();
+	}
+
+	public function findMyTotal($feast_id,$user_id ) {
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT SUM(fd.total) as total, SUM(fd.dance) as dance, SUM(fd.music) as music, fd.date  FROM BackendBundle:UserFeastData fd
+			WHERE fd.feast = $feast_id  AND fd.user = $user_id
+			GROUP BY fd.user"
+		);
+		
+		try {
+			return $q->getSingleResult();
+		} catch (\Doctrine\ORM\NoResultException $e) {
+			return false;
+		}
+	}
+
+	public function findLastData($user_id ) {
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT fd.total as total, fd.dance as dance, fd.music as music, fd.date  FROM BackendBundle:UserFeastData fd
+			WHERE fd.user = $user_id
+			ORDER BY fd.date DESC"
+		);
+		$q->setMaxResults(1);
+		
+		try {
+			return $q->getSingleResult();
+		} catch (\Doctrine\ORM\NoResultException $e) {
+			return false;
+		}
+	}
+
+	public function findMedia($feast_id ) {
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT fd.total as total, count(fd.total) as quantity  FROM BackendBundle:UserFeastData fd
+			WHERE fd.feast = $feast_id
+			GROUP BY fd.feast"
+		);
+		$q->setMaxResults(1);
+		
+		try {
+			return $q->getSingleResult();
+		} catch (\Doctrine\ORM\NoResultException $e) {
+			return false;
+		}
 	}
 
 }

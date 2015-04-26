@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use CoolwayFestivales\SafetyBundle\Entity\User;
 use CoolwayFestivales\BackendBundle\Entity\UserFavorites;
 use CoolwayFestivales\BackendBundle\Entity\ArtistFavorites;
+use CoolwayFestivales\BackendBundle\Entity\UserFeastData;
 
 /**
  * API controller.
@@ -23,6 +24,99 @@ class ApiController extends Controller {
     protected $days = array(1 =>'Lunes',2 =>'Martes',3 =>'Miercoles',4 =>'Jueves',5 =>'Viernes',6 =>'Sabado',7 =>'Domingo');
 
     protected $months = array (1 => 'Enero',2 => 'Febrero',3 => 'Marzo',4 => 'Abril',5 => 'Mayo',6 => 'Junio',7 => 'Julio',8 => 'Agosto',9 => 'Septiembre',10 => 'Octubre',11 => 'Noviembre',12 => 'Diciembre');
+
+    /**
+     * Add Data
+     *
+     * @Route("/data", name="api_data")
+     * @Template()
+     */
+    public function dataAction() {
+        $data = $this->getData();
+        $user = $this->checkToken($data);
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        
+        if($data['first'] == "0" && $data['logged'] == "1" && $user)
+        {
+            $d = new \DateTime();
+            $fd = new UserFeastData();
+            $fd->setUser($user);
+            $fd->setFeast($feast);            
+            $fd->setTotal($data['total']);
+            $fd->setDance($data['dance']);
+            $fd->setMusic($data['music']);
+            $fd->setLatitude($data['latitude']);
+            $fd->setLongitude($data['longitude']);
+            $fd->setTotalShare('0');
+            $fd->setDate($d);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($fd);
+            $em->flush();
+        }
+
+        $information = array();
+        $information['position'] = "0";
+        $information['points'] = "0";
+        $information['total'] = "0";
+
+        if($data['logged'] == "1" && $user )
+        {
+            $total = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findMyTotal($feast->getId(),$user->getId());
+
+            if($total)            
+                $information['total'] = ceil($total['total']*100);
+
+            $ranking_list = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findRanking($feast->getId());
+            $i = 1;
+
+            foreach($ranking_list as $r)
+            {
+                if( $r['user_id'] == $user->getId() )
+                {
+                    $information['position'] = $i;
+                    $information['points'] = ceil($r['total']*100);
+                    break;
+                }
+            }
+            
+            
+            $lastData = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findLastData($user->getId());
+            if($lastData)
+            {
+                $information['dance'] = $lastData['dance']*100;
+                $information['music'] = $lastData['music']*100;
+                $information['feast'] = $lastData['total']*100;
+            }
+            else
+            {
+                $information['dance'] = "0";
+                $information['music'] = "0";
+                $information['feast'] = "0";
+            }
+        }
+        else
+        {
+            $information['total'] = "0";
+            $information['points'] = "0";
+            $information['position'] = "0";
+            $information['dance'] = "0";
+            $information['music'] = "0";
+            $information['feast'] = "0";
+        }
+            
+        $media = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findMedia($feast->getId());
+        
+        if($media)
+            $information['media'] = ceil(($media['total']*100)/$media['quantity']);
+
+        $data = array(
+            'status' => 'success',
+            'data' => $information
+        );
+
+        return $this->setResponse($data);
+    }
 
 	/**
      * Login User
@@ -75,7 +169,7 @@ class ApiController extends Controller {
                 $ranking[] = array(
                     'id' => $r['user_id'],
                     'position' => $i,
-                    'point'=>$r['total']*100,
+                    'point'=>ceil($r['total']*100),
                     'name' => $r['user'],
                     'favorite' => isset($favorites[$r['user_id']]) || $r['user_id'] == $user->getId() ? 1 : 0,
                 );
@@ -289,6 +383,7 @@ class ApiController extends Controller {
      */
     public function timelineAction() {
         $data = $this->getData();
+        $data = array('token'=>'1e93ee47231575bd');
         $user = $this->checkToken($data);
         if($user)
         {
@@ -305,9 +400,9 @@ class ApiController extends Controller {
                     $date = $this->days[$l['date']->format('N')].', '.$l['date']->format('j').' '.$this->months[$l['date']->format('n')];
                 $timeline[]=array(
                     'date' => $date,
-                    'percent' => $l['total']*100,
-                    'music' => $l['music']*100,
-                    'dance' => $l['dance']*100,
+                    'percent' => ceil($l['total']),
+                    'music' => ceil($l['music']),
+                    'dance' => ceil($l['dance']),
                 );
             }
 
@@ -430,24 +525,23 @@ class ApiController extends Controller {
      * @Route("/terms", name="api_terms")
      * @Template()
      */
-    public function termsAction() {       
+    public function termsAction() {
             
         $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-        $a = $this->getDoctrine()->getRepository('BackendBundle:Award')->findOneBy(array(
-            'feast'=>$feast->getId()
+        $a = $this->getDoctrine()->getRepository('BackendBundle:Terms')->findOneBy(array(
+            'id'=>1
         ));
 
         if($a)
         {
-            $award = array (
-                'image' => $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/awards/'.$a->getPath(),
+            $terms = array (
                 'title' => $a->getName(),
-                'text' => $a->getTermsConditions()
+                'text' => $a->getText()
             );
 
             $data = array(
                 'status' => 'success',
-                'data' => $award
+                'data' => $terms
             );
         }
         else {
@@ -523,13 +617,84 @@ class ApiController extends Controller {
         return $this->setResponse($data);
     }
 
+    /**
+     * SendNotification
+     *
+     * @Route("/notification/send", name="api_notification_send")
+     * @Template()
+     */
+    public function notificationSendAction()
+    {
+        $url = 'https://android.googleapis.com/gcm/send';
+
+        $users =  $this->getDoctrine()->getRepository('SafetyBundle:User')->findNotification();
+
+        $ids = array();
+
+        foreach($users as $u)
+        {
+            $ids[]= $u->getNotificationId();            
+        }
+
+        if(!count($ids))
+            die("not user to send");
+
+        $em = $this->getDoctrine()->getManager();
+        $notification_list = $this->getDoctrine()->getRepository('BackendBundle:Notification')->findBy(array('send'=>0));
+
+        foreach($notification_list as $n)
+        {
+
+            $fields = array(
+                "data"=>array(
+                    'title'=>$n->getName(),
+                    'message'=>$n->getText(),
+                ),
+                "registration_ids"=>$ids 
+            );
+
+            $headers = array( 
+                'Authorization: key=AIzaSyCFpBmNym9kaRPoUA-ZKogSk-QZzvLhlfc',
+                'Content-Type: application/json'
+            );
+            
+            $ch = curl_init(); 
+            curl_setopt($ch, CURLOPT_URL, $url); 
+            curl_setopt($ch, CURLOPT_POST, true); 
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+            $result = curl_exec($ch);
+            curl_close($ch);
+            file_put_contents('notification_data.text', "$result\r\n",FILE_APPEND);
+
+            $n->setSend(1);
+            $em->persist($n);
+        }
+        $em->flush();
+
+        die();
+
+        //sender id = 1090006415155;
+        //api key = AIzaSyCFpBmNym9kaRPoUA-ZKogSk-QZzvLhlfc
+    }
+
     private function checkToken($data, $create = false) {
     	
     	if (isset($data['token']) && $token = $data['token'])
     	{
     		$em = $this->getDoctrine()->getManager();
         	if($user = $this->getDoctrine()->getRepository('SafetyBundle:User')->findOneBy(array('token_phone'=>$token)))
+            {
+                if(isset($data['notificationId']) && $data['notificationId'] )
+                {
+                    $user->setNotificationId($data['notificationId']);
+                    $em->persist($user);
+                    $em->flush();
+                }
         		return $user;
+            }
             if(!$create)
                 return false;
         	
@@ -540,6 +705,10 @@ class ApiController extends Controller {
         	$user->setSalt(md5(time().rand()));
         	$user->setName($data['name']);
         	$user->setEmail(strtolower(trim($data['email'])));
+            
+            if(isset($data['notificationId']) && $data['notificationId'] )
+                $user->setNotificationId($data['notificationId']);
+
         	$em->persist($user);
         	$em->flush();
 

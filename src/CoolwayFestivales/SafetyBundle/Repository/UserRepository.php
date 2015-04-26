@@ -31,4 +31,13 @@ class UserRepository extends EntityRepository implements ContainerAwareInterface
         return $result;
         
     }
+
+    public function findNotification() {
+        $q = $this->getEntityManager()->createQuery(
+            "SELECT u FROM SafetyBundle:User u
+            WHERE u.notificationId != 'NULL'"
+        );
+        
+        return $q->getResult();
+    }
 }

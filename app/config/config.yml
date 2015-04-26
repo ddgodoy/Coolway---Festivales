@@ -60,6 +60,9 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+        dql:
+            datetime_functions:
+                Date: CoolwayFestivales\BackendBundle\Util\Date
 
 # Swiftmailer Configuration
 swiftmailer:
