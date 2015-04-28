@@ -26,7 +26,7 @@ class UserFeastDataRepository extends EntityRepository {
 
 	public function findTimeline($feast_id,$user_id ) {
 		$q = $this->getEntityManager()->createQuery(
-			"SELECT  Date(fd.date) as fecha,SUM(fd.total) as total, SUM(fd.dance) as dance, SUM(fd.music) as music, fd.date  FROM BackendBundle:UserFeastData fd
+			"SELECT  Date(fd.date) as fecha , SUM(fd.total) as total, SUM(fd.dance) as dance, SUM(fd.music) as music, fd.date  FROM BackendBundle:UserFeastData fd
 			WHERE fd.feast = $feast_id  AND fd.user = $user_id
 			GROUP BY fecha
 			ORDER BY fd.date DESC"
@@ -35,6 +35,44 @@ class UserFeastDataRepository extends EntityRepository {
 		return $q->getResult();
 	}
 
+	public function findTotalDay($feast_id,$date ) {
+		
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT Date(fd.date) as fecha, SUM(fd.total) as total FROM BackendBundle:UserFeastData fd
+			WHERE fd.feast = $feast_id AND Date(fd.date) = '$date'
+			GROUP BY fecha
+			ORDER BY fd.date DESC"
+		);
+		$q->setMaxResults(1);
+		
+		try {
+			return $q->getSingleResult();
+		} catch (\Doctrine\ORM\NoResultException $e) {
+			return false;
+		}
+	}
+
+	public function findUsersForDay($feast_id,$date ) {
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT SUM(fd.total) as total FROM BackendBundle:UserFeastData fd
+			WHERE fd.feast = $feast_id  AND Date(fd.date) = '$date'
+			GROUP BY fd.user"
+		);
+		
+		return $q->getResult();
+	}
+
+	public function findUsersForFeast($feast_id) {
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT fd.total FROM BackendBundle:UserFeastData fd
+			WHERE fd.feast = $feast_id
+			GROUP BY fd.user"
+		);
+		
+		return $q->getResult();
+	}
+	
+
 	public function findMyTotal($feast_id,$user_id ) {
 		$q = $this->getEntityManager()->createQuery(
 			"SELECT SUM(fd.total) as total, SUM(fd.dance) as dance, SUM(fd.music) as music, fd.date  FROM BackendBundle:UserFeastData fd
@@ -42,6 +80,8 @@ class UserFeastDataRepository extends EntityRepository {
 			GROUP BY fd.user"
 		);
 		
+		$q->setMaxResults(1);
+
 		try {
 			return $q->getSingleResult();
 		} catch (\Doctrine\ORM\NoResultException $e) {
@@ -64,9 +104,9 @@ class UserFeastDataRepository extends EntityRepository {
 		}
 	}
 
-	public function findMedia($feast_id ) {
+	public function findTotal($feast_id ) {
 		$q = $this->getEntityManager()->createQuery(
-			"SELECT fd.total as total, count(fd.total) as quantity  FROM BackendBundle:UserFeastData fd
+			"SELECT SUM(fd.total) as total FROM BackendBundle:UserFeastData fd
 			WHERE fd.feast = $feast_id
 			GROUP BY fd.feast"
 		);

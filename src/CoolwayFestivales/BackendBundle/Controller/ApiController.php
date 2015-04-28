@@ -25,6 +25,11 @@ class ApiController extends Controller {
 
     protected $months = array (1 => 'Enero',2 => 'Febrero',3 => 'Marzo',4 => 'Abril',5 => 'Mayo',6 => 'Junio',7 => 'Julio',8 => 'Agosto',9 => 'Septiembre',10 => 'Octubre',11 => 'Noviembre',12 => 'Diciembre');
 
+    private $convertPoint = 100;
+    private $km = 1.5;
+    private $kf = 0.5;
+    private $kr = 0.5;
+
     /**
      * Add Data
      *
@@ -34,6 +39,7 @@ class ApiController extends Controller {
     public function dataAction() {
         $data = $this->getData();
         $user = $this->checkToken($data);
+
         $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
         
         if($data['first'] == "0" && $data['logged'] == "1" && $user)
@@ -41,7 +47,7 @@ class ApiController extends Controller {
             $d = new \DateTime();
             $fd = new UserFeastData();
             $fd->setUser($user);
-            $fd->setFeast($feast);            
+            $fd->setFeast($feast);
             $fd->setTotal($data['total']);
             $fd->setDance($data['dance']);
             $fd->setMusic($data['music']);
@@ -65,7 +71,7 @@ class ApiController extends Controller {
             $total = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findMyTotal($feast->getId(),$user->getId());
 
             if($total)            
-                $information['total'] = ceil($total['total']*100);
+                $information['total'] = ceil($total['total']*$this->convertPoint);
 
             $ranking_list = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findRanking($feast->getId());
             $i = 1;
@@ -75,7 +81,7 @@ class ApiController extends Controller {
                 if( $r['user_id'] == $user->getId() )
                 {
                     $information['position'] = $i;
-                    $information['points'] = ceil($r['total']*100);
+                    $information['points'] = ceil($r['total']*$this->convertPoint);
                     break;
                 }
             }
@@ -84,9 +90,9 @@ class ApiController extends Controller {
             $lastData = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findLastData($user->getId());
             if($lastData)
             {
-                $information['dance'] = $lastData['dance']*100;
-                $information['music'] = $lastData['music']*100;
-                $information['feast'] = $lastData['total']*100;
+                $information['dance'] = ceil($lastData['dance']*$this->convertPoint);
+                $information['music'] = ceil($lastData['music']*$this->convertPoint);
+                $information['feast'] = ceil($lastData['total']*$this->convertPoint);
             }
             else
             {
@@ -104,11 +110,15 @@ class ApiController extends Controller {
             $information['music'] = "0";
             $information['feast'] = "0";
         }
+
+        //$total_day = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotalDay($feast->getId(),$tmpDate);
+        //$user_day = count( $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findUsersForDay($feast->getId(),$tmpDate) );
             
-        $media = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findMedia($feast->getId());
+        $totalForFeast = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotal($feast->getId());
+        $usersForFeast = count ( $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findUsersForFeast($feast->getId()) );
+        $media = $totalForFeast['total'] / $usersForFeast;
         
-        if($media)
-            $information['media'] = ceil(($media['total']*100)/$media['quantity']);
+        $information['media'] = ceil($media*$this->convertPoint);
 
         $data = array(
             'status' => 'success',
@@ -169,7 +179,7 @@ class ApiController extends Controller {
                 $ranking[] = array(
                     'id' => $r['user_id'],
                     'position' => $i,
-                    'point'=>ceil($r['total']*100),
+                    'point'=>ceil($r['total']*$this->convertPoint),
                     'name' => $r['user'],
                     'favorite' => isset($favorites[$r['user_id']]) || $r['user_id'] == $user->getId() ? 1 : 0,
                 );
@@ -383,7 +393,6 @@ class ApiController extends Controller {
      */
     public function timelineAction() {
         $data = $this->getData();
-        $data = array('token'=>'1e93ee47231575bd');
         $user = $this->checkToken($data);
         if($user)
         {
@@ -398,11 +407,22 @@ class ApiController extends Controller {
                     $date = 'Ayer';
                 else
                     $date = $this->days[$l['date']->format('N')].', '.$l['date']->format('j').' '.$this->months[$l['date']->format('n')];
+                
+                $music = ( $l['music'] * $this->kf * $this->kr ) / $l['total'];
+                $dance = ( $l['dance'] * $this->kf * $this->km ) / $l['total'];
+
+                $tmpDate = $l['date']->format('Y-m-d');
+                $total_day = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotalDay($feast->getId(),$tmpDate);
+                $user_day = count( $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findUsersForDay($feast->getId(),$tmpDate) );
+
+                $media = ceil ( ($total_day['total']/$user_day )*$this->convertPoint );
+
                 $timeline[]=array(
                     'date' => $date,
-                    'percent' => ceil($l['total']),
-                    'music' => ceil($l['music']),
-                    'dance' => ceil($l['dance']),
+                    'total' => ceil($l['total']*$this->convertPoint),
+                    'media' => $media,
+                    'music' => $music*100,
+                    'dance' => $dance*100,
                 );
             }
 
