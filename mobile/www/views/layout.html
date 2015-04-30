@@ -1,0 +1,28 @@
+<ion-view>
+	<drawer side="left" class="menu-left">
+	    <ion-content class="menu-wrapper">
+	        <h2>Menu</h2>
+	        <ul class="menu-list">
+	        	<li><a ui-sref="layout.level" ng-click="closeDrawer()">Inicio</a></li>
+	            <li><a ui-sref="layout.lineup" ng-click="closeDrawer()">Conciertos</a></li>
+	            <li><a ui-sref="layout.infofest" ng-click="closeDrawer()">Mapa</a></li>
+	            <li><a ui-sref="layout.awards" ng-click="closeDrawer()">Premios Coolway </a></li>
+	            <li><a ui-sref="layout.profile" ng-click="closeDrawer()">Mi Perfil</a></li>
+	            <li>
+	            	<a ng-show="isLogged" ng-click="logout();closeDrawer()">Log out</a>
+	            	<a ng-show="!isLogged" ui-sref="login" ng-click="closeDrawer()">Login</a>
+	            </li>
+	        </ul>
+	    </ion-content>
+	</drawer>
+	<ion-pane>
+		<div class="header">
+			<a ui-sref="layout.level">
+				<img src="img/logo.png">
+			</a>
+			<i ng-click="toggleDrawer()" class="icon ion-navicon btn-menu"></i>
+		</div>
+		<ion-nav-view name="content">
+		</ion-nav-view>
+	</ion-pane>
+</ion-view>

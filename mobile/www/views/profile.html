@@ -1,0 +1,27 @@
+<ion-view class="bg-two profile">
+	<ion-content scroll="false" class="has-header">
+	<form name="profileForm" ng-submit="processForm()">
+		<label class="item item-input item-stacked-label">
+			<span class="input-label">Nombre</span>
+			<input type="text" name="name" ng-model="user.name" required placeholder="Nombre">
+			<div ng-show="profileForm.$submitted || profileForm.name.$touched">
+				<span class="error" ng-show="profileForm.name.$error.required">Requerido</span>
+			</div>
+		</label>
+		<label class="item item-input item-stacked-label">
+			<span class="input-label" >E-mail</span>
+			<input type="email" name="email" ng-model="user.email" required placeholder="email@dominio.com">
+			<div ng-show="profileForm.$submitted || profileForm.email.$touched">
+				<span class="error" ng-show="profileForm.email.$error.required">Requerido</span>
+				<span class="error" ng-show="profileForm.email.$error.email">E-mail invalido</span>
+			</div>
+		</label>
+		<div class="row">
+			<div class="col">
+				<button type="submit" class="profile-button button button-block button-positive activated">GUARDAR CAMBIOS</button>
+				<span class="success" ng-show="saved">Datos Guardados</span>
+			</div>
+		</div>
+	</form>
+	</ion-content>
+</ion-view>

@@ -1,0 +1,28 @@
+<ion-view class="bg-two ranking">
+	<div class="has-header">
+		<h1 class="title">RANKING</h1>
+		<div class="search-box">
+			<div class="list list-inset">
+				<label class="item item-input">
+					<i class="icon ion-search placeholder-icon"></i>
+					<input type="text" ng-change="scrollTop()" placeholder="Busca a tus amigos" ng-model="searchFriend.$">
+				</label>
+				<button class="input-button" ng-class="{ favorite: isFavorite }" ng-click="searchFriend.favorite = filterFavorite()">
+					<i class="icon ion-heart"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+	<ion-content class="has-search-box ranking-content">
+		<ion-list class="ranking-list">
+			<ion-item ng-repeat="item in ranking | filter:searchFriend" ng-class="{ active: item.favorite }" >
+				<span class="ranking-position">{{ item.position }}.</span>
+				<span class="ranking-name">{{ item.name }} ({{ item.point }})</span>
+				<button class="ranking-add-favorite" ng-click="addFavorite(item)" ng-class="{ favorite: item.favorite == 1 , wait: item.favorite == 2  }"><i class="icon ion-heart"></i></button>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+	<a class="ranking-share" ng-click="share()">
+		<img src="img/btn-share.png">
+	</a>
+</ion-view>

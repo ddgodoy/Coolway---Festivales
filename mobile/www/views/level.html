@@ -1,0 +1,43 @@
+<ion-view class="bg-two level">
+	<ion-content class="has-header" scroll="false">
+		<h2 class="title"></h2>
+		<div class="level-circle">
+			<div class="level-circle-full" style="-webkit-clip-path: {{TotalPolygon}}"></div>
+			<span class="level-total-percent">{{TotalPercent}}%</span>
+			<div class="level-extra-data">
+				<div class="wrapper">
+					<div class="level-total">
+						{{ $root.total }}<br>
+						<span>total</span>
+					</div>
+					<div class="level-media">
+						{{ $root.media }}<br>
+						<span>media</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="level-bars">
+			<div class="level-bar level-dance" style="-webkit-clip-path: {{DancePolygon}}"></div>
+			<div class="level-bar level-music" style="-webkit-clip-path: {{MusicPolygon}}"></div>
+			<div class="level-bar-txt">
+				<span>Música</span>
+				<span>Baile</span>
+			</div>
+		</div>
+		<div class="level-footer">
+			<a class="level-footer-button" ui-sref="layout.timeline">
+				<img src="img/btn-timeline.png">
+				<span>HISTORIAL</span>
+			</a>
+			<a class="level-footer-button" ui-sref="layout.ranking">
+				<img src="img/btn-ranking.png">
+				<span>RANKING</span>
+			</a>
+			<a class="level-footer-button" ng-click="share()">
+				<img src="img/btn-share.png">
+				<span>COMPARTIR</span>
+			</a>
+		</div>
+	</ion-content>
+</ion-view>

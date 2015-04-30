@@ -1,0 +1,28 @@
+<ion-view class="bg-two login">
+	
+	<img class="login-logo" src="img/slide-1.png">
+	
+	<p class="login-title">I	niciar sesión</p>
+
+	<div class="row">
+		<div class="col">
+			<button class="login-btn login-btn-facebook" ng-click="loginFacebook()">
+				<i class="icon ion-social-facebook pull-left"></i><span>facebook</span>
+			</button>
+			<button class="login-btn login-btn-twitter" ng-click="loginTwitter()">
+				<i class="icon ion-social-twitter pull-left"></i><span>twitter</span>
+			</button>
+			<button class="login-btn login-btn-google" ng-click="loginGoogle()">
+				<i class="icon ion-social-google pull-left"></i><span>google</span>
+			</button>
+			<button class="login-btn login-btn-instagram" ng-click="loginInstagram()">
+				<i class="icon ion-social-instagram-outline pull-left"></i><span>instagram</span>
+			</button>
+		</div>
+	</div>
+
+	<a ng-click="loginFake()" class="login-without">Acceder sin registro</a>
+
+	<p class="login-terms" ng-click="openModal()">Al registrarte, aceptas terminos y condiciones.</p>
+
+</ion-view>
