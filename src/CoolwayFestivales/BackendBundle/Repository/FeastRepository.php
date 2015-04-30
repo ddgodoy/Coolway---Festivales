@@ -12,18 +12,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class FeastRepository extends EntityRepository {
 
-	public function findCurrent()
-	{
-		$now = date('Y-m-d 00:00:00');
-		$q = $this->getEntityManager()->createQuery(
-			"SELECT f FROM BackendBundle:Feast f
+    public function findCurrent() {
+        $now = date('Y-m-d 00:00:00');
+        $q = $this->getEntityManager()->createQuery(
+                "SELECT f FROM BackendBundle:Feast f
 			WHERE f.date_from <= '$now'  AND f.date_to >= '$now'"
-		);
-		
-		try {
-			return $q->getSingleResult();
-		} catch (\Doctrine\ORM\NoResultException $e) {
-			return false;
-		}
-	}
+        );
+
+        $q->setMaxResults(1);
+        try {
+            return $q->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return false;
+        }
+    }
+
 }
