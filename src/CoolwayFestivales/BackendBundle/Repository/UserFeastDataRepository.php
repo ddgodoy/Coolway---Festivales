@@ -14,7 +14,7 @@ class UserFeastDataRepository extends EntityRepository {
 
 	public function findRanking($id) {
 		$q = $this->getEntityManager()->createQuery(
-			"SELECT u.name as user, u.id as user_id, SUM( fd.total ) as total  FROM BackendBundle:UserFeastData fd
+			"SELECT u.name as user, u.notificationId as notificationId, u.id as user_id, SUM( fd.total ) as total  FROM BackendBundle:UserFeastData fd
 			LEFT JOIN SafetyBundle:User u WITH fd.user = u.id
 			WHERE fd.feast = $id 
 			GROUP BY fd.user
@@ -93,6 +93,21 @@ class UserFeastDataRepository extends EntityRepository {
 		$q = $this->getEntityManager()->createQuery(
 			"SELECT fd.total as total, fd.dance as dance, fd.music as music, fd.date  FROM BackendBundle:UserFeastData fd
 			WHERE fd.user = $user_id
+			ORDER BY fd.date DESC"
+		);
+		$q->setMaxResults(1);
+		
+		try {
+			return $q->getSingleResult();
+		} catch (\Doctrine\ORM\NoResultException $e) {
+			return false;
+		}
+	}
+
+	public function findLastDataNotNull($feast,$user_id ) {
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT fd.total as total, fd.dance as dance, fd.music as music, fd.date  FROM BackendBundle:UserFeastData fd
+			WHERE fd.user = $user_id AND fd.feast = $feast AND fd.total > 0 
 			ORDER BY fd.date DESC"
 		);
 		$q->setMaxResults(1);

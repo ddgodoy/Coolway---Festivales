@@ -30,6 +30,62 @@ class ApiController extends Controller {
     private $kf = 0.5;
     private $kr = 0.5;
 
+
+    /**
+     * Share
+     *
+     * @Route("/share", name="api_share")
+     * @Template()
+     */
+    public function shareAction() {
+        $data = $this->getData();
+        $data = array('token'=>'1e93ee47231575bd');
+        $user = $this->checkToken($data);
+        if($user){
+
+            $em = $this->getDoctrine()->getManager();
+
+            $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+            $lastValue = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findLastDataNotNull($feast->getId(),$user->getId());
+
+            $totalShare = 5 * $lastValue['total'] / 100;
+
+            $newData = new UserFeastData();
+            $newData->setUser($user);
+            $newData->setFeast($feast);
+            $newData->setTotal($lastValue['total']+$totalShare);
+            $newData->setDance(0);
+            $newData->setMusic(0);
+            $newData->setTotalShare(5);
+            $newData->setLatitude(0);
+            $newData->setLongitude(0);
+            $newData->setDate(new \Datetime());
+            $em->persist($newData);
+            $em->flush();
+
+
+            $title = "Felicitaciones!!";
+            $message= "Has aumentado tu puntuación en un 5%. Sigue de fiesta y consigue nuestro premio.";
+            $recipients = array($user->getNotificationId());
+            $this->send($title,$message,$recipients);
+
+            $data = array(
+                'status' => 'success',
+                'data' => 'Point adds'
+            );
+
+        }
+        else {
+            $data = array(
+                'status' => 'error',
+                'message' => 'ERROR SHARE ADD POINT'
+            );
+        }
+
+        return $this->setResponse($data);
+
+    }
+
     /**
      * Add Data
      *
@@ -337,7 +393,7 @@ class ApiController extends Controller {
         $data = $this->getData();
         if($user = $this->checkToken($data))
         {
-            if( $data['is_favorite'] && $user->getId() != $data['id'] ) {
+            if( $data['is_favorite'] ) {
                 $favorite = $this->getDoctrine()->getRepository('BackendBundle:ArtistFavorites')->findOneBy(array('user'=> $user->getId(),'artist'=>$data['id']));
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($favorite);
@@ -348,7 +404,7 @@ class ApiController extends Controller {
                     'data' => 'lineup favorite'
                 );
             }
-            else if( $user->getId() != $data['id'] )
+            else
             {
                 $artist = $this->getDoctrine()->getRepository('BackendBundle:Artist')->findOneBy(array('id'=> $data['id']));
                 if($artist)
@@ -367,13 +423,6 @@ class ApiController extends Controller {
                     'status' => 'success',
                     'data' => 'lineup favorite'
                 );
-            }
-            else
-            {
-                $data = array(
-                    'status' => 'error',
-                    'message' => 'lineup favorite'
-                );    
             }
         }
         else {
@@ -408,21 +457,21 @@ class ApiController extends Controller {
                 else
                     $date = $this->days[$l['date']->format('N')].', '.$l['date']->format('j').' '.$this->months[$l['date']->format('n')];
                 
-                $music = ( $l['music'] * $this->kf * $this->kr ) / $l['total'];
-                $dance = ( $l['dance'] * $this->kf * $this->km ) / $l['total'];
+                $music =  round( $l['music'] * $this->kf * $this->kr  / $l['total'] )*100;
+                $dance = 100 - $music;
 
-                $tmpDate = $l['date']->format('Y-m-d');
-                $total_day = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotalDay($feast->getId(),$tmpDate);
-                $user_day = count( $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findUsersForDay($feast->getId(),$tmpDate) );
+                //$tmpDate = $l['date']->format('Y-m-d');
+                //$total_day = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotalDay($feast->getId(),$tmpDate);
+                //$user_day = count( $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findUsersForDay($feast->getId(),$tmpDate) );
 
-                $media = ceil ( ($total_day['total']/$user_day )*$this->convertPoint );
+                //$media = ceil ( ($total_day['total']/$user_day )*$this->convertPoint );
 
                 $timeline[]=array(
                     'date' => $date,
                     'total' => ceil($l['total']*$this->convertPoint),
-                    'media' => $media,
-                    'music' => $music*100,
-                    'dance' => $dance*100,
+                    //'media' => $media,
+                    'music' => $music,
+                    'dance' => $dance,
                 );
             }
 
@@ -645,8 +694,6 @@ class ApiController extends Controller {
      */
     public function notificationSendAction()
     {
-        $url = 'https://android.googleapis.com/gcm/send';
-
         $users =  $this->getDoctrine()->getRepository('SafetyBundle:User')->findNotification();
 
         $ids = array();
@@ -665,29 +712,7 @@ class ApiController extends Controller {
         foreach($notification_list as $n)
         {
 
-            $fields = array(
-                "data"=>array(
-                    'title'=>$n->getName(),
-                    'message'=>$n->getText(),
-                ),
-                "registration_ids"=>$ids 
-            );
-
-            $headers = array( 
-                'Authorization: key=AIzaSyCFpBmNym9kaRPoUA-ZKogSk-QZzvLhlfc',
-                'Content-Type: application/json'
-            );
-            
-            $ch = curl_init(); 
-            curl_setopt($ch, CURLOPT_URL, $url); 
-            curl_setopt($ch, CURLOPT_POST, true); 
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-            $result = curl_exec($ch);
-            curl_close($ch);
-            file_put_contents('notification_data.text', "$result\r\n",FILE_APPEND);
+            $this->send($n->getName(),$n->getText(),$ids);
 
             $n->setSend(1);
             $em->persist($n);
@@ -695,9 +720,148 @@ class ApiController extends Controller {
         $em->flush();
 
         die();
+    }
 
+    /**
+     * Notification Artist
+     *
+     * @Route("/notification/artist", name="api_notification_artist")
+     * @Template()
+     */
+    public function notificationArtistAction()
+    {
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        $artist = $this->getDoctrine()->getRepository('BackendBundle:FeastStageArtist')->findNextArtist($feast->getId());
+
+        if(isset($artist['id']))
+        {
+            $users = $this->getDoctrine()->getRepository('BackendBundle:ArtistFavorites')->findUserByArtist($artist['id']);
+            if(count($users)) {
+                $recipients = array();
+                foreach($users as $u )
+                    $recipients[]= $u['notificationId'];
+
+                $title = "Quedan 5 minutos";
+                $message = "para que comience el concierto de ".$artist['artist']." en el  ".$artist['stage']."!";
+
+                $this->send($title,$message,$recipients); 
+            }
+        }
+        die();
+    }
+
+    /**
+     * Notification Ranking
+     *
+     * @Route("/notification/ranking", name="api_notification_ranking")
+     * @Template()
+     */
+    public function notificationRankingAction()
+    {
+        $top = array(
+            "A este nivel yo ya te invitaba a mis fiestas.",
+            "Tus zapas echan humo!",
+            "Estas que te sales!",
+            "Si sigues así…esta noche triunfas!",
+            "Sigue así y acabas en el escenario.",
+            "Elvis/Michael Jackson estaría orgulloso de ti.",
+            "El año que viene te veo en el cartel del Viña!",
+            "Eres el rey de la pista!",
+            "Tu eres de otro nivel!",
+        );
+        $middle = array(
+            "Ya veo que te estas viniendo arriba!",
+            "Puedes superarte…y lo sabes!",
+            "Te estas poniendo a tono!",
+            "Venga que lo petas.",
+            "Currátelo o te van a ganar!",
+            "Los de tu lado bailan mejor que tú.",
+            "Ahora es el momento de dar el gran paso…anímate!",
+            "Venga…ahora o nunca!",
+        );
+        $bottom = array(
+            "Desgastate la suela de los zapatos!",
+            "Yo soy tu y me vuelvo pa´casa.",
+            "Puff…esto es lo que más das de ti?",
+            "Mi abuela tiene más marcha que tú!",
+            "Eres un Loser!",
+            "Pareces un maniquí",
+            "Pégate una ducha y vuelves!",
+            "Tienes miedo de tener agujetas?",
+            "Te mueves menos que un Playmobil.",
+            "Para estar así vete a un concierto de Julio Iglesias!",
+        );
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        $ranking_list = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findRanking($feast->getId());
+
+        $ids = array();
+        $total = count($ranking_list );
+        $partial25  = round(25 / $total * 100);
+
+        $i = 1; 
+        $ids = array('top','middle','bottom');
+        foreach($ranking_list as $r)
+        {
+            if($i <= $partial25)
+                $ids['top'][]= $r['notificationId'];
+            else if( $i <= $partial25*2 )
+                $ids['middle'][]= $r['notificationId'];
+            else
+                $ids['bottom'][]= $r['notificationId'];
+            $i++;
+        }
+
+        foreach( $ids as $key => $recipients )
+        {
+
+            if($key == 'top') {
+                $title = "Estás en la parte ALTA de la tabla";
+                $message = $top[rand(0,8)];
+            } else if ($key == 'middle') {
+                $title = "Estás en la parte MEDIA de la tabla";
+                $message = $middle[rand(0,7)];
+            } else {
+                $title = "Estás en la parte BAJA de la tabla";
+                $message = $bottom[rand(0,9)];
+            }
+            
+            $message.= " Compartelo con tus amigos y aumenta tu puntuación";
+
+            $this->send($title,$message,$recipients);
+        }
+
+        die();
+
+    }
+
+    private function send($title,$message,$recipients) {
+        $url = 'https://android.googleapis.com/gcm/send';
+        $fields = array(
+            "data"=>array(
+                'title'=>$title,
+                'message'=>$message,
+            ),
+            "registration_ids"=>$recipients 
+        );
+
+        $headers = array( 
+            'Authorization: key=AIzaSyCFpBmNym9kaRPoUA-ZKogSk-QZzvLhlfc',
+            'Content-Type: application/json'
+        );
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url); 
+        curl_setopt($ch, CURLOPT_POST, true); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+        $result = curl_exec($ch);
+        curl_close($ch);
         //sender id = 1090006415155;
         //api key = AIzaSyCFpBmNym9kaRPoUA-ZKogSk-QZzvLhlfc
+        
+        return true;
     }
 
     private function checkToken($data, $create = false) {

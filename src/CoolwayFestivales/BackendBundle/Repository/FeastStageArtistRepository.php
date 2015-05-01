@@ -27,4 +27,26 @@ class FeastStageArtistRepository extends EntityRepository {
 
 		return $q->getResult();
 	}
+
+	public function findNextArtist()
+	{
+		$time = date('H:i:00',strtotime("+5 minutes"));
+		$date = date('Y-m-d');
+		$time = '17:00:00';
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT a.id as id, a.name as artist, s.name as stage FROM BackendBundle:FeastStageArtist fsa
+			LEFT JOIN BackendBundle:Artist a WITH fsa.artist = a.id
+			LEFT JOIN BackendBundle:FeastStage fs WITH fsa.feast_stage = fs.id
+			LEFT JOIN BackendBundle:Stage s WITH fs.stage = s.id
+			WHERE fsa.time = '$time' AND fsa.date = '$date'"
+		);
+
+		$q->setMaxResults(1);
+
+		try {
+			return $q->getSingleResult();
+		} catch (\Doctrine\ORM\NoResultException $e) {
+			return false;
+		}
+	}
 }

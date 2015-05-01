@@ -12,4 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class ArtistFavoritesRepository extends EntityRepository {
 
+	public function findUserByArtist($artist)
+	{
+	
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT u.notificationId as notificationId FROM BackendBundle:ArtistFavorites af
+			LEFT JOIN SafetyBundle:User u WITH af.user = u.id
+			WHERE af.artist = $artist"
+		);
+
+		return $q->getResult();
+	}
 }
