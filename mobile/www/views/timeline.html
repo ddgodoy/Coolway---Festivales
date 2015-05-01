@@ -11,15 +11,17 @@
 					<div class="timeline-bar">
 						<span>Baile</span>
 						<div class="timeline-dance" style="width: {{ item.dance }}%;"></div>
+						<span class="timeline-percent-details">{{ item.dance }}%</span>
 					</div>
 					<div class="timeline-bar">
 						<span>Música</span>
 						<div class="timeline-music" style="width: {{ item.music }}%;"></div>
+						<span class="timeline-percent-details">{{ item.music }}%</span>
 					</div>
 				</div>
 				<div class="timeline-meter">
-					<span>{{ item.total }}</span><br><br>
-					<span>{{ item.media }}</span>
+				<div class="total">{{ item.total }} <span class="pt">pt</span></div>
+				<div class="dia">por día</div>
 				</div>
 			</ion-item>
 		</ion-list>

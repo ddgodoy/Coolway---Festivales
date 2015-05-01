@@ -561,6 +561,12 @@ class ApiController extends Controller {
     public function awardsAction() {       
             
         $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        
+        $background = $this->getDoctrine()->getRepository('BackendBundle:Images')->findOneBy(array(
+            'feast'=>$feast->getId(),
+            'code_name' => 'background'
+        ));
+
         $a = $this->getDoctrine()->getRepository('BackendBundle:Award')->findOneBy(array(
             'feast'=>$feast->getId()
         ));
@@ -570,8 +576,11 @@ class ApiController extends Controller {
             $award = array (
                 'image' => $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/awards/'.$a->getPath(),
                 'title' => $a->getName(),
-                'text' => $a->getTermsConditions()
+                'text' => $a->getTermsConditions(),
+
             );
+            if($background)
+            $award['background'] = $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/images/'.$background->getPath();
 
             $data = array(
                 'status' => 'success',

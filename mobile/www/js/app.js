@@ -86,11 +86,11 @@ app.config(function ($stateProvider,$urlRouterProvider) {
         'content' :{
           templateUrl: 'views/timeline.html',
           controller: 'timelineCtrl',
-          /*resolve: {
+          resolve: {
             userLogged: ['userAuth', function(userAuth){
               return userAuth.isLogged();
             }]
-          }*/
+          }
         }
       }
     })
@@ -125,13 +125,15 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+    
     $rootScope.isOffline = $cordovaNetwork.isOffline();
-
+  
     if($rootScope.isOffline) {
       if(userAuth.isFirstTime())
       {
         $rootScope.awards = "img/awards.png";
         $rootScope.map = "img/map.png";
+        $rootScope.background = "bg-awards";
         
         var map = {
           status: "success",
@@ -157,6 +159,7 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
       {
         $rootScope.awards = "file:///data/data/com.coolway.letsdance/www/img/awards.png";
         $rootScope.map = "file:///data/data/com.coolway.letsdance/www/img/map.png";
+        $rootScope.background = "bg-awards-2";
       }
     } else {
       userAuth.disabledFirstTime();
@@ -453,7 +456,6 @@ app.controller('levelCtrl' ,function ($rootScope,$scope,$state,$interval,$cordov
 
   ionic.Platform.ready(function() {
     
-    
     //Get Dance
     var watch = $cordovaDeviceMotion.watchAcceleration({ frequency: 100 });
     watch.then(null,function(error) {
@@ -521,7 +523,12 @@ app.controller('levelCtrl' ,function ($rootScope,$scope,$state,$interval,$cordov
             serverConnection.getHost()+'/images/icon.png'
           )
           .then(function(result) {
-            serverConnection.get('share');
+            serverConnection.get('share',function(){
+              console.log("success share");
+            }, function(){
+              console.log("error share");
+            },
+            { token: userAuth.getToken() });
           }, function(err) {
             console.log(err);
           });
@@ -531,8 +538,9 @@ app.controller('levelCtrl' ,function ($rootScope,$scope,$state,$interval,$cordov
         $state.go('noLogged');
       }
     }
-
+    
   });
+
 
   $scope.updateMusicPercent = function(percent)
   {
@@ -638,7 +646,6 @@ app.controller('infoFestCtrl' ,function ($scope,$ionicLoading,userAuth,serverCon
   }, { token: userAuth.getToken() } );
 
   $scope.height = function () {
-    console.log(screen.height);
     return (screen.height - 90);
   };
 
@@ -647,7 +654,6 @@ app.controller('infoFestCtrl' ,function ($scope,$ionicLoading,userAuth,serverCon
 app.controller('awardsCtrl' ,function ($scope,$ionicLoading,$ionicModal,serverConnection,userAuth) {
 
   $scope.height = function () {
-    console.log(screen.height);
     return (screen.height - (90+45));
   };
 
@@ -728,7 +734,12 @@ app.controller('timelineCtrl' ,function ($scope,$ionicLoading,$cordovaSocialShar
             "file://"+res.filePath
           )
           .then(function(result) {
-            serverConnection.get('share');
+            serverConnection.get('share',function(){
+              console.log("success share");
+            }, function(){
+              console.log("error share");
+            },
+            { token: userAuth.getToken() });
           }, function(err) {
             console.log(err);
         });
@@ -1020,7 +1031,11 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$ionicPopu
       var str = JSON.stringify(rsp);
       window.localStorage.setItem(url,str);
       if( rsp.status == "success" &&  typeof rsp.data != "undefined" && rsp.data.image != "undefined" )
-          this.downloadFile(rsp.data.image,url,"png");
+      {
+        this.downloadFile(rsp.data.image,url,"png");
+        if(url == 'awards')
+          this.downloadFile(rsp.data.background,"background","jpg");
+      }
     },
 
     getCache: function (url) {
@@ -1031,7 +1046,10 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$ionicPopu
           $rootScope.map = "file:///data/data/com.coolway.letsdance/www/img/map.png";
         
         else if( url == 'awards' && window.localStorage.getItem('isFirstTime') == 0 )
+        {
           $rootScope.awards = "file:///data/data/com.coolway.letsdance/www/img/awards.png";
+          $rootScope.background = "bg-awards-2";
+        }
 
         return JSON.parse(data);
       }
@@ -1050,6 +1068,8 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$ionicPopu
             $rootScope.awards = targetPath;
           else if(name == 'map')
             $rootScope.map = targetPath;
+          else if(name == 'background')
+            $rootScope.background = "bg-awards-2";
         }, function(err) {
           console.log("error download");
         }, function (progress) {
