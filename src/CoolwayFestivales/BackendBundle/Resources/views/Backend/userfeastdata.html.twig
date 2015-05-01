@@ -2,7 +2,7 @@
     <div class="portlet box blue-steel">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-bell-o"></i>Datos recolectados en las fiestas
+                <i class="fa fa-bell-o"></i>Ranking - {{feast}}
             </div>
 
         </div>
@@ -12,7 +12,7 @@
                         <thead>
                             <tr>
                                 <th>
-                                    Festival
+                                    Id Usuario
                                 </th>
                                 <th>
                                     Usuario
@@ -20,21 +20,7 @@
                                 <th>
                                     Total
                                 </th>
-                                <th>
-                                    Dance
-                                </th>
-                                <th>
-                                    Musica
-                                </th>
-                                <th>
-                                    Total Share
-                                </th>
-                                <th>
-                                    Latitud
-                                </th>
-                                <th>
-                                    Longitud
-                                </th>
+
 
 
 
@@ -44,29 +30,15 @@
                             {%for entity in entities%}
 
                                 <tr>
+
                                     <td>
-                                        {{entity.feast}}
+                                        {{entity["user_id"]}}
                                     </td>
                                     <td>
-                                        {{entity.user}}
+                                        {{entity["user"]}}
                                     </td>
                                     <td>
-                                        {{entity.total}}
-                                    </td>
-                                    <td>
-                                        {{entity.dance}}
-                                    </td>
-                                    <td>
-                                        {{entity.music}}
-                                    </td>
-                                    <td>
-                                        {{entity.getTotalShare}}
-                                    </td>
-                                    <td>
-                                        {{entity.latitude}}
-                                    </td>
-                                    <td>
-                                        {{entity.longitude}}
+                                        {{entity["total"]}}
                                     </td>
 
 

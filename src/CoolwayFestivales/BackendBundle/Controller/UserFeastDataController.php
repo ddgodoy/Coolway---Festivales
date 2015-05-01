@@ -36,8 +36,9 @@ class UserFeastDataController extends Controller {
      * @Template()
      */
     public function userfeastdatapotletAction() {
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findAll();
-        return $this->render('BackendBundle:Backend:userfeastdata.html.twig', array("entities" => $entities));
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        $entities = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findRankingDashboard($feast->getId());
+        return $this->render('BackendBundle:Backend:userfeastdata.html.twig', array("entities" => $entities, "feast" => $feast));
     }
 
     /**

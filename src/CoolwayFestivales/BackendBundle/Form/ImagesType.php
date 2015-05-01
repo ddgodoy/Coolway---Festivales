@@ -16,7 +16,7 @@ class ImagesType extends AbstractType {
         $builder
                 ->add('feast', null, array('label' => 'Festival'))
                 ->add('image', null, array('label' => 'Imagen', "required" => ""))
-                ->add('code_name', null, array('label' => 'Nombre de código'))
+                ->add('code_name', 'choice', array('choices' => array('plano' => 'Plano', 'background' => 'Background'), 'label' => 'Nombre de código'))
                 ->add('enabled', null, array('label' => 'Habilitado'))
 
 
