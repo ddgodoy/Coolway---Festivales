@@ -36,7 +36,7 @@ class UserFeastDataController extends Controller {
      * @Template()
      */
     public function userfeastdatapotletAction() {
-        $entities = [];
+        $entities = array();
         $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
         if($feast){
             $entities = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findRankingDashboard($feast->getId());
