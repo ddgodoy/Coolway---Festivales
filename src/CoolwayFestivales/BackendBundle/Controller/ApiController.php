@@ -826,20 +826,23 @@ class ApiController extends Controller {
         foreach( $ids as $key => $recipients )
         {
 
-            if($key == 'top') {
-                $title = "Estás en la parte ALTA de la tabla";
-                $message = $top[rand(0,8)];
-            } else if ($key == 'middle') {
-                $title = "Estás en la parte MEDIA de la tabla";
-                $message = $middle[rand(0,7)];
-            } else {
-                $title = "Estás en la parte BAJA de la tabla";
-                $message = $bottom[rand(0,9)];
-            }
-            
-            $message.= " Compartelo con tus amigos y aumenta tu puntuación";
+            if(count($recipients))
+            {
+                if($key == 'top') {
+                    $title = "Estás en la parte ALTA de la tabla";
+                    $message = $top[rand(0,8)];
+                } else if ($key == 'middle') {
+                    $title = "Estás en la parte MEDIA de la tabla";
+                    $message = $middle[rand(0,7)];
+                } else {
+                    $title = "Estás en la parte BAJA de la tabla";
+                    $message = $bottom[rand(0,9)];
+                }
+                
+                $message.= " Compartelo con tus amigos y aumenta tu puntuación";
 
-            $this->send($title,$message,$recipients);
+                $this->send($title,$message,$recipients);
+            }
         }
 
         die();
