@@ -500,14 +500,17 @@ class ApiController extends Controller {
      */
     public function sliderAction() {
 
-        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-        $slider_list = $this->getDoctrine()->getRepository('BackendBundle:Step')->findSlider($feast->getId());
-
         $slider = array();
-        foreach($slider_list as $s) {
-            $slider[]=array(
-                'text' => $s->getText(),
-            );
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        if($feast){
+            $slider_list = $this->getDoctrine()->getRepository('BackendBundle:Step')->findSlider($feast->getId());
+
+
+            foreach($slider_list as $s) {
+                $slider[]=array(
+                    'text' => $s->getText(),
+                );
+            }
         }
 
         $data = array(
