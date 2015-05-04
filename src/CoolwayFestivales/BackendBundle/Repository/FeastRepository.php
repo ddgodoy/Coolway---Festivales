@@ -23,7 +23,15 @@ class FeastRepository extends EntityRepository {
         try {
             return $q->getSingleResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
-            return false;
+            $q = $this->getEntityManager()->createQuery(
+                "SELECT f FROM BackendBundle:Feast f
+                WHERE f.date_to <= '$now'
+                ORDER BY f.date_to DESC"
+            );            
+            
+            $q->setMaxResults(1);
+            
+            return $q->getSingleResult();
         }
     }
 
