@@ -21,7 +21,7 @@ class UserType extends AbstractType {
     }
 
     public function getName() {
-        return 'prodi_safetybundle_usertype';
+        return 'coolway_safetybundle_usertype';
     }
 
 }
