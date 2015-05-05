@@ -445,8 +445,8 @@ class ApiController extends Controller {
         $user = $this->checkToken($data);
         if($user)
         {
-            $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-            $timeline_list = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTimeline($feast->getId(),$user->getId());
+            //$feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+            $timeline_list = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTimeline($user->getId());
 
             $timeline = array();
             foreach($timeline_list as $l) {

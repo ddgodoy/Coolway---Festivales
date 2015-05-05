@@ -37,14 +37,14 @@ class UserFeastDataRepository extends EntityRepository {
         return $q->getResult();
     }
 
-    public function findTimeline($feast_id, $user_id) {
+    public function findTimeline($user_id) {
         $q = $this->getEntityManager()->createQuery(
                 "SELECT  Date(fd.date) as fecha , SUM(fd.total) as total, SUM(fd.dance) as dance, SUM(fd.music) as music, fd.date  FROM BackendBundle:UserFeastData fd
-			WHERE fd.feast = $feast_id  AND fd.user = $user_id
+			WHERE fd.user = $user_id
 			GROUP BY fecha
 			ORDER BY fd.date DESC"
         );
-
+        $q->setMaxResults(30);
         return $q->getResult();
     }
 
