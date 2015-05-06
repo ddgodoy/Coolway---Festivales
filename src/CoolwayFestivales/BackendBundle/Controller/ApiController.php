@@ -459,8 +459,6 @@ class ApiController extends Controller {
                 $music =  round( $l['music'] * $this->kf * $this->kr  / $l['total'] * 100 );
                 $dance = 100 - $music;
 
-                private $convertPoint = 100;
-
                 //$tmpDate = $l['date']->format('Y-m-d');
                 //$total_day = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotalDay($feast->getId(),$tmpDate);
                 //$user_day = count( $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findUsersForDay($feast->getId(),$tmpDate) );
