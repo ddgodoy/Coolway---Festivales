@@ -39,7 +39,6 @@ class ApiController extends Controller {
      */
     public function shareAction() {
         $data = $this->getData();
-        $data = array('token'=>'1e93ee47231575bd');
         $user = $this->checkToken($data);
         if($user){
 
