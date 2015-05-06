@@ -58,13 +58,13 @@ class UserFeastData {
 
     /**
      * @var string $latitude
-     * @ORM\Column(name="latitude", type="string", length=50, nullable=false)
+     * @ORM\Column(name="latitude", type="string", length=50, nullable=true)
      */
     private $latitude;
 
     /**
      * @var string $longitude
-     * @ORM\Column(name="longitude", type="string", length=50, nullable=false)
+     * @ORM\Column(name="longitude", type="string", length=50, nullable=true)
      */
     private $longitude;
 

@@ -13,8 +13,22 @@ class FeastType extends AbstractType {
                 ->add('name', null, array('label' => 'Nombre'))
                 ->add('latitude', null, array('label' => 'Latitud'))
                 ->add('longitude', null, array('label' => 'Longitud'))
-                ->add('date_from', null, array('label' => 'Desde', 'widget' => 'single_text', 'attr' => array('class' => 'datepicker')))
-                ->add('date_to', null, array('label' => 'Hasta', 'widget' => 'single_text', 'attr' => array('class' => 'datepicker')));
+                ->add('date_from', null, array(
+                    'label' => 'Desde:',
+                    'widget' => 'single_text',
+                    'format' => 'MM/dd/yyyy',
+                    'attr' => array(
+                        'class' => 'datepicker',
+                    )
+                ))
+                ->add('date_to', null, array(
+                    'label' => 'Hasta:',
+                    'widget' => 'single_text',
+                    'format' => 'MM/dd/yyyy',
+                    'attr' => array(
+                        'class' => 'datepicker',
+                    )
+        ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
@@ -24,7 +38,7 @@ class FeastType extends AbstractType {
     }
 
     public function getName() {
-        return 'prodi_ecomercebundle_categorytype';
+        return 'coolway_appbundle_categorytype';
     }
 
 }

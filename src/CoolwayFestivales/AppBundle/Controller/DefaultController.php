@@ -69,7 +69,7 @@ class DefaultController extends Controller {
     public function validateeAction(\Symfony\Component\HttpFoundation\Request $request) {
         $result = array("valid" => true);
 
-        $params = $request->get('prodi_safetybundle_usertype');
+        $params = $request->get('coolway_safetybundle_usertype');
         $email = $params['email'];
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $em = $this->getDoctrine()->getManager();
@@ -89,7 +89,7 @@ class DefaultController extends Controller {
     public function validateuAction(\Symfony\Component\HttpFoundation\Request $request) {
         $result = array("valid" => true);
 
-        $params = $request->get('prodi_safetybundle_usertype');
+        $params = $request->get('coolway_safetybundle_usertype');
         $username = $params['username'];
 
         $em = $this->getDoctrine()->getManager();

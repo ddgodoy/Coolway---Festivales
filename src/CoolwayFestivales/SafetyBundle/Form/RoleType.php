@@ -17,6 +17,6 @@ class RoleType extends AbstractType
 
     public function getName()
     {
-        return 'prodi_safetybundle_roletype';
+        return 'coolway_safetybundle_roletype';
     }
 }

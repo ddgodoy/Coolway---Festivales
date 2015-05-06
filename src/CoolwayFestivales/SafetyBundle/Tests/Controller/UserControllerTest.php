@@ -19,7 +19,7 @@ class UserControllerTest extends WebTestCase
 
         // Fill in the form and submit it
         $form = $crawler->selectButton('Create')->form(array(
-            'prodi_safetybundle_usertype[field_name]'  => 'Test',
+            'coolway_safetybundle_usertype[field_name]'  => 'Test',
             // ... other fields to fill
         ));
 
@@ -33,7 +33,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $client->click($crawler->selectLink('Edit')->link());
 
         $form = $crawler->selectButton('Edit')->form(array(
-            'prodi_safetybundle_usertype[field_name]'  => 'Foo',
+            'coolway_safetybundle_usertype[field_name]'  => 'Foo',
             // ... other fields to fill
         ));
 
