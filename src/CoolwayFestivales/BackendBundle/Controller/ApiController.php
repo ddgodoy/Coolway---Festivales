@@ -456,8 +456,10 @@ class ApiController extends Controller {
                 else
                     $date = $this->days[$l['date']->format('N')].', '.$l['date']->format('j').' '.$this->months[$l['date']->format('n')];
                 
-                $music =  round( $l['music'] * $this->kf * $this->kr  / $l['total'] )*100;
+                $music =  round( $l['music'] * $this->kf * $this->kr  / $l['total'] * 100 );
                 $dance = 100 - $music;
+
+                private $convertPoint = 100;
 
                 //$tmpDate = $l['date']->format('Y-m-d');
                 //$total_day = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotalDay($feast->getId(),$tmpDate);
