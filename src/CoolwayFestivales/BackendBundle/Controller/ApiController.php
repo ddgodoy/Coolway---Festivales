@@ -349,6 +349,7 @@ class ApiController extends Controller {
             if($date != $last_date) {
                 $i++;
                 $j = 0-1;
+                $last_stage = '';
                 $lineup[$i] = array(
                     'date' => $this->days[$date_object->format('N')].', '.$date_object->format('j').' '.$this->months[$date_object->format('n')].' '.$date_object->format('Y') ,
                     'stages' => array()
