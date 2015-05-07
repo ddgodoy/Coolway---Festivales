@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Validator\Constraints\DateTime;
 use CoolwayFestivales\SafetyBundle\Entity\User;
 use CoolwayFestivales\BackendBundle\Entity\UserFavorites;
 use CoolwayFestivales\BackendBundle\Entity\ArtistFavorites;
@@ -341,14 +342,15 @@ class ApiController extends Controller {
         $i = 0-1;
         foreach( $feastStageArtist as $f )
         {
-            $date = $f['date']->format('Y-m-d');
+            $date_object = !is_object($f['date'])?new \DateTime($f['date']):$f['date'];
+            $date = $date_object->format('Y-m-d');
             $stage = $f['stage_id'];
 
             if($date != $last_date) {
                 $i++;
                 $j = 0-1;
                 $lineup[$i] = array(
-                    'date' => $this->days[$f['date']->format('N')].', '.$f['date']->format('j').' '.$this->months[$f['date']->format('n')].' '.$f['date']->format('Y') ,
+                    'date' => $this->days[$date_object->format('N')].', '.$date_object->format('j').' '.$this->months[$date_object->format('n')].' '.$date_object->format('Y') ,
                     'stages' => array()
                 );
             }
