@@ -32,7 +32,7 @@ class FeastStageArtistRepository extends EntityRepository {
 	{
 		$time = date('H:i:00',strtotime("+5 minutes"));
 		$date = date('Y-m-d');
-		$time = '17:00:00';
+		//$time = '17:00:00';
 		$q = $this->getEntityManager()->createQuery(
 			"SELECT a.id as id, a.name as artist, s.name as stage FROM BackendBundle:FeastStageArtist fsa
 			LEFT JOIN BackendBundle:Artist a WITH fsa.artist = a.id
