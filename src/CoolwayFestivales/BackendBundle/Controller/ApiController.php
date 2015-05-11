@@ -903,17 +903,6 @@ class ApiController extends Controller {
         //api key = AIzaSyCFpBmNym9kaRPoUA-ZKogSk-QZzvLhlfc
 
         $passphrase = 'iY88bR62';
-        $ctx = stream_context_create();
-        stream_context_set_option($ctx, 'ssl', 'local_cert', '../mobile/certs/aps_development.pem');
-        stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
-        $fp = stream_socket_client(
-            'ssl://gateway.sandbox.push.apple.com:2195', $err,
-            $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx
-        );
- 
-        if (!$fp) {
-            exit("Error de conexión with apple");
-        }
 
         $fields = array(
             'aps' => array(
@@ -925,13 +914,23 @@ class ApiController extends Controller {
 
         $payload = json_encode($fields);
 
-
         foreach( $recipients['IOS'] as $deviceToken ) {
+            $ctx = stream_context_create();
+            stream_context_set_option($ctx, 'ssl', 'local_cert', '../mobile/certs/aps_development.pem');
+            stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+            $fp = stream_socket_client(
+                'ssl://gateway.sandbox.push.apple.com:2195', $err,
+                $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx
+            );
+     
+            if (!$fp) {
+                echo "Error de conexión with apple";
+            }
+
             $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
             $result = fwrite($fp, $msg, strlen($msg));
+            fclose($fp);
         }
-        
-        fclose($fp);
         
         return true;
     }
