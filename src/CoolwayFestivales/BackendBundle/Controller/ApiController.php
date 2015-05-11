@@ -710,14 +710,17 @@ class ApiController extends Controller {
     {
         $users =  $this->getDoctrine()->getRepository('SafetyBundle:User')->findNotification();
 
-        $ids = array();
+        $ids = array(
+            'Android'=>array(),
+            'IOS'=>array()
+        );
 
         foreach($users as $u)
         {
-            $ids[]= $u->getNotificationId();            
+            $ids[$u->getOs()][]= $u->getNotificationId();
         }
 
-        if(!count($ids))
+        if(!count($ids['Android']) || !count($ids['IOS']) )
             die("not user to send");
 
         $em = $this->getDoctrine()->getManager();
@@ -751,9 +754,15 @@ class ApiController extends Controller {
         {
             $users = $this->getDoctrine()->getRepository('BackendBundle:ArtistFavorites')->findUserByArtist($artist['id']);
             if(count($users)) {
-                $recipients = array();
-                foreach($users as $u )
-                    $recipients[]= $u['notificationId'];
+                $recipients = array(
+                    'Android'=>array(),
+                    'IOS'=>array()
+                );
+
+                foreach($users as $u)
+                {
+                    $recipients[$u['os']][] = $u['notificationId'];
+                }
 
                 $title = "Quedan 5 minutos";
                 $message = "para que comience el concierto de ".$artist['artist']." en el  ".$artist['stage']."!";
@@ -813,15 +822,30 @@ class ApiController extends Controller {
         $partial25  = round(25 / $total * 100);
 
         $i = 1; 
-        $ids = array('top','middle','bottom');
+
+        $ids = array(
+            'top' => array(
+                'Android'=>array(),
+                'IOS'=>array()
+            ),
+            'middle' => array(
+                'Android'=>array(),
+                'IOS'=>array()
+            ),
+            'bottom' => array(
+                'Android'=>array(),
+                'IOS'=>array()
+            )
+        );
+
         foreach($ranking_list as $r)
         {
             if($i <= $partial25)
-                $ids['top'][]= $r['notificationId'];
+                $ids['top'][$r['os']][]= $r['notificationId'];
             else if( $i <= $partial25*2 )
-                $ids['middle'][]= $r['notificationId'];
+                $ids['middle'][$r['os']][]= $r['notificationId'];
             else
-                $ids['bottom'][]= $r['notificationId'];
+                $ids['bottom'][$r['os']][]= $r['notificationId'];
             $i++;
         }
 
@@ -858,7 +882,7 @@ class ApiController extends Controller {
                 'title'=>$title,
                 'message'=>$message,
             ),
-            "registration_ids"=>$recipients 
+            "registration_ids"=>$recipients['Android']
         );
 
         $headers = array( 
@@ -877,6 +901,37 @@ class ApiController extends Controller {
         curl_close($ch);
         //sender id = 1090006415155;
         //api key = AIzaSyCFpBmNym9kaRPoUA-ZKogSk-QZzvLhlfc
+
+        $passphrase = 'iY88bR62';
+        $ctx = stream_context_create();
+        stream_context_set_option($ctx, 'ssl', 'local_cert', '../mobile/certs/aps_development.pem');
+        stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+        $fp = stream_socket_client(
+            'ssl://gateway.sandbox.push.apple.com:2195', $err,
+            $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx
+        );
+ 
+        if (!$fp) {
+            exit("Error de conexión with apple");
+        }
+
+        $fields = array(
+            'aps' => array(
+                'alert' => $message,
+                'title' => $title,
+                'sound' => 'bingbong.aiff'
+            )
+        );
+
+        $payload = json_encode($fields);
+
+
+        foreach( $recipients['IOS'] as $deviceToken ) {
+            $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+            $result = fwrite($fp, $msg, strlen($msg));
+        }
+        
+        fclose($fp);
         
         return true;
     }
@@ -891,6 +946,7 @@ class ApiController extends Controller {
                 if(isset($data['notificationId']) && $data['notificationId'] )
                 {
                     $user->setNotificationId($data['notificationId']);
+                    $user->setOs($data['os']);
                     $em->persist($user);
                     $em->flush();
                 }
@@ -908,7 +964,10 @@ class ApiController extends Controller {
         	$user->setEmail(strtolower(trim($data['email'])));
             
             if(isset($data['notificationId']) && $data['notificationId'] )
+            {
                 $user->setNotificationId($data['notificationId']);
+                $user->setOs($data['os']);
+            }
 
         	$em->persist($user);
         	$em->flush();

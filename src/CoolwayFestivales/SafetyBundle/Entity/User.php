@@ -34,6 +34,11 @@ class User implements AdvancedUserInterface, \Serializable {
     protected $notificationId;
 
     /**
+     * @ORM\Column(type="text", length=255,nullable=true)
+     */
+    protected $os;
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     protected $username;
@@ -149,6 +154,24 @@ class User implements AdvancedUserInterface, \Serializable {
      */
     public function getnotificationId() {
         return $this->notificationId;
+    }
+
+    /**
+     * Set os
+     *
+     * @param string $os
+     */
+    public function setOs($os) {
+        $this->os = $os;
+    }
+
+    /**
+     * Get os
+     *
+     * @return string
+     */
+    public function getOs() {
+        return $this->os;
     }
 
     /**

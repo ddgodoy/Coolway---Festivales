@@ -16,7 +16,7 @@ class ArtistFavoritesRepository extends EntityRepository {
 	{
 	
 		$q = $this->getEntityManager()->createQuery(
-			"SELECT u.notificationId as notificationId FROM BackendBundle:ArtistFavorites af
+			"SELECT u.notificationId as notificationId, u.os as os FROM BackendBundle:ArtistFavorites af
 			LEFT JOIN SafetyBundle:User u WITH af.user = u.id
 			WHERE af.artist = $artist"
 		);

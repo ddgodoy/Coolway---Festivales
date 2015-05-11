@@ -15,7 +15,7 @@ class UserFeastDataRepository extends EntityRepository {
 
 	public function findRanking($id) {
 		$q = $this->getEntityManager()->createQuery(
-			"SELECT u.name as user, u.notificationId as notificationId, u.id as user_id, SUM( fd.total ) as total  FROM BackendBundle:UserFeastData fd
+			"SELECT u.name as user, u.os as os, u.notificationId as notificationId, u.id as user_id, SUM( fd.total ) as total  FROM BackendBundle:UserFeastData fd
 			LEFT JOIN SafetyBundle:User u WITH fd.user = u.id
 			WHERE fd.feast = $id
 			GROUP BY fd.user
