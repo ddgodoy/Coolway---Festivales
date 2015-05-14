@@ -140,6 +140,7 @@ class ApiController extends Controller {
                     $information['points'] = ceil($r['total']*$this->convertPoint);
                     break;
                 }
+                $i++;
             }
             
             

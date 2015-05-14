@@ -4,7 +4,7 @@ document.addEventListener('deviceready', function onDeviceReady() {
 
 app = angular.module('app', ['ionic','ionic.contrib.drawer','ngCordova'])
 
-app.config(function ($stateProvider,$urlRouterProvider) {
+app.config(function ($stateProvider,$urlRouterProvider,$ionicConfigProvider) {
   $stateProvider
     .state('tutorial', {
       cache: false,
@@ -116,11 +116,15 @@ app.config(function ($stateProvider,$urlRouterProvider) {
     });
 
   $urlRouterProvider.otherwise("/");
+  $ionicConfigProvider.views.swipeBackEnabled(false);
 
 });
 
-app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordovaGeolocation,$cordovaPush,$cordovaNetwork,userAuth,serverConnection) {
+app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordovaDevice,$cordovaGeolocation,$cordovaPush,$cordovaNetwork,userAuth,serverConnection) {
   $rootScope.notificacionId = "";
+  $rootScope.currentMusic = 0;
+  $rootScope.currentDance = 0;
+  $rootScope.currentTotal = 0;
 
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -133,7 +137,7 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
       {
         $rootScope.awards = "img/awards.png";
         $rootScope.map = "img/map.png";
-        $rootScope.background = "bg-awards";
+        $rootScope.background = "img/background.jpg";
         
         var map = {
           status: "success",
@@ -157,12 +161,21 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
       }
       else
       {
-        $rootScope.awards = "file:///data/data/com.coolway.letsdance/www/img/awards.png";
-        $rootScope.map = "file:///data/data/com.coolway.letsdance/www/img/map.png";
-        $rootScope.background = "bg-awards-2";
+        $rootScope.awards = cordova.file.dataDirectory + "awards.png";
+        $rootScope.map = cordova.file.dataDirectory + "map.png";
+        $rootScope.background = cordova.file.dataDirectory + "background.jpg";
       }
     } else {
       userAuth.disabledFirstTime();
+      serverConnection.get('awards',function(rsp) {
+      },function(rsp){
+        console.log(rsp);
+      }, { token: userAuth.getToken() } );
+
+      serverConnection.get('map',function(rsp) {
+      },function(rsp){
+        console.log(rsp);
+      }, { token: userAuth.getToken() } );
     }
 
     $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
@@ -200,49 +213,94 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
       }
     },100);
     
-    var androidConfig = {
-      "senderID": "1090006415155",
-    };
-    
-    $cordovaPush.register(androidConfig).then(function(result) {
-      console.log(result);
-    }, function(error) {
-      console.log(error);
-    });
+    var platform = $cordovaDevice.getPlatform();
 
-    $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-      switch(notification.event) {
-        case 'registered':
-          if (notification.regid.length > 0 ) {
-            $rootScope.notificationId = notification.regid;
-          }
-          break;
+    if(platform == 'Android') {
 
-        case 'message':
-          $ionicPopup.show({
-            template: '<p style="color:#000;">'+notification.payload.message+'</p>',
-            title: notification.payload.title,
-            buttons: [
-              {
-                text: '<b>Aceptar</b>',
-                type: 'button-positive',
-                onTap: function(e) {
-                  this.close();
+      var androidConfig = {
+        "senderID": "1090006415155",
+      };
+      
+      $cordovaPush.register(androidConfig).then(function(result) {
+        console.log(result);
+      }, function(error) {
+        console.log(error);
+      });
+
+      $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+        switch(notification.event) {
+          case 'registered':
+            if (notification.regid.length > 0 ) {
+              $rootScope.notificationId = notification.regid;
+              $rootScope.OS = "Android";
+            }
+            break;
+
+          case 'message':
+            $ionicPopup.show({
+              template: '<p style="color:#000;">'+notification.payload.message+'</p>',
+              title: notification.payload.title,
+              buttons: [
+                {
+                  text: '<b>Aceptar</b>',
+                  type: 'button-positive',
+                  onTap: function(e) {
+                    this.close();
+                  }
                 }
-              }
-            ]
-          });
-          break;
+              ]
+            });
+            break;
 
-        case 'error':
-          console.log('GCM ERROR');
-          break;
+          case 'error':
+            console.log('GCM ERROR');
+            break;
 
-        default:
-          console.log('GCM DEFAULT');
-          break;
-      }
-    });
+          default:
+            console.log('GCM DEFAULT');
+            break;
+        }
+      });
+
+    } else {
+
+      var iosConfig = {
+        "badge": false,
+        "sound": true,
+        "alert": true,
+      };
+
+      $cordovaPush.register(iosConfig).then(function(deviceToken) {
+        $rootScope.notificationId = deviceToken;
+        $rootScope.OS = "IOS";
+      }, function(err) {
+        console.log("error in ios notification register");
+      });
+
+      $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+        if (notification.alert) {
+          $ionicPopup.show({
+              template: '<p style="color:#000;">'+notification.alert+'</p>',
+              title: notification.title,
+              buttons: [
+                {
+                  text: '<b>Aceptar</b>',
+                  type: 'button-positive',
+                  onTap: function(e) {
+                    this.close();
+                  }
+                }
+              ]
+            });
+        }
+
+        if (notification.sound) {
+          var snd = new Media(event.sound);
+          snd.play();
+        } 
+      });
+
+    }
 
   });
 
@@ -259,12 +317,17 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
             $rootScope.total = rsp.data.total;
             $rootScope.media = rsp.data.media;
             $rootScope.points =rsp.data.points;
-            $rootScope.position = rsp.data.points;
+            $rootScope.position = rsp.data.position;
             $rootScope.dance = rsp.data.dance;
             $rootScope.music = rsp.data.music;
             $rootScope.feast = rsp.data.feast;
+            $rootScope.currentMusic = 0;
+            $rootScope.currentDance = 0;
+            $rootScope.currentTotal = 0;
           },function(){
-
+            $rootScope.currentMusic = 0;
+            $rootScope.currentDance = 0;
+            $rootScope.currentTotal = 0;
           },{
             token: userAuth.getToken(),
             logged: userAuth.checkLogged(),
@@ -277,7 +340,42 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
           });
 
         }, function(err) {
-          console.log('GEOLOCATION ERROR');
+
+          $ionicPopup.show({
+            template: '<p style="color:#000;">Para poder sumar puntos debes tener activado tu gps</p>',
+            title: 'Activar GPS',
+            buttons: [
+              {
+                text: '<b>Aceptar</b>',
+                type: 'button-positive',
+                onTap: function(e) {
+                  this.close();
+                }
+              }
+            ]
+          });
+
+          serverConnection.get('data',function(rsp){
+            $rootScope.total = rsp.data.total;
+            $rootScope.media = rsp.data.media;
+            $rootScope.points = rsp.data.points;
+            $rootScope.position = rsp.data.position;
+            $rootScope.dance = rsp.data.dance;
+            $rootScope.music = rsp.data.music;
+            $rootScope.feast = rsp.data.feast;
+          },function(){
+            console.log("error get data with gps off");
+          },{
+            token: userAuth.getToken(),
+            logged: userAuth.checkLogged(),
+            music: "0",
+            dance: "0",
+            total: "0",
+            latitude: "0",
+            longitude: "0",
+            first: "1"
+          });
+          
         });
   },1000*60*10);
 
@@ -288,7 +386,7 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
     $rootScope.total = rsp.data.total;
     $rootScope.media = rsp.data.media;
     $rootScope.points = rsp.data.points;
-    $rootScope.position = rsp.data.points;
+    $rootScope.position = rsp.data.position;
     $rootScope.dance = rsp.data.dance;
     $rootScope.music = rsp.data.music;
     $rootScope.feast = rsp.data.feast;
@@ -504,9 +602,13 @@ app.controller('levelCtrl' ,function ($rootScope,$scope,$state,$interval,$cordov
 
       tPercent = (Kf * (Km*$scope.DancePercent+Kr*$scope.MusicPercent));
 
-      $rootScope.currentMusic = $scope.MusicPercent;
-      $rootScope.currentDance = $scope.DancePercent;
-      $rootScope.currentTotal = tPercent;
+      if($scope.DancePercent > $rootScope.currentDance)
+        $rootScope.currentDance = $scope.DancePercent;
+      
+      if($scope.MusicPercent > $rootScope.currentMusic)
+        $rootScope.currentMusic = $scope.MusicPercent;
+      
+      $rootScope.currentTotal = (Kf * (Km*$rootScope.currentDance+Kr*$rootScope.currentMusic));
 
       $scope.updateMusicPercent($scope.MusicPercent);
       $scope.updateDancePercent($scope.DancePercent);
@@ -772,7 +874,12 @@ app.controller('rankingCtrl' ,function ($rootScope,$scope,$ionicScrollDelegate,$
             "file://"+res.filePath
           )
           .then(function(result) {
-            serverConnection.get('share');
+            serverConnection.get('share',function(){
+              console.log("success share");
+            }, function(){
+              console.log("error share");
+            },
+            { token: userAuth.getToken() });
           }, function(err) {
             console.log(err);
         });
@@ -869,7 +976,8 @@ app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicLoading,$cordo
         token: this.getToken(),
         email: obj.email,
         name: obj.name,
-        notificationId: $rootScope.notificationId
+        notificationId: $rootScope.notificationId,
+        os: $rootScope.OS
       });
     },
 
@@ -1030,7 +1138,7 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$ionicPopu
     setCache: function (url,rsp) {
       var str = JSON.stringify(rsp);
       window.localStorage.setItem(url,str);
-      if( rsp.status == "success" &&  typeof rsp.data != "undefined" && rsp.data.image != "undefined" )
+      if( rsp.status == "success" &&  typeof rsp.data != "undefined" && typeof rsp.data.image != "undefined" )
       {
         this.downloadFile(rsp.data.image,url,"png");
         if(url == 'awards')
@@ -1043,12 +1151,12 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$ionicPopu
       {
 
         if( url == 'map' && window.localStorage.getItem('isFirstTime') == 0 )
-          $rootScope.map = "file:///data/data/com.coolway.letsdance/www/img/map.png";
+          $rootScope.map = cordova.file.dataDirectory + "map.png";
         
         else if( url == 'awards' && window.localStorage.getItem('isFirstTime') == 0 )
         {
-          $rootScope.awards = "file:///data/data/com.coolway.letsdance/www/img/awards.png";
-          $rootScope.background = "bg-awards-2";
+          $rootScope.awards = cordova.file.dataDirectory + "awards.png";
+          $rootScope.background = cordova.file.dataDirectory + "background.jpg";
         }
 
         return JSON.parse(data);
@@ -1057,7 +1165,7 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$ionicPopu
     },
 
     downloadFile: function(url,name,format) {
-      var targetPath = cordova.file.applicationStorageDirectory + "www/img/" + name + "." +format;
+      var targetPath = cordova.file.dataDirectory + name + "." +format;
       var trustHosts = true
       var options = {};
 
@@ -1069,7 +1177,7 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$ionicPopu
           else if(name == 'map')
             $rootScope.map = targetPath;
           else if(name == 'background')
-            $rootScope.background = "bg-awards-2";
+            $rootScope.background = targetPath;
         }, function(err) {
           console.log("error download");
         }, function (progress) {

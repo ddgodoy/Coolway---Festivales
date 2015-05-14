@@ -24,11 +24,10 @@
       "id": "com.mpcode.cordova.noisemeter",
       "locator": "../../Icox/noiseMeter/"
     },
-    "org.apache.cordova.network-information",
-    "org.apache.cordova.file-transfer",
-    "org.apache.cordova.geolocation"
+    "org.apache.cordova.network-information"
   ],
   "cordovaPlatforms": [
-    "android"
+    "android",
+    "ios"
   ]
 }

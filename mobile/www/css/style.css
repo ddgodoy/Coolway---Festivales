@@ -6,6 +6,13 @@
 	float: left;
 }
 
+.platform-ios .header{
+    margin-top:10px!important;
+}
+.platform-ios .login {
+    padding-top:20px!important;
+}
+
 /* ================================== LAYOUT ================================== */
 
 .bg-one {
@@ -36,6 +43,9 @@
 	top: 90px;
 	width: 100%;
 }
+.platform-ios .has-header {
+    top: 100px !important;
+}
 
 .has-search-box {
 	top: 200px;
@@ -43,6 +53,9 @@
 
 .has-title {
 	top: 120px;
+}
+.platform-ios .has-title {
+    top: 130px;
 }
 
 .btn-menu {
@@ -204,6 +217,11 @@
 	display: block;
 	font-size: 0.6rem;
 }
+
+.platform-ios .login-terms {
+	margin-top: 10px !important;
+}
+
 /* ================================== PROFILE ================================== */
 .input-label {
 	color:#FFF;
@@ -477,7 +495,7 @@
 	color: #ffd800;
 }
 .lineup-add-favorite.favorite i {
-	color: #FFF;
+	color: #e86565;
 }
 /* ================================== INFOFEST ================================== */
 .zoom-title {
@@ -493,14 +511,10 @@
 }
 /* ================================== AWARDS ================================== */
 .bg-awards {
+	/*
 	background: url(../img/bg-awards.jpg);
 	background-size: cover;
-	text-align: center;
-}
-
-.bg-awards-2 {
-	background: url(file:///data/data/com.coolway.letsdance/www/img/background.jpg);
-	background-size: cover;
+	*/
 	text-align: center;
 }
 
@@ -533,10 +547,18 @@
 	height: 15px;
 	margin: 5px 15px;
 }
+.platform-ios .modal-header {
+    padding-top: 15px!important;
+}
+
 .has-modal-header {
 	top: 20px;
 	padding: 0 15px;
 }
+.platform-ios .has-modal-header {
+    top: 40px!important;
+}
+
 @media screen and ( height: 533px) {
 	.level-bars {
 		margin: 10% auto !important;
