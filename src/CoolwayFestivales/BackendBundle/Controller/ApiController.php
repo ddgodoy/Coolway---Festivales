@@ -921,7 +921,7 @@ class ApiController extends Controller {
 
         foreach( $recipients['IOS'] as $deviceToken ) {
             $ctx = stream_context_create();
-            stream_context_set_option($ctx, 'ssl', 'local_cert', $this->container->getParameter('kernel.root_dir').'../mobile/certs/aps_development.pem');
+            stream_context_set_option($ctx, 'ssl', 'local_cert', $this->container->getParameter('kernel.root_dir').'/../mobile/certs/aps_development.pem');
             stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
             $fp = stream_socket_client(
                 'ssl://gateway.sandbox.push.apple.com:2195', $err,
