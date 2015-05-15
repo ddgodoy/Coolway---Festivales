@@ -66,7 +66,11 @@ class ApiController extends Controller {
 
             $title = "Felicitaciones!!";
             $message= "Has aumentado tu puntuación en un 5%. Sigue de fiesta y consigue nuestro premio.";
-            $recipients = array($user->getNotificationId());
+            $recipients = array(
+                'Android'=>array(),
+                'IOS'=>array()
+            );
+            $recipients[$user->getOs()][]= $user->getNotificationId();
             $this->send($title,$message,$recipients);
 
             $data = array(
