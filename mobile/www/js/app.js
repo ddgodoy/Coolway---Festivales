@@ -120,15 +120,66 @@ app.config(function ($stateProvider,$urlRouterProvider,$ionicConfigProvider) {
 
 });
 
-app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordovaDevice,$cordovaGeolocation,$cordovaPush,$cordovaNetwork,userAuth,serverConnection) {
+app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordovaNoiseMeter,$cordovaDeviceMotion,$cordovaDevice,$cordovaGeolocation,$cordovaPush,$cordovaNetwork,userAuth,serverConnection) {
   $rootScope.notificacionId = "";
   $rootScope.currentMusic = 0;
   $rootScope.currentDance = 0;
   $rootScope.currentTotal = 0;
+  $rootScope.MusicPercent = 0;
+  $rootScope.DancePercent = 0;
 
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+    
+    //Accelerometer
+    var Kacc = 70;
+    var InitAcc = true;
+    var MinAcceleration = 1;
+
+    //Sound
+    var Kmusic = 32756;
+     
+    var watch = $cordovaDeviceMotion.watchAcceleration({ frequency: 100 });
+    
+    watch.then(null,function(error) {
+      //console.log('ERROR '+error.code+': '+error.message);
+    },
+    function(acceleration) {
+      if(InitAcc)
+      {
+        lastX = acceleration.x;
+        lastY = acceleration.y;
+        lastZ = acceleration.z;
+        InitAcc = false;
+      }
+      else
+      {
+        deltaX =  Math.abs(lastX - acceleration.x);
+        deltaY =  Math.abs(lastY - acceleration.y);
+        deltaZ =  Math.abs(lastZ - acceleration.z);
+
+        if (deltaX < MinAcceleration) deltaX = 0;
+        if (deltaY < MinAcceleration) deltaY = 0;
+        if (deltaZ < MinAcceleration) deltaZ = 0;
+
+        lastX = acceleration.x;
+        lastY = acceleration.y;
+        lastZ = acceleration.z;
+
+        dance = Math.sqrt( Math.pow(deltaX,2) + Math.pow(deltaY,2)+ Math.pow(deltaZ,2) );
+        $rootScope.DancePercent = dance/Kacc;
+      }
+    });
+   
+    //Get Music
+    var noiseWatch = $cordovaNoiseMeter.getNoise();
+
+    noiseWatch.then(null,function(error) {
+      //console.log('ERROR NOISE');
+    },function(noise) {
+      $rootScope.MusicPercent = noise/Kmusic;
+    });
     
     $rootScope.isOffline = $cordovaNetwork.isOffline();
   
@@ -169,12 +220,12 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
       userAuth.disabledFirstTime();
       serverConnection.get('awards',function(rsp) {
       },function(rsp){
-        console.log(rsp);
+        //console.log(rsp);
       }, { token: userAuth.getToken() } );
 
       serverConnection.get('map',function(rsp) {
       },function(rsp){
-        console.log(rsp);
+        //console.log(rsp);
       }, { token: userAuth.getToken() } );
     }
 
@@ -220,11 +271,13 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
       var androidConfig = {
         "senderID": "1090006415155",
       };
+
+      $rootScope.OS = "Android";
       
       $cordovaPush.register(androidConfig).then(function(result) {
-        console.log(result);
+        //console.log(result);
       }, function(error) {
-        console.log(error);
+        //console.log(error);
       });
 
       $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
@@ -232,7 +285,6 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
           case 'registered':
             if (notification.regid.length > 0 ) {
               $rootScope.notificationId = notification.regid;
-              $rootScope.OS = "Android";
             }
             break;
 
@@ -253,11 +305,11 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
             break;
 
           case 'error':
-            console.log('GCM ERROR');
+            //console.log('GCM ERROR');
             break;
 
           default:
-            console.log('GCM DEFAULT');
+            //console.log('GCM DEFAULT');
             break;
         }
       });
@@ -270,11 +322,13 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
         "alert": true,
       };
 
+      $rootScope.OS = "IOS";
+
       $cordovaPush.register(iosConfig).then(function(deviceToken) {
         $rootScope.notificationId = deviceToken;
-        $rootScope.OS = "IOS";
       }, function(err) {
-        console.log("error in ios notification register");
+        //console.log(err);
+        //console.log("error in ios notification register");
       });
 
       $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
@@ -307,7 +361,7 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
 
   $interval(function(){
       
-        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        var posOptions = {timeout: 10000, enableHighAccuracy: true,maximumAge: 1000*60*60};
         $cordovaGeolocation.getCurrentPosition(posOptions)
         .then(function (position) {
           $rootScope.currentLatitude = position.coords.latitude;
@@ -364,7 +418,7 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
             $rootScope.music = rsp.data.music;
             $rootScope.feast = rsp.data.feast;
           },function(){
-            console.log("error get data with gps off");
+            //console.log("error get data with gps off");
           },{
             token: userAuth.getToken(),
             logged: userAuth.checkLogged(),
@@ -432,7 +486,7 @@ app.controller('tutorialCtrl' ,function ($scope,$state,$ionicLoading,$ionicSlide
     $scope.steps = rsp.data;
     $ionicLoading.hide();
   },function(rsp){
-    console.log(rsp);
+    //console.log(rsp);
     $ionicLoading.hide();
   });
 
@@ -451,7 +505,7 @@ app.controller('tutorialCtrl' ,function ($scope,$state,$ionicLoading,$ionicSlide
   };
 
   $scope.activeSlide = function (a) {
-    console.log("a");
+    //console.log("a");
   }
 
 });
@@ -465,7 +519,7 @@ app.controller('loginCtrl' ,function ($scope,$state,$ionicLoading,$ionicModal,$c
     $cordovaOauth.facebook("900256300038339", ["email"]).then(function(result) {
       userAuth.login('facebook',result.access_token);
     }, function(error) {
-      console.log(error);
+      //console.log(error);
     });
   };
 
@@ -479,7 +533,7 @@ app.controller('loginCtrl' ,function ($scope,$state,$ionicLoading,$ionicModal,$c
       };
       userAuth.login('twitter',r);
     }, function(error) {
-      console.log(error);
+      //console.log(error);
     });
   };
 
@@ -487,7 +541,7 @@ app.controller('loginCtrl' ,function ($scope,$state,$ionicLoading,$ionicModal,$c
     $cordovaOauth.google("1090006415155-3rdvfqlmd2sno0ehrvhghgl602conopv.apps.googleusercontent.com", ["email"]).then(function(result) {
       userAuth.login('google',result.access_token);
     }, function(error) {
-      console.log(error);
+      //console.log(error);
     });
   };
 
@@ -495,7 +549,7 @@ app.controller('loginCtrl' ,function ($scope,$state,$ionicLoading,$ionicModal,$c
     $cordovaOauth.instagram("0e3680b448de464db376a09dc9e82137", ["basic"]).then(function(result) {
       userAuth.login('instagram',result.access_token);
     }, function(error) {
-      console.log(error);
+      //console.log(error);
     });
   };
 
@@ -503,7 +557,7 @@ app.controller('loginCtrl' ,function ($scope,$state,$ionicLoading,$ionicModal,$c
     $scope.title = rsp.data.title;
     $scope.text = rsp.data.text;
   },function(rsp){
-    console.log(rsp);
+    //console.log(rsp);
   }, { token: userAuth.getToken() } );
   
   $ionicModal.fromTemplateUrl('views/modal.html', {
@@ -532,117 +586,40 @@ app.controller('layoutCtrl' ,function ($scope,userAuth) {
 
 });
 
-app.controller('levelCtrl' ,function ($rootScope,$scope,$state,$interval,$cordovaSocialSharing,$cordovaDeviceMotion,$cordovaNoiseMeter,userAuth,serverConnection) {
+app.controller('levelCtrl' ,function ($rootScope,$scope,$state,$interval,$cordovaDeviceMotion,$cordovaNoiseMeter,userAuth,serverConnection) {
   
   $scope.MusicPercent = 0;
   $scope.DancePercent = 0;
   $scope.TotalPercent = 0;
 
-  //Accelerometer
-  var Kacc = 70;
-  var InitAcc = true;
-  var MinAcceleration = 1;
-
-  //Sound
-  var SampleRate = 8000;
-  var SampleDelay = 1000;
-  var MinMusic = 1000;
-  var Kmusic = 32756;
   var Kf = 0.5;
   var Kr = 0.5;
   var Km = 1.5;
-
-  ionic.Platform.ready(function() {
     
-    //Get Dance
-    var watch = $cordovaDeviceMotion.watchAcceleration({ frequency: 100 });
-    watch.then(null,function(error) {
-      console.log('ERROR '+error.code+': '+error.message);
-    },
-    function(acceleration) {
-      if(InitAcc)
-      {
-        lastX = acceleration.x;
-        lastY = acceleration.y;
-        lastZ = acceleration.z;  
-        InitAcc = false;
-      }
-      else
-      {
-        deltaX =  Math.abs(lastX - acceleration.x);
-        deltaY =  Math.abs(lastY - acceleration.y);
-        deltaZ =  Math.abs(lastZ - acceleration.z);
+  //Update interface
+  $interval(function () {
+    $scope.MusicPercent = $rootScope.MusicPercent;
+    $scope.DancePercent = $rootScope.DancePercent;
 
-        if (deltaX < MinAcceleration) deltaX = 0;
-        if (deltaY < MinAcceleration) deltaY = 0;
-        if (deltaZ < MinAcceleration) deltaZ = 0;
+    tPercent = (Kf * (Km*$scope.DancePercent+Kr*$scope.MusicPercent));
 
-        lastX = acceleration.x;
-        lastY = acceleration.y;
-        lastZ = acceleration.z;
-
-        dance = Math.sqrt( Math.pow(deltaX,2) + Math.pow(deltaY,2)+ Math.pow(deltaZ,2) );
-        $scope.DancePercent = dance/Kacc;
-      }
-    });
-
-    //Get Music
-    var noiseWatch = $cordovaNoiseMeter.getNoise();
+    if($scope.DancePercent > $rootScope.currentDance)
+      $rootScope.currentDance = $scope.DancePercent;
     
-    noiseWatch.then(null,function(error) {
-      console.log('ERROR NOISE');
-    },function(noise) {
-        $scope.MusicPercent = noise/Kmusic;
-    });
+    if($scope.MusicPercent > $rootScope.currentMusic)
+      $rootScope.currentMusic = $scope.MusicPercent;
     
-    //Update interface
-    $interval(function () {
-      //$scope.MusicPercent = Math.random();
-      //$scope.DancePercent = Math.random();
+    $rootScope.currentTotal = (Kf * (Km*$rootScope.currentDance+Kr*$rootScope.currentMusic));
 
-      tPercent = (Kf * (Km*$scope.DancePercent+Kr*$scope.MusicPercent));
+    $scope.updateMusicPercent($scope.MusicPercent);
+    $scope.updateDancePercent($scope.DancePercent);
+    $scope.updateTotalPercent(tPercent);
+  },100);
 
-      if($scope.DancePercent > $rootScope.currentDance)
-        $rootScope.currentDance = $scope.DancePercent;
-      
-      if($scope.MusicPercent > $rootScope.currentMusic)
-        $rootScope.currentMusic = $scope.MusicPercent;
-      
-      $rootScope.currentTotal = (Kf * (Km*$rootScope.currentDance+Kr*$rootScope.currentMusic));
-
-      $scope.updateMusicPercent($scope.MusicPercent);
-      $scope.updateDancePercent($scope.DancePercent);
-      $scope.updateTotalPercent(tPercent);
-    },100);
-
-    $scope.share = function() {
-      if(userAuth.checkLogged())
-      {
-        $cordovaSocialSharing
-          .share(
-            "Ranking Posición "+$rootScope.position+" con "+$rootScope.points+" Puntos. Baile: "+$rootScope.dance+" , Músic: "+$rootScope.music+" , Feast: "+$rootScope.feast,
-            "Coolway Let´s Dance",
-            serverConnection.getHost()+'/images/icon.png'
-          )
-          .then(function(result) {
-            serverConnection.get('share',function(){
-              console.log("success share");
-            }, function(){
-              console.log("error share");
-            },
-            { token: userAuth.getToken() });
-          }, function(err) {
-            console.log(err);
-          });
-      }
-      else
-      {  
-        $state.go('noLogged');
-      }
-    }
+  $scope.share = function() {
+    serverConnection.share('level',{ token: userAuth.getToken() });
+  }
     
-  });
-
 
   $scope.updateMusicPercent = function(percent)
   {
@@ -702,7 +679,7 @@ app.controller('lineupCtrl' ,function ($rootScope,$scope,$ionicLoading,$ionicScr
     $scope.lineup = rsp.data;
     $ionicLoading.hide();
   },function(rsp){
-    console.log("Error get data in lineup");
+    //console.log("Error get data in lineup");
     $ionicLoading.hide();
   },{ token: userAuth.getToken() });
 
@@ -743,7 +720,7 @@ app.controller('infoFestCtrl' ,function ($scope,$ionicLoading,userAuth,serverCon
     $scope.title = "Plano "+rsp.data.title;
     $ionicLoading.hide();
   },function(rsp){
-    console.log(rsp);
+    //console.log(rsp);
     $ionicLoading.hide();
   }, { token: userAuth.getToken() } );
 
@@ -765,7 +742,7 @@ app.controller('awardsCtrl' ,function ($scope,$ionicLoading,$ionicModal,serverCo
     $scope.text = rsp.data.text;
     $ionicLoading.hide();
   },function(rsp){
-    console.log(rsp);
+    //console.log(rsp);
     $ionicLoading.hide();
   }, { token: userAuth.getToken() } );
   
@@ -794,7 +771,7 @@ app.controller('profileCtrl' ,function ($scope,$state,$ionicLoading,userAuth,ser
     $scope.user = rsp.data;
     $ionicLoading.hide();
   },function(rsp){
-    console.log("ERROR GET DATA PROFILE");
+    //console.log("ERROR GET DATA PROFILE");
     $ionicLoading.hide();
   },{ token: userAuth.getToken() });
   
@@ -820,34 +797,13 @@ app.controller('timelineCtrl' ,function ($scope,$ionicLoading,$cordovaSocialShar
     $scope.timeline = rsp.data;
     $ionicLoading.hide();
   },function(rsp){
-    console.log("ERROR GET DATA TIMELINE");
+    //console.log("ERROR GET DATA TIMELINE");
     $ionicLoading.hide();
   },{ token: userAuth.getToken() });
 
   $scope.share = function() {
-    navigator.screenshot.save(function(error,res){
-      if(error){
-        console.error(error);
-      }else{
-        $cordovaSocialSharing
-          .share(
-            "¡Mira cuánto me divierto! Descarga tú también la app y mide tu nivel de diversión",
-            "Coolway Let´s Dance",
-            "file://"+res.filePath
-          )
-          .then(function(result) {
-            serverConnection.get('share',function(){
-              console.log("success share");
-            }, function(){
-              console.log("error share");
-            },
-            { token: userAuth.getToken() });
-          }, function(err) {
-            console.log(err);
-        });
-      }
-    });
-  };
+    serverConnection.share('timeline',{ token: userAuth.getToken() });
+  }
   
 });
 
@@ -858,34 +814,14 @@ app.controller('rankingCtrl' ,function ($rootScope,$scope,$ionicScrollDelegate,$
     $scope.ranking = rsp.data;
     $ionicLoading.hide();
   },function(rsp){
-    console.log(rsp);
+    //console.log(rsp);
     $ionicLoading.hide();
   },{ token: userAuth.getToken() });
 
+  
   $scope.share = function() {
-    navigator.screenshot.save(function(error,res){
-      if(error){
-        console.error(error);
-      }else{
-        $cordovaSocialSharing
-          .share(
-            "¡Mira cuánto me divierto! Descarga tú también la app y mide tu nivel de diversión",
-            "Coolway Let´s Dance",
-            "file://"+res.filePath
-          )
-          .then(function(result) {
-            serverConnection.get('share',function(){
-              console.log("success share");
-            }, function(){
-              console.log("error share");
-            },
-            { token: userAuth.getToken() });
-          }, function(err) {
-            console.log(err);
-        });
-      }
-    });
-  };
+    serverConnection.share('timeline',{ token: userAuth.getToken() });
+  }
 
   $scope.isFavorite = 0;
   
@@ -1092,15 +1028,92 @@ app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicLoading,$cordo
   }
 });
 
-app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$ionicPopup,$cordovaFileTransfer) {
+app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$cordovaGeolocation,$cordovaSocialSharing,$ionicPopup,$cordovaFileTransfer) {
   //var host = 'http://festivales.icox.mobi';
-  //var host = 'http://local.coolway.192.168.1.100.xip.io/app_dev.php';
+  //var host = 'http://local.coolway.192.168.1.100.xip.io';
   var host = 'http://62.75.210.58';
   var api = host+'/api/';
   return {
 
     getHost : function () {
       return host;
+    },
+    share : function (section,params) {
+      that = this;
+      switch (section) {
+        case 'level': 
+          message = "Ranking Posición "+$rootScope.position+" con "+$rootScope.points+" Puntos. Baile: "+$rootScope.dance+" , Músic: "+$rootScope.music+" , Feast: "+$rootScope.feast;
+          subject = "Coolway Let´s Dance";
+          file = host+'/images/icon.png';
+          link = api+'download';
+          break;
+
+        case 'timeline': 
+          message = "¡Mira cuánto me divierto! Descarga tú también la app y mide tu nivel de diversión";
+          subject = "Coolway Let´s Dance";
+          link = api+'download';
+          break;
+
+        case 'ranking':
+          message = "¡Mira cuánto me divierto! Descarga tú también la app y mide tu nivel de diversión";
+          subject = "Coolway Let´s Dance";
+          link = api+'download';
+          break;
+      }
+
+      if(section != 'level') {
+        
+        navigator.screenshot.save(function(error,res){
+          if(error){
+            console.error(error);
+          }else{
+            file = "file://"+res.filePath;
+            $cordovaSocialSharing
+              .share(message,subject,file,link)
+              .then(function(result) {
+
+                var posOptions = {timeout: 10000, enableHighAccuracy: true,maximumAge: 1000*60*60};
+                $cordovaGeolocation.getCurrentPosition(posOptions).then(function (position) {
+                  params.latitude = position.coords.latitude;
+                  params.longitude = position.coords.longitude;
+                  that.get('share',function(result){
+                    //console.log(result);
+                  }, function(){
+                    //console.log("error share");
+                  }, params);
+                }, function(err){
+                  //console.log(err)
+                });
+
+              }, function(err) {
+                //console.log(err);
+            });
+          }
+        });
+      
+      } else {
+
+        $cordovaSocialSharing.share(message,subject,file,link)
+          .then(function(result) {
+
+            var posOptions = {timeout: 10000, enableHighAccuracy: true,maximumAge: 1000*60*60};
+            $cordovaGeolocation.getCurrentPosition(posOptions).then(function (position) {
+              params.latitude = position.coords.latitude;
+              params.longitude = position.coords.longitude;
+              that.get('share',function(result){
+                //console.log(result);
+              }, function(){
+                //console.log("error share");
+              }, params);
+            }, function(err){
+              //console.log(err)
+            });
+
+          }, function(err) {
+            //console.log(err);
+        });
+      }
+
     },
 
     get : function (url,success,error,params) {
@@ -1171,7 +1184,7 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$ionicPopu
 
       $cordovaFileTransfer.download(url, targetPath, options, trustHosts)
         .then(function(result) {
-          console.log("succes download");
+          //console.log("succes download");
           if(name == 'awards')
             $rootScope.awards = targetPath;
           else if(name == 'map')
@@ -1179,11 +1192,11 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$ionicPopu
           else if(name == 'background')
             $rootScope.background = targetPath;
         }, function(err) {
-          console.log("error download");
+          //console.log("error download");
         }, function (progress) {
-          $timeout(function () {
-            console.log((progress.loaded / progress.total) * 100);
-          })
+          /*$timeout(function () {
+            //console.log((progress.loaded / progress.total) * 100);
+          })*/
       });
     },
 

@@ -57,8 +57,8 @@ class ApiController extends Controller {
             $newData->setDance(0);
             $newData->setMusic(0);
             $newData->setTotalShare(5);
-            $newData->setLatitude(0);
-            $newData->setLongitude(0);
+            $newData->setLatitude($data['latitude']);
+            $newData->setLongitude($data['longitude']);
             $newData->setDate(new \Datetime());
             $em->persist($newData);
             $em->flush();
@@ -66,7 +66,7 @@ class ApiController extends Controller {
 
             $title = "Felicitaciones!!";
             $message= "Has aumentado tu puntuación en un 5%. Sigue de fiesta y consigue nuestro premio.";
-            $recipients = array($user->getNotificationId());
+            $recipients[$user->getOS()] = array($user->getNotificationId());
             $this->send($title,$message,$recipients);
 
             $data = array(
@@ -173,7 +173,10 @@ class ApiController extends Controller {
             
         $totalForFeast = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotal($feast->getId());
         $usersForFeast = count ( $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findUsersForFeast($feast->getId()) );
-        $media = $totalForFeast['total'] / $usersForFeast;
+        if($usersForFeast)
+            $media = $totalForFeast['total'] / $usersForFeast;
+        else
+            $media = 0;
         
         $information['media'] = ceil($media*$this->convertPoint);
 
@@ -874,6 +877,29 @@ class ApiController extends Controller {
 
         die();
 
+    }
+
+    /**
+     * download
+     *
+     * @Route("/download", name="api_download")
+     * @Template()
+     */
+    public function downlodAction() {
+        //Detect special conditions devices
+        $iPod    = stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
+        $iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
+        $iPad    = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
+        $Android = stripos($_SERVER['HTTP_USER_AGENT'],"Android");
+        $webOS   = stripos($_SERVER['HTTP_USER_AGENT'],"webOS");
+
+        //do something with this information
+        if( $iPod || $iPhone || $iPad )
+            $link = "link to ios";
+        else
+            $link = "link to android";
+
+        die($link);
     }
 
     private function send($title,$message,$recipients) {

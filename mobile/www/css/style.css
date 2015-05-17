@@ -34,7 +34,7 @@
 	text-align: center;
 }
 .header img {
-	height: 74px;
+	height: 64px;
 	margin: auto;
 }
 
@@ -63,7 +63,8 @@
 	right: 10px;
 	top: 10px;
 	font-weight: bold;
-	font-size: 40px;
+	font-size: 45px;
+	width: 50px;
 }
 
 .list-inset {
@@ -412,6 +413,9 @@
 /* ================================== RANKING ================================== */
 .ranking-content {
 	padding: 0 10px;
+}
+.ranking-list .list {
+	margin-bottom: 60px!important;
 }
 .ranking-list .item{
 	background: rgba(0,0,0,0.4);
