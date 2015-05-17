@@ -937,8 +937,6 @@ class ApiController extends Controller {
         //sender id = 1090006415155;
         //api key = AIzaSyCFpBmNym9kaRPoUA-ZKogSk-QZzvLhlfc
 
-        $passphrase = 'iY88bR62';
-
         $fields = array(
             'aps' => array(
                 'alert' => $message,
@@ -949,12 +947,14 @@ class ApiController extends Controller {
 
         $payload = json_encode($fields);
 
+        $passphrase = 'iY88bR62';
+
         foreach( $recipients['IOS'] as $deviceToken ) {
             $ctx = stream_context_create();
-            stream_context_set_option($ctx, 'ssl', 'local_cert', $this->container->getParameter('kernel.root_dir').'/../mobile/certs/aps_development.pem');
+            stream_context_set_option($ctx, 'ssl', 'local_cert', $this->container->getParameter('kernel.root_dir').'/../mobile/certs/aps_production.pem');
             stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
             $fp = stream_socket_client(
-                'ssl://gateway.sandbox.push.apple.com:2195', $err,
+                'ssl://gateway.push.apple.com:2195', $err,
                 $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx
             );
      
@@ -966,7 +966,7 @@ class ApiController extends Controller {
             $result = fwrite($fp, $msg, strlen($msg));
             fclose($fp);
         }
-        
+        die("BIEN");
         return true;
     }
 
