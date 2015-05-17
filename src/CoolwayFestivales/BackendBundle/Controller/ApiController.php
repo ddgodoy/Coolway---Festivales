@@ -966,7 +966,7 @@ class ApiController extends Controller {
             $result = fwrite($fp, $msg, strlen($msg));
             fclose($fp);
         }
-        die("BIEN");
+        
         return true;
     }
 
