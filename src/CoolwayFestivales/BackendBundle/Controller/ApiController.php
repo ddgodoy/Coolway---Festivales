@@ -360,6 +360,7 @@ class ApiController extends Controller {
         $last_stage = '';
         $i = 0-1;
         $first = true;
+        $date_array= array();
         foreach( $feastStageArtist as $f )
         {
             $date_object = !is_object($f['date'])?new \DateTime($f['date']):$f['date'];
@@ -367,6 +368,7 @@ class ApiController extends Controller {
             $stage = $f['stage_id'];
 
             if($date != $last_date ) {
+                $date_array[] = $date; 
                 if($first || $f['time']->format('G') > '06')
                 {
                     $first= false;
@@ -382,7 +384,7 @@ class ApiController extends Controller {
                    $date = $last_date;
             }
             elseif ( $f['time']->format('G') <= '06' )
-                $date = $last_date;
+                $date = $date_array[count($date_array) -1 ];
 
             $stageExist = false;
             if($stage != $last_stage)
@@ -414,7 +416,7 @@ class ApiController extends Controller {
                 'name' => $f['artist'],
                 'hour' => $f['time']->format('H:i'),
                 'date' => $date_object->format('Y-m-d'),
-                'cache' => '1',
+                'cache' => '2',
                 'favorite' => isset($favorites[$f['artist_id']]) ? '1' : '0'
             );
 
