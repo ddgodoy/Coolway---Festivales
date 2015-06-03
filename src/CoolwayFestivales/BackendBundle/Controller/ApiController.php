@@ -367,12 +367,14 @@ class ApiController extends Controller {
             $date = $date_object->format('Y-m-d');
             $stage = $f['stage_id'];
 
+            $d = $i;
             if($date != $last_date ) {
                 $date_array[] = $date; 
                 if($first || $f['time']->format('G') > '06')
                 {
                     $first= false;
                     $i++;
+                    $d = $i;
                     $j = 0-1;
                     $last_stage = '';
                     $lineup[$i] = array(
@@ -384,15 +386,12 @@ class ApiController extends Controller {
                    $date = $last_date;
             }
             elseif ( $f['time']->format('G') <= '06' )
-            {
-                $date = $date_array[count($date_array) -1 ];
-                $i--;
-            }
+                $d--;
 
             $stageExist = false;
             if($stage != $last_stage)
             {
-                foreach($lineup[$i]['stages'] as $k => $s) {
+                foreach($lineup[$d]['stages'] as $k => $s) {
                     if ($s['name'] == $f['stage'] ) {
                         $stageExist = $k;
                         break;
@@ -402,7 +401,7 @@ class ApiController extends Controller {
 
                 if($stageExist === false ) {
                     $j++;
-                    $lineup[$i]['stages'][$j] = array(
+                    $lineup[$d]['stages'][$j] = array(
                         'name' => $f['stage'],
                         'artist' => array()
                     );
@@ -414,7 +413,7 @@ class ApiController extends Controller {
             else
                 $t = $stageExist;
 
-            $lineup[$i]['stages'][$t]['artist'][] = array(
+            $lineup[$d]['stages'][$t]['artist'][] = array(
                 'id' => $f['artist_id'],
                 'name' => $f['artist'],
                 'hour' => $f['time']->format('H:i'),
