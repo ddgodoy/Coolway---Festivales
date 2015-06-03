@@ -385,13 +385,15 @@ class ApiController extends Controller {
             $stageExist = false;
             if($stage != $last_stage)
             {
-                foreach($lineup[$i]['stages'] as $k => $s)
-                    if ($s['name'] == $f['stage'] ){
+                foreach($lineup[$i]['stages'] as $k => $s) {
+                    if ($s['name'] == $f['stage'] ) {
                         $stageExist = $k;
                         break;
                     }
+                        
+                }
 
-                if($stageExist == false ) {
+                if($stageExist === false ) {
                     $j++;
                     $lineup[$i]['stages'][$j] = array(
                         'name' => $f['stage'],
@@ -400,7 +402,7 @@ class ApiController extends Controller {
                 }
             }
 
-            if($stageExist == false)
+            if($stageExist === false)
                 $t = $j;
             else
                 $t = $stageExist;
@@ -410,7 +412,6 @@ class ApiController extends Controller {
                 'name' => $f['artist'],
                 'hour' => $f['time']->format('H:i'),
                 'date' => $date_object->format('Y-m-d'),
-                'c' => 'a',
                 'favorite' => isset($favorites[$f['artist_id']]) ? '1' : '0'
             );
 
