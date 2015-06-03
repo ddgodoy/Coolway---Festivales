@@ -377,7 +377,7 @@ class ApiController extends Controller {
                     $d = $i;
                     $j = 0-1;
                     $last_stage = '';
-                    $lineup[$i] = array(
+                    $lineup[$d] = array(
                         'date' => $this->days[$date_object->format('N')].', '.$date_object->format('j').' '.$this->months[$date_object->format('n')].' '.$date_object->format('Y') ,
                         'stages' => array()
                     );
@@ -389,8 +389,8 @@ class ApiController extends Controller {
                 $d--;
 
             $stageExist = false;
-            if($stage != $last_stage)
-            {
+            //if($stage != $last_stage)
+            //{
                 foreach($lineup[$d]['stages'] as $k => $s) {
                     if ($s['name'] == $f['stage'] ) {
                         $stageExist = $k;
@@ -406,7 +406,7 @@ class ApiController extends Controller {
                         'artist' => array()
                     );
                 }
-            }
+            //}
 
             if($stageExist === false)
                 $t = $j;
