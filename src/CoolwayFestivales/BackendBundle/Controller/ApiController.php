@@ -384,7 +384,7 @@ class ApiController extends Controller {
                    $date = $last_date;
             }
             elseif ( $f['time']->format('G') <= '06' )
-                $date = $date_array[count($date_array) -1 ];
+                $i--;
 
             $stageExist = false;
             if($stage != $last_stage)
@@ -416,7 +416,7 @@ class ApiController extends Controller {
                 'name' => $f['artist'],
                 'hour' => $f['time']->format('H:i'),
                 'date' => $date_object->format('Y-m-d'),
-                'cache' => '2',
+                'cache' => '3',
                 'favorite' => isset($favorites[$f['artist_id']]) ? '1' : '0'
             );
 
