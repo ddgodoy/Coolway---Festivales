@@ -359,6 +359,7 @@ class ApiController extends Controller {
         $last_date = '';
         $last_stage = '';
         $i = 0-1;
+        $first = true;
         foreach( $feastStageArtist as $f )
         {
             $date_object = !is_object($f['date'])?new \DateTime($f['date']):$f['date'];
@@ -366,8 +367,9 @@ class ApiController extends Controller {
             $stage = $f['stage_id'];
 
             if($date != $last_date ) {
-                if($f['time']->format('G') > '06')
+                if($first || $f['time']->format('G') > '06')
                 {
+                    $first= false;
                     $i++;
                     $j = 0-1;
                     $last_stage = '';
