@@ -410,6 +410,7 @@ class ApiController extends Controller {
                 'name' => $f['artist'],
                 'hour' => $f['time']->format('H:i'),
                 'date' => $date_object->format('Y-m-d'),
+                'c' => 'a',
                 'favorite' => isset($favorites[$f['artist_id']]) ? '1' : '0'
             );
 
