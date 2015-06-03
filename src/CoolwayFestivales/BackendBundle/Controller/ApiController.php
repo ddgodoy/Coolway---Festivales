@@ -391,7 +391,7 @@ class ApiController extends Controller {
                         break;
                     }
 
-                if(!$stageExist) {
+                if($stageExist == false ) {
                     $j++;
                     $lineup[$i]['stages'][$j] = array(
                         'name' => $f['stage'],
@@ -400,11 +400,11 @@ class ApiController extends Controller {
                 }
             }
 
-            if(!$stageExist)
+            if($stageExist == false)
                 $t = $j;
             else
                 $t = $stageExist;
-            
+
             $lineup[$i]['stages'][$t]['artist'][] = array(
                 'id' => $f['artist_id'],
                 'name' => $f['artist'],
