@@ -74,8 +74,34 @@ class UserFeastData {
      */
     private $date;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $in_concert;
+
     public function __construct() {
 
+    }
+
+    /**
+     * Set in_concert
+     *
+     * @param boolean $in_concert
+     * @return Step
+     */
+    public function setInConcert($in_concert) {
+        $this->in_concert = $in_concert;
+
+        return $this;
+    }
+
+    /**
+     * Get in_concert
+     *
+     * @return boolean
+     */
+    public function getInConcert() {
+        return $this->in_concert;
     }
 
     /**

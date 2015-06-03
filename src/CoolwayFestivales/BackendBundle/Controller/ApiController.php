@@ -47,34 +47,40 @@ class ApiController extends Controller {
 
             $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
             $lastValue = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findLastDataNotNull($feast->getId(),$user->getId());
+            $lastShare = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findLastShare($feast->getId(),$user->getId());
 
-            $totalShare = 5 * $lastValue['total'] / 100;
+            $checkTime = date('Y-m-d H:i:00',strtotime("-5 minutes"));
+            if(!$lastShare || $lastShare['date']->format('Y-m-d H:i:00') < $checkTime) {
 
-            $newData = new UserFeastData();
-            $newData->setUser($user);
-            $newData->setFeast($feast);
-            $newData->setTotal($lastValue['total']+$totalShare);
-            $newData->setDance(0);
-            $newData->setMusic(0);
-            $newData->setTotalShare(5);
-            $newData->setLatitude($data['latitude']);
-            $newData->setLongitude($data['longitude']);
-            $newData->setDate(new \Datetime());
-            $em->persist($newData);
-            $em->flush();
+                $totalShare = 5 * $lastValue['total'] / 100;
+
+                $newData = new UserFeastData();
+                $newData->setUser($user);
+                $newData->setFeast($feast);
+                $newData->setTotal($lastValue['total']+$totalShare);
+                $newData->setDance(0);
+                $newData->setMusic(0);
+                $newData->setTotalShare(5);
+                $newData->setLatitude($data['latitude']);
+                $newData->setLongitude($data['longitude']);
+                $newData->setInConcert($this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo()));
+                $newData->setDate(new \Datetime());
+                $em->persist($newData);
+                $em->flush();
 
 
-            $title = "Felicitaciones!!";
-            $message= "Has aumentado tu puntuación en un 5%. Sigue de fiesta y consigue nuestro premio.";
+                $title = "Felicitaciones!!";
+                $message= "Has aumentado tu puntuación en un 5%. Sigue de fiesta y consigue nuestro premio.";
 
-            $recipients = array(
-                'Android'=>array(),
-                'IOS'=>array()
-            );
+                $recipients = array(
+                    'Android'=>array(),
+                    'IOS'=>array()
+                );
 
-            $recipients[$user->getOs()][]= $user->getNotificationId();
+                $recipients[$user->getOs()][]= $user->getNotificationId();
 
-            $this->send($title,$message,$recipients);
+                $this->send($title,$message,$recipients);
+            }
 
             $data = array(
                 'status' => 'success',
@@ -118,7 +124,7 @@ class ApiController extends Controller {
             $fd->setLongitude($data['longitude']);
             $fd->setTotalShare('0');
             $fd->setDate($d);
-
+            $fd->setInConcert($this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo()));
             $em = $this->getDoctrine()->getManager();
             $em->persist($fd);
             $em->flush();
@@ -359,14 +365,19 @@ class ApiController extends Controller {
             $date = $date_object->format('Y-m-d');
             $stage = $f['stage_id'];
 
-            if($date != $last_date) {
-                $i++;
-                $j = 0-1;
-                $last_stage = '';
-                $lineup[$i] = array(
-                    'date' => $this->days[$date_object->format('N')].', '.$date_object->format('j').' '.$this->months[$date_object->format('n')].' '.$date_object->format('Y') ,
-                    'stages' => array()
-                );
+            if($date != $last_date ) {
+                if($f['time']->format('G') > '06')
+                {
+                    $i++;
+                    $j = 0-1;
+                    $last_stage = '';
+                    $lineup[$i] = array(
+                        'date' => $this->days[$date_object->format('N')].', '.$date_object->format('j').' '.$this->months[$date_object->format('n')].' '.$date_object->format('Y') ,
+                        'stages' => array()
+                    );
+                }
+                else
+                   $date = $last_date;
             }
 
             if($stage != $last_stage)
@@ -777,7 +788,7 @@ class ApiController extends Controller {
                     $recipients[$u['os']][] = $u['notificationId'];
                 }
 
-                $title = "Quedan 5 minutos";
+                $title = "Quedan 15 minutos";
                 $message = "para que comience el concierto de ".$artist['artist']." en el  ".$artist['stage']."!";
 
                 $this->send($title,$message,$recipients); 
@@ -1011,6 +1022,24 @@ class ApiController extends Controller {
         	return true;
     	}
     	return false;
+    }
+
+    private function checkInConcert($userLatitude,$userLongitude,$feastLatitude,$feastLongitude,$feastDateFrom,$feastDateTo ) {
+        return true;
+        $now = date('Y-m-d');
+        if($now >= $feastDateFrom->format('Y-m-d') && $now <= $feastDateTo->format('Y-m-d'))
+        {
+            $distance = pow($userLatitude - $feastLatitude, 2) + pow($userLongitude - $feastLongitude,2);
+            $theta = $userLongitude - $feastLongitude;
+            $dist = sin(deg2rad($userLatitude)) * sin(deg2rad($feastLatitude)) +  cos(deg2rad($userLatitude)) * cos(deg2rad($feastLatitude)) * cos(deg2rad($theta));
+            $dist = acos($dist);
+            $dist = rad2deg($dist);
+            $miles = $dist * 60 * 1.1515;
+            $km = $miles * 1.609344;
+            if($km <= 5)
+                return true;
+        }
+        return false;
     }
 
     private function getData() {

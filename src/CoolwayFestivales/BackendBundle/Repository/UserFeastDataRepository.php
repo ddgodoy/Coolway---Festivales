@@ -131,6 +131,21 @@ class UserFeastDataRepository extends EntityRepository {
 		}
 	}
 
+    public function findLastShare($feast,$user_id ) {
+        $q = $this->getEntityManager()->createQuery(
+            "SELECT fd.total as total, fd.dance as dance, fd.music as music, fd.date  FROM BackendBundle:UserFeastData fd
+            WHERE fd.user = $user_id AND fd.feast = $feast AND fd.total_share = 5 
+            ORDER BY fd.date DESC"
+        );
+        $q->setMaxResults(1);
+        
+        try {
+            return $q->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return false;
+        }
+    }
+
 	public function findTotal($feast_id ) {
 		$q = $this->getEntityManager()->createQuery(
 			"SELECT SUM(fd.total) as total FROM BackendBundle:UserFeastData fd

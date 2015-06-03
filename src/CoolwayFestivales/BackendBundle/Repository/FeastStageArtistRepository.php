@@ -31,7 +31,7 @@ class FeastStageArtistRepository extends EntityRepository {
 	public function findNextArtist()
 	{
 		$time_from = date('H:i:00');
-                $time_to = date('H:i:00',strtotime("+6 minutes"));
+                $time_to = date('H:i:00',strtotime("+15 minutes"));
 		$date = date('Y-m-d');
 		//$date= '2015-04-29';
 		//$time = '20:00:00';
