@@ -381,6 +381,8 @@ class ApiController extends Controller {
                 else
                    $date = $last_date;
             }
+            elseif ( $f['time']->format('G') <= '06' )
+                $date = $last_date;
 
             $stageExist = false;
             if($stage != $last_stage)
