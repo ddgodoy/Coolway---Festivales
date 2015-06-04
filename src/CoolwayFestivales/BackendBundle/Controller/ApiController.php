@@ -942,11 +942,11 @@ class ApiController extends Controller {
 
         //do something with this information
         if( $iPod || $iPhone || $iPad )
-            $link = "link to ios";
+            $link = "https://itunes.apple.com/es/app/coolway-let-s-dance/id995819166?mt=8";
         else
-            $link = "link to android";
+            $link = "https://play.google.com/store/apps/details?id=com.coolway.letsdance";
 
-        die($link);
+        $this->redirect($link);
     }
 
     private function send($title,$message,$recipients) { 
