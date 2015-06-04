@@ -17,7 +17,7 @@ class UserFeastDataRepository extends EntityRepository {
 		$q = $this->getEntityManager()->createQuery(
 			"SELECT u.name as user, u.os as os, u.notificationId as notificationId, u.id as user_id, SUM( fd.total ) as total  FROM BackendBundle:UserFeastData fd
 			LEFT JOIN SafetyBundle:User u WITH fd.user = u.id
-			WHERE fd.feast = $id AND fd.inConcert = 1
+			WHERE fd.feast = $id AND fd.in_concert = 1
 			GROUP BY fd.user
 			ORDER BY total DESC"
         );
