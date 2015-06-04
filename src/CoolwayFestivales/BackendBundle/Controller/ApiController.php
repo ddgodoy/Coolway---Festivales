@@ -946,7 +946,7 @@ class ApiController extends Controller {
         else
             $link = "https://play.google.com/store/apps/details?id=com.coolway.letsdance";
 
-        $this->redirect($link);
+        return $this->redirect($link);
     }
 
     private function send($title,$message,$recipients) { 
