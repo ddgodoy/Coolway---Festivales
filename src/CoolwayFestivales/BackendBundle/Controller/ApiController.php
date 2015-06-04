@@ -235,7 +235,6 @@ class ApiController extends Controller {
      */
     public function rankingAction() {
     	$data = $this->getData();
-        $data['token'] = 'd8ec06e1c024504d';
 		if($user = $this->checkToken($data))
 		{
 
