@@ -52,34 +52,40 @@ class ApiController extends Controller {
             $checkTime = date('Y-m-d H:i:00',strtotime("-5 minutes"));
             if(!$lastShare || $lastShare['date']->format('Y-m-d H:i:00') < $checkTime) {
 
-                $totalShare = 5 * $lastValue['total'] / 100;
+                if($lastValue)
+                {
+                    $totalShare = 5 * $lastValue['total'] / 100;
 
-                $newData = new UserFeastData();
-                $newData->setUser($user);
-                $newData->setFeast($feast);
-                $newData->setTotal($lastValue['total']+$totalShare);
-                $newData->setDance(0);
-                $newData->setMusic(0);
-                $newData->setTotalShare(5);
-                $newData->setLatitude($data['latitude']);
-                $newData->setLongitude($data['longitude']);
-                $newData->setInConcert($this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo()));
-                $newData->setDate(new \Datetime());
-                $em->persist($newData);
-                $em->flush();
+                    $newData = new UserFeastData();
+                    $newData->setUser($user);
+                    $newData->setFeast($feast);
+                    $newData->setTotal($lastValue['total']+$totalShare);
+                    $newData->setDance(0);
+                    $newData->setMusic(0);
+                    $newData->setTotalShare(5);
+                    $newData->setLatitude($data['latitude']);
+                    $newData->setLongitude($data['longitude']);
+                    $newData->setInConcert($this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo()));
+                    $newData->setDate(new \Datetime());
+                    $em->persist($newData);
+                    $em->flush();
 
 
-                $title = "Felicitaciones!!";
-                $message= "Has aumentado tu puntuación en un 5%. Sigue de fiesta y consigue nuestro premio.";
+                    $title = "Felicitaciones!!";
+                    $message= "Has aumentado tu puntuación en un 5%. Sigue de fiesta y consigue nuestro premio.";
 
-                $recipients = array(
-                    'Android'=>array(),
-                    'IOS'=>array()
-                );
+                    $recipients = array(
+                        'Android'=>array(),
+                        'IOS'=>array()
+                    );
 
-                $recipients[$user->getOs()][]= $user->getNotificationId();
+                    if($user->getOs())
+                    {
+                        $recipients[$user->getOs()][]= $user->getNotificationId();
 
-                $this->send($title,$message,$recipients);
+                        $this->send($title,$message,$recipients);
+                    }
+                }
             }
 
             $data = array(
@@ -1063,7 +1069,7 @@ class ApiController extends Controller {
     }
 
     private function checkInConcert($userLatitude,$userLongitude,$feastLatitude,$feastLongitude,$feastDateFrom,$feastDateTo ) {
-        //return true;
+        //return false;
         $now = date('Y-m-d');
         if($now >= $feastDateFrom->format('Y-m-d') && $now <= $feastDateTo->format('Y-m-d'))
         {
@@ -1093,5 +1099,104 @@ class ApiController extends Controller {
 		$response->headers->set('Access-Control-Allow-Origin', '*');
 		$response->setData($data);
 		return $response;
+    }
+
+    /**
+     * Add Data
+     *
+     * @Route("/extra-data", name="api_extra_data")
+     * @Template()
+     */
+
+    public function extraAction (){
+        $data_list = array(
+            array(
+                'dance'=>0,
+                'music'=>0,
+                'total'=>0,
+                'token'=>'EEAE6654-E7A6-4B4B-8C17-37383D1FCF40',//cesar
+                'latitude'=>'39.4647527',
+                'longitude'=>'-0.3655201',
+            ),
+            array(
+                'dance'=>0,
+                'music'=>0,
+                'total'=>0,
+                'token'=>'ED7638E1-78F7-4D14-AACE-F9309279462D',//pilar
+                'latitude'=>'39.4647527',
+                'longitude'=>'-0.3655201',
+            ),
+            array(
+                'dance'=>0,
+                'music'=>0,
+                'total'=>0,
+                'token'=>'22549698-B1F4-48CD-B17B-1D774D81D38A',//carlos
+                'latitude'=>'39.4647527',
+                'longitude'=>'-0.3655201',
+            ),
+            array(
+                'dance'=>0,
+                'music'=>0,
+                'total'=>0,
+                'token'=>'9F23170A-9647-499E-8436-6DF95BD1879E',//pepe
+                'latitude'=>'39.4647527',
+                'longitude'=>'-0.3655201',
+            ),
+            array(
+                'dance'=>0,
+                'music'=>0,
+                'total'=>0,
+                'token'=>'E97BB910-7B98-44B2-9148-B5D989658BD1',//pepe
+                'latitude'=>'39.4647527',
+                'longitude'=>'-0.3655201',
+            ),
+            array(
+                'dance'=>0,
+                'music'=>0,
+                'total'=>0,
+                'token'=>'6ADEE59B-62F9-4F9E-A8FB-F1281392D0C2',//pipo
+                'latitude'=>'39.4647527',
+                'longitude'=>'-0.3655201',
+            ),
+            array(
+                'dance'=>0,
+                'music'=>0,
+                'total'=>0,
+                'token'=>'AB3039BB-D480-4A53-91CE-CFB8F791D1E8',//cristina
+                'latitude'=>'39.4647527',
+                'longitude'=>'-0.3655201',
+            ),
+        );
+
+
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        
+        foreach($data_list as $data)
+        {
+            $user = $this->checkToken($data);
+            if($user)
+            {
+                $data['dance'] = rand(100000000000,5000000000000)/10000000000000;
+                $data['music'] = rand(100000000000,5000000000000)/10000000000000;
+                $data['total'] = ($this->kf * ($this->km*$data['dance']+$this->kr*$data['music']));
+
+                $d = new \DateTime();
+                $fd = new UserFeastData();
+                $fd->setUser($user);
+                $fd->setFeast($feast);
+                $fd->setTotal($data['total']);
+                $fd->setDance($data['dance']);
+                $fd->setMusic($data['music']);
+                $fd->setLatitude($data['latitude']);
+                $fd->setLongitude($data['longitude']);
+                $fd->setTotalShare('0');
+                $fd->setDate($d);
+                $fd->setInConcert($this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo()));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($fd);
+                $em->flush();
+            }
+        }
+        die();
     }
 }
