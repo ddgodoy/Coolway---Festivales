@@ -134,6 +134,7 @@ class ApiController extends Controller {
         $information['position'] = "0";
         $information['points'] = "0";
         $information['total'] = "0";
+        $information['media'] = "0";
 
         if($data['logged'] == "1" && $user )
         {
@@ -260,10 +261,21 @@ class ApiController extends Controller {
                     break;
                 $i++;
             }
-			$data = array(
-				'status' => 'success',
-				'data' => $ranking
-			);
+
+            if(!count($ranking))
+            {
+                $data = array(
+                    'status' => 'error',
+                    'message' => 'ranking'
+                );
+            }
+            else
+            {
+    			$data = array(
+    				'status' => 'success',
+    				'data' => $ranking
+    			);
+            }
 		}
 		else {
 			$data = array(
