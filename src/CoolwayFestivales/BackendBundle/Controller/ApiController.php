@@ -1133,7 +1133,7 @@ class ApiController extends Controller {
                 'token'=>'22549698-B1F4-48CD-B17B-1D774D81D38A',//carlos
                 'latitude'=>'39.4647527',
                 'longitude'=>'-0.3655201',
-            ),
+            ),/*
             array(
                 'dance'=>0,
                 'music'=>0,
@@ -1149,7 +1149,7 @@ class ApiController extends Controller {
                 'token'=>'E97BB910-7B98-44B2-9148-B5D989658BD1',//pepe
                 'latitude'=>'39.4647527',
                 'longitude'=>'-0.3655201',
-            ),
+            ),*/
             array(
                 'dance'=>0,
                 'music'=>0,
