@@ -263,7 +263,7 @@ class ApiController extends Controller {
                     'name' => $r['user'],
                     'favorite' => isset($favorites[$r['user_id']]) || $r['user_id'] == $user->getId() ? 1 : 0,
                 );
-                if($i == 200)
+                if($i == 400)
                     break;
                 $i++;
             }
