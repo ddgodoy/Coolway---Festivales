@@ -117,7 +117,7 @@ class ApiController extends Controller {
 
         $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
         
-        if($data['first'] == "0" && $data['logged'] == "1" && $user)
+        if($data['first'] == "0" && $data['logged'] == "1" && $user )
         {
             $d = new \DateTime();
             $fd = new UserFeastData();
@@ -256,6 +256,8 @@ class ApiController extends Controller {
             $ranking = array();
             $i = 1;
             foreach( $ranking_list as $r ) {
+                //if(!$r['total'])
+                //    break;
                 $ranking[] = array(
                     'id' => $r['user_id'],
                     'position' => $i,
@@ -1069,7 +1071,7 @@ class ApiController extends Controller {
     }
 
     private function checkInConcert($userLatitude,$userLongitude,$feastLatitude,$feastLongitude,$feastDateFrom,$feastDateTo ) {
-        //return false;
+        return false;
         $now = date('Y-m-d');
         if($now >= $feastDateFrom->format('Y-m-d') && $now <= $feastDateTo->format('Y-m-d'))
         {
