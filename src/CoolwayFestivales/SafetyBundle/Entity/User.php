@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use CoolwayFestivales\BackendBundle\Entity\Feast;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
 
 /**
  * @ORM\Entity(repositoryClass="CoolwayFestivales\SafetyBundle\Repository\UserRepository")
@@ -27,6 +28,17 @@ class User implements AdvancedUserInterface, \Serializable {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+    * @ManyToOne(targetEntity="\CoolwayFestivales\BackendBundle\Entity\Feast", fetch="EAGER")
+    **/
+    private $feast;
+
+    /**
+     * @var string $total
+     * @ORM\Column(name="total", type="float")
+     */
+    private $total;
 
     /**
      * @ORM\Column(type="text", length=255,nullable=true)
@@ -655,4 +667,50 @@ class User implements AdvancedUserInterface, \Serializable {
         return $this->user_favorite;
     }
 
+
+    /**
+     * Set total
+     *
+     * @param float $total
+     * @return User
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return float 
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * Set feast
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\Feast $feast
+     * @return User
+     */
+    public function setFeast(\CoolwayFestivales\BackendBundle\Entity\Feast $feast = null)
+    {
+        $this->feast = $feast;
+
+        return $this;
+    }
+
+    /**
+     * Get feast
+     *
+     * @return \CoolwayFestivales\BackendBundle\Entity\Feast 
+     */
+    public function getFeast()
+    {
+        return $this->feast;
+    }
 }

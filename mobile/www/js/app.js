@@ -121,341 +121,305 @@ app.config(function ($stateProvider,$urlRouterProvider,$ionicConfigProvider) {
 });
 
 app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordovaNoiseMeter,$cordovaDeviceMotion,$cordovaDevice,$cordovaGeolocation,$cordovaPush,$cordovaNetwork,userAuth,serverConnection) {
+  
   $rootScope.notificacionId = "";
+  $rootScope.OS = "IOS";
   $rootScope.currentMusic = 0;
   $rootScope.currentDance = 0;
   $rootScope.currentTotal = 0;
   $rootScope.MusicPercent = 0;
   $rootScope.DancePercent = 0;
-
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    
-    //Accelerometer
-    var Kacc = 70;
-    var InitAcc = true;
-    var MinAcceleration = 1;
-
-    //Sound
-    var Kmusic = 32756;
-     
-    var watch = $cordovaDeviceMotion.watchAcceleration({ frequency: 100 });
-    
-    watch.then(null,function(error) {
-      //console.log('ERROR '+error.code+': '+error.message);
-    },
-    function(acceleration) {
-      if(InitAcc)
-      {
-        lastX = acceleration.x;
-        lastY = acceleration.y;
-        lastZ = acceleration.z;
-        InitAcc = false;
-      }
-      else
-      {
-        deltaX =  Math.abs(lastX - acceleration.x);
-        deltaY =  Math.abs(lastY - acceleration.y);
-        deltaZ =  Math.abs(lastZ - acceleration.z);
-
-        if (deltaX < MinAcceleration) deltaX = 0;
-        if (deltaY < MinAcceleration) deltaY = 0;
-        if (deltaZ < MinAcceleration) deltaZ = 0;
-
-        lastX = acceleration.x;
-        lastY = acceleration.y;
-        lastZ = acceleration.z;
-
-        dance = Math.sqrt( Math.pow(deltaX,2) + Math.pow(deltaY,2)+ Math.pow(deltaZ,2) );
-        $rootScope.DancePercent = dance/Kacc;
-      }
-    });
-   
-    //Get Music
-    var noiseWatch = $cordovaNoiseMeter.getNoise();
-
-    noiseWatch.then(null,function(error) {
-      //console.log('ERROR NOISE');
-    },function(noise) {
-      $rootScope.MusicPercent = noise/Kmusic;
-    });
-    
-    $rootScope.isOffline = $cordovaNetwork.isOffline();
-  
-    if($rootScope.isOffline) {
-      if(userAuth.isFirstTime())
-      {
-        $rootScope.awards = "img/awards.png";
-        $rootScope.map = "img/map.png";
-        $rootScope.background = "img/background.jpg";
-        
-        var map = {
-          status: "success",
-          data: {
-            title: "Vi\u00f1a Rock"
-          }
-        };
-
-        serverConnection.setCache('map',map);
-        
-        var slider = {
-          status: "success",
-          data:[
-            { text: "La app \u003Cstrong\u003Ecoolway\u003C\/strong\u003E es una app\u003Cbr\u003E \nincre\u00edble que mide tu nivel de\u003Cbr\u003E \nfiesta y el de tus amigos.\u003Cbr\u003E\nPodr\u00e1s compartirlo y ganar\u003Cbr\u003E \nmuchos \u003Cstrong\u003Epremios\u003C\/strong\u003E."},
-            { text: "\u003Cstrong\u003EBAILA, SALTA, GRITA\u003C\/strong\u003E\u003Cbr\u003E\u003Cbr\u003E\nLo que sea pero... \u00a1NO PARES! \u003Cbr\u003E\nMedimos tu actividad y la \u003Cbr\u003E\nconvertimos en puntos. \u003Cbr\u003E"},
-            { text: "\u003Cstrong\u003ECOMPARTE\u003C\/strong\u003E\u003Cbr\u003E\u003Cbr\u003E\nComparte en redes sociales y\u003Cbr\u003E\ngana puntos extras.\u003Cbr\u003E"},
-            { text: "\u003Cstrong\u003E\u00a1VETE DE VIAJE\u003C\/strong\u003E\u003Cbr\u003E\u003Cbr\u003E\nAcumula \u003Cstrong\u003Epuntos\u003C\/strong\u003E y gana un viaje\u003Cbr\u003E\na \u003Cstrong\u003EMarruecos\u003C\/strong\u003E para dos \u003Cbr\u003E\npersonas \u00a1todo incluido! \u003Cbr\u003E\n(Y muchos premios m\u00e1s...) \u003Cbr\u003E"}
-          ]};
-
-        serverConnection.setCache('slider',slider);
-      }
-      else
-      {
-        $rootScope.awards = cordova.file.dataDirectory + "awards.png";
-        $rootScope.map = cordova.file.dataDirectory + "map.png";
-        $rootScope.background = cordova.file.dataDirectory + "background.jpg";
-      }
-    } else {
-      userAuth.disabledFirstTime();
-      serverConnection.get('awards',function(rsp) {
-      },function(rsp){
-        //console.log(rsp);
-      }, { token: userAuth.getToken() } );
-
-      serverConnection.get('map',function(rsp) {
-      },function(rsp){
-        //console.log(rsp);
-      }, { token: userAuth.getToken() } );
-    }
-
-    $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
-      $rootScope.isOffline = false;
-    });
-
-    $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
-      $rootScope.isOffline = true;      
-    });
-
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-
-    $ionicPlatform.registerBackButtonAction( function() {
-      if(userAuth.checkLogged())
-      {
-        if( $state.current.name == 'layout.level' )
-          navigator.app.exitApp();
-        else
-          $state.go('layout.level');
-      }
-      else {
-        if( $state.current.name == 'layout.level')
-          $state.go('login');
-        else if( $state.current.name == 'login')
-          $state.go('tutorial');
-        else if( $state.current.name == 'tutorial')
-          navigator.app.exitApp();
-        else
-          $state.go('layout.level',{ reload: true });
-      }
-    },100);
-    
-    var platform = $cordovaDevice.getPlatform();
-
-    if(platform == 'Android') {
-
-      var androidConfig = {
-        "senderID": "1090006415155",
-      };
-
-      $rootScope.OS = "Android";
-      
-      $cordovaPush.register(androidConfig).then(function(result) {
-        //console.log(result);
-      }, function(error) {
-        //console.log(error);
-      });
-
-      $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-        switch(notification.event) {
-          case 'registered':
-            if (notification.regid.length > 0 ) {
-              $rootScope.notificationId = notification.regid;
-            }
-            break;
-
-          case 'message':
-            $ionicPopup.show({
-              template: '<p style="color:#000;">'+notification.payload.message+'</p>',
-              title: notification.payload.title,
-              buttons: [
-                {
-                  text: '<b>Aceptar</b>',
-                  type: 'button-positive',
-                  onTap: function(e) {
-                    this.close();
-                  }
-                }
-              ]
-            });
-            break;
-
-          case 'error':
-            //console.log('GCM ERROR');
-            break;
-
-          default:
-            //console.log('GCM DEFAULT');
-            break;
-        }
-      });
-
-    } else {
-
-      var iosConfig = {
-        "badge": false,
-        "sound": true,
-        "alert": true,
-      };
-
-      $rootScope.OS = "IOS";
-
-      $cordovaPush.register(iosConfig).then(function(deviceToken) {
-        $rootScope.notificationId = deviceToken;
-      }, function(err) {
-        //console.log(err);
-        //console.log("error in ios notification register");
-      });
-
-      $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-        if (notification.alert) {
-          $ionicPopup.show({
-              template: '<p style="color:#000;">'+notification.alert+'</p>',
-              title: notification.title,
-              buttons: [
-                {
-                  text: '<b>Aceptar</b>',
-                  type: 'button-positive',
-                  onTap: function(e) {
-                    this.close();
-                  }
-                }
-              ]
-            });
-        }
-
-        if (notification.sound) {
-          var snd = new Media(event.sound);
-          snd.play();
-        } 
-      });
-
-    }
-
-  });
-
-
-  $interval(function(){
-      
-        var posOptions = {timeout: 10000, enableHighAccuracy: true,maximumAge: 1000*60*60};
-        $cordovaGeolocation.getCurrentPosition(posOptions)
-        .then(function (position) {
-          $rootScope.currentLatitude = position.coords.latitude;
-          $rootScope.currentLongitude = position.coords.longitude;
-
-          serverConnection.get('data',function(rsp){
-            $rootScope.total = rsp.data.total;
-            $rootScope.media = rsp.data.media;
-            $rootScope.points =rsp.data.points;
-            $rootScope.position = rsp.data.position;
-            $rootScope.dance = rsp.data.dance;
-            $rootScope.music = rsp.data.music;
-            $rootScope.feast = rsp.data.feast;
-            $rootScope.currentMusic = 0;
-            $rootScope.currentDance = 0;
-            $rootScope.currentTotal = 0;
-          },function(){
-            $rootScope.currentMusic = 0;
-            $rootScope.currentDance = 0;
-            $rootScope.currentTotal = 0;
-          },{
-            token: userAuth.getToken(),
-            logged: userAuth.checkLogged(),
-            music: $rootScope.currentMusic,
-            dance: $rootScope.currentDance,
-            total: $rootScope.currentTotal,
-            latitude: $rootScope.currentLatitude,
-            longitude: $rootScope.currentLongitude,
-            first: "0"
-          });
-
-        }, function(err) {
-
-          $ionicPopup.show({
-            template: '<p style="color:#000;">Para poder sumar puntos debes tener activado tu gps</p>',
-            title: 'Activar GPS',
-            buttons: [
-              {
-                text: '<b>Aceptar</b>',
-                type: 'button-positive',
-                onTap: function(e) {
-                  this.close();
-                }
-              }
-            ]
-          });
-
-          serverConnection.get('data',function(rsp){
-            $rootScope.total = rsp.data.total;
-            $rootScope.media = rsp.data.media;
-            $rootScope.points = rsp.data.points;
-            $rootScope.position = rsp.data.position;
-            $rootScope.dance = rsp.data.dance;
-            $rootScope.music = rsp.data.music;
-            $rootScope.feast = rsp.data.feast;
-          },function(){
-            //console.log("error get data with gps off");
-          },{
-            token: userAuth.getToken(),
-            logged: userAuth.checkLogged(),
-            music: "0",
-            dance: "0",
-            total: "0",
-            latitude: "0",
-            longitude: "0",
-            first: "1"
-          });
-          
-        });
-  },1000*60*10);
-
   $rootScope.total = "...";
   $rootScope.media = "...";
 
-  serverConnection.get('data',function(rsp){
-    $rootScope.total = rsp.data.total;
-    $rootScope.media = rsp.data.media;
-    $rootScope.points = rsp.data.points;
-    $rootScope.position = rsp.data.position;
-    $rootScope.dance = rsp.data.dance;
-    $rootScope.music = rsp.data.music;
-    $rootScope.feast = rsp.data.feast;
-  },function(){
+  $ionicPlatform.ready(function() {
+    if(window.cordova) {
+      if(!cordova.plugins.backgroundMode.isEnabled())
+      {
+        cordova.plugins.backgroundMode.configure({
+          silent: true
+        })
+        cordova.plugins.backgroundMode.enable();
+      }
+    
+      //Accelerometer
+      var Kacc = 70;
+      var InitAcc = true;
+      var MinAcceleration = 1;
 
-  },{
-    token: userAuth.getToken(),
-    logged: userAuth.checkLogged(),
-    music: "0",
-    dance: "0",
-    total: "0",
-    latitude: "0",
-    longitude: "0",
-    first: "1"
+      //Sound
+      var Kmusic = 32756;
+       
+      var watch = $cordovaDeviceMotion.watchAcceleration({ frequency: 100 });
+      
+      watch.then(null,function(error) {
+        //console.log('ERROR '+error.code+': '+error.message);
+      },
+      function(acceleration) {
+        if(InitAcc)
+        {
+          lastX = acceleration.x;
+          lastY = acceleration.y;
+          lastZ = acceleration.z;
+          InitAcc = false;
+        }
+        else
+        {
+          deltaX =  Math.abs(lastX - acceleration.x);
+          deltaY =  Math.abs(lastY - acceleration.y);
+          deltaZ =  Math.abs(lastZ - acceleration.z);
+
+          if (deltaX < MinAcceleration) deltaX = 0;
+          if (deltaY < MinAcceleration) deltaY = 0;
+          if (deltaZ < MinAcceleration) deltaZ = 0;
+
+          lastX = acceleration.x;
+          lastY = acceleration.y;
+          lastZ = acceleration.z;
+
+          dance = Math.sqrt( Math.pow(deltaX,2) + Math.pow(deltaY,2)+ Math.pow(deltaZ,2) );
+          $rootScope.DancePercent = dance/Kacc;
+        }
+      });
+     
+      //Get Music
+      var noiseWatch = $cordovaNoiseMeter.getNoise();
+
+      noiseWatch.then(null,function(error) {
+        //console.log('ERROR NOISE');
+      },function(noise) {
+        $rootScope.MusicPercent = noise/Kmusic;
+      });
+
+      userAuth.disabledFirstTime();
+      
+      $rootScope.isOffline = $cordovaNetwork.isOffline();
+
+      $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
+        $rootScope.isOffline = false;
+      });
+
+      $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
+        $rootScope.isOffline = true;      
+      });
+
+      if(window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      }
+      if(window.StatusBar) {
+        StatusBar.styleDefault();
+      }
+
+      $ionicPlatform.registerBackButtonAction( function() {
+        if(userAuth.checkLogged())
+        {
+          if( $state.current.name == 'layout.level' )
+            navigator.app.exitApp();
+          else
+            $state.go('layout.level');
+        }
+        else {
+          if( $state.current.name == 'layout.level')
+            $state.go('login');
+          else if( $state.current.name == 'login')
+            $state.go('tutorial');
+          else if( $state.current.name == 'tutorial')
+            navigator.app.exitApp();
+          else
+            $state.go('layout.level',{ reload: true });
+        }
+      },100);
+    
+      var platform = $cordovaDevice.getPlatform();
+
+      if(platform == 'Android') {
+
+        var androidConfig = {
+          "senderID": "1090006415155"
+        };
+
+        $rootScope.OS = "Android";
+        
+        $cordovaPush.register(androidConfig).then(function(result) {
+          //console.log(result);
+        }, function(error) {
+          //console.log(error);
+        });
+
+        $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+          switch(notification.event) {
+            case 'registered':
+              if (notification.regid.length > 0 ) {
+                $rootScope.notificationId = notification.regid;
+              }
+              break;
+
+            case 'message':
+              $ionicPopup.show({
+                template: '<p style="color:#000;">'+notification.payload.message+'</p>',
+                title: notification.payload.title,
+                buttons: [
+                  {
+                    text: '<b>Aceptar</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                      this.close();
+                    }
+                  }
+                ]
+              });
+              break;
+
+            case 'error':
+              //console.log('GCM ERROR');
+              break;
+
+            default:
+              //console.log('GCM DEFAULT');
+              break;
+          }
+        });
+
+      } else {
+
+        $rootScope.OS = "IOS";
+
+        var iosConfig = {
+          "badge": false,
+          "sound": true,
+          "alert": true
+        };
+
+        $cordovaPush.register(iosConfig).then(function(deviceToken) {
+          $rootScope.notificationId = deviceToken;
+        }, function(err) {
+          //console.log(err);
+          //console.log("error in ios notification register");
+        });
+
+        $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+          if (notification.alert) {
+            $ionicPopup.show({
+                template: '<p style="color:#000;">'+notification.alert+'</p>',
+                title: notification.title,
+                buttons: [
+                  {
+                    text: '<b>Aceptar</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                      this.close();
+                    }
+                  }
+                ]
+              });
+          }
+
+          if (notification.sound) {
+            var snd = new Media(event.sound);
+            snd.play();
+          } 
+        });
+
+      }
+    }
+
   });
+
+  if(window.cordova) {
+    $interval(function(){
+      var posOptions = {timeout: 10000, enableHighAccuracy: true,maximumAge: 1000*60*60};
+      $cordovaGeolocation.getCurrentPosition(posOptions)
+      .then(function (position) {
+        $rootScope.currentLatitude = position.coords.latitude;
+        $rootScope.currentLongitude = position.coords.longitude;
+
+        serverConnection.get('data',function(rsp){
+          $rootScope.total = rsp.data.total;
+          $rootScope.media = rsp.data.media;
+          $rootScope.points =rsp.data.points;
+          $rootScope.position = rsp.data.position;
+          $rootScope.dance = rsp.data.dance;
+          $rootScope.music = rsp.data.music;
+          $rootScope.feast = rsp.data.feast;
+          $rootScope.currentMusic = 0;
+          $rootScope.currentDance = 0;
+          $rootScope.currentTotal = 0;
+        },function(){
+          $rootScope.currentMusic = 0;
+          $rootScope.currentDance = 0;
+          $rootScope.currentTotal = 0;
+        },{
+          token: userAuth.getToken(),
+          logged: userAuth.checkLogged(),
+          music: $rootScope.currentMusic,
+          dance: $rootScope.currentDance,
+          total: $rootScope.currentTotal,
+          latitude: $rootScope.currentLatitude,
+          longitude: $rootScope.currentLongitude,
+          first: "0"
+        });
+
+      }, function(err) {
+
+        $ionicPopup.show({
+          template: '<p style="color:#000;">Para poder sumar puntos debes tener activado tu gps</p>',
+          title: 'Activar GPS',
+          buttons: [
+            {
+              text: '<b>Aceptar</b>',
+              type: 'button-positive',
+              onTap: function(e) {
+                this.close();
+              }
+            }
+          ]
+        });
+
+        serverConnection.get('data',function(rsp){
+          $rootScope.total = rsp.data.total;
+          $rootScope.media = rsp.data.media;
+          $rootScope.points = rsp.data.points;
+          $rootScope.position = rsp.data.position;
+          $rootScope.dance = rsp.data.dance;
+          $rootScope.music = rsp.data.music;
+          $rootScope.feast = rsp.data.feast;
+        },function(){
+          //console.log("error get data with gps off");
+        },{
+          token: userAuth.getToken(),
+          logged: userAuth.checkLogged(),
+          music: "0",
+          dance: "0",
+          total: "0",
+          latitude: "0",
+          longitude: "0",
+          first: "1"
+        });
+        
+      });
+    },1000*60*10);
+
+    serverConnection.get('data',function(rsp){
+      $rootScope.total = rsp.data.total;
+      $rootScope.media = rsp.data.media;
+      $rootScope.points = rsp.data.points;
+      $rootScope.position = rsp.data.position;
+      $rootScope.dance = rsp.data.dance;
+      $rootScope.music = rsp.data.music;
+      $rootScope.feast = rsp.data.feast;
+    },function(){
+
+    },{
+      token: userAuth.getToken(),
+      logged: userAuth.checkLogged(),
+      music: "0",
+      dance: "0",
+      total: "0",
+      latitude: "0",
+      longitude: "0",
+      first: "1"
+    });
+  }
 
   $rootScope.$on("$stateChangeError",function (event, toState, toParams, fromState, fromParams, error) {
     if('noLogged' == error ) {
@@ -480,16 +444,6 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
 
 app.controller('tutorialCtrl' ,function ($scope,$state,$ionicLoading,$ionicSlideBoxDelegate,userAuth,serverConnection) {
   
-  
-  $ionicLoading.show();
-  serverConnection.get('slider',function(rsp) {
-    $scope.steps = rsp.data;
-    $ionicLoading.hide();
-  },function(rsp){
-    //console.log(rsp);
-    $ionicLoading.hide();
-  });
-
   $scope.guide = '<i class="icon ion-chevron-left" ></i> DESLIZA';
 
   $scope.slideHasChanged = function (index) {
@@ -504,17 +458,10 @@ app.controller('tutorialCtrl' ,function ($scope,$state,$ionicLoading,$ionicSlide
       $scope.guide = '<i class="icon ion-chevron-left" ></i> DESLIZA';
   };
 
-  $scope.activeSlide = function (a) {
-    //console.log("a");
-  }
-
 });
 
 app.controller('loginCtrl' ,function ($scope,$state,$ionicLoading,$ionicModal,$cordovaOauth,userAuth,serverConnection) {
   
-  $scope.loginFake = function () {
-    $state.go('layout.level');
-  }
   $scope.loginFacebook = function() {
     $cordovaOauth.facebook("900256300038339", ["email"]).then(function(result) {
       userAuth.login('facebook',result.access_token);
@@ -553,12 +500,8 @@ app.controller('loginCtrl' ,function ($scope,$state,$ionicLoading,$ionicModal,$c
     });
   };
 
-  serverConnection.get('terms',function(rsp) {
-    $scope.title = rsp.data.title;
-    $scope.text = rsp.data.text;
-  },function(rsp){
-    //console.log(rsp);
-  }, { token: userAuth.getToken() } );
+  $scope.title = 'titulo 1';
+  $scope.text = 'texto 1';
   
   $ionicModal.fromTemplateUrl('views/modal.html', {
     scope: $scope,
@@ -674,13 +617,9 @@ app.controller('lineupCtrl' ,function ($rootScope,$scope,$ionicLoading,$ionicScr
   
   $scope.searchArtist = '';
 
-  $ionicLoading.show();
   serverConnection.get('lineup',function(rsp) {
     $scope.lineup = rsp.data;
-    $ionicLoading.hide();
   },function(rsp){
-    //console.log("Error get data in lineup");
-    $ionicLoading.hide();
   },{ token: userAuth.getToken() });
 
   $scope.isFavorite = '';
@@ -714,20 +653,9 @@ app.controller('lineupCtrl' ,function ($rootScope,$scope,$ionicLoading,$ionicScr
 });
 
 app.controller('infoFestCtrl' ,function ($scope,$ionicLoading,userAuth,serverConnection) {
-  
-  $ionicLoading.show();
-  serverConnection.get('map',function(rsp) {
-    $scope.title = "Plano "+rsp.data.title;
-    $ionicLoading.hide();
-  },function(rsp){
-    //console.log(rsp);
-    $ionicLoading.hide();
-  }, { token: userAuth.getToken() } );
-
   $scope.height = function () {
     return (screen.height - 90);
   };
-
 });
 
 app.controller('awardsCtrl' ,function ($scope,$ionicLoading,$ionicModal,serverConnection,userAuth) {
@@ -736,15 +664,8 @@ app.controller('awardsCtrl' ,function ($scope,$ionicLoading,$ionicModal,serverCo
     return (screen.height - (90+45));
   };
 
-  $ionicLoading.show();
-  serverConnection.get('awards',function(rsp) {
-    $scope.title = rsp.data.title;
-    $scope.text = rsp.data.text;
-    $ionicLoading.hide();
-  },function(rsp){
-    //console.log(rsp);
-    $ionicLoading.hide();
-  }, { token: userAuth.getToken() } );
+  $scope.title = 'titulo';
+  $scope.text = 'texto';
   
   $ionicModal.fromTemplateUrl('views/modal.html', {
     scope: $scope,
@@ -792,13 +713,9 @@ app.controller('profileCtrl' ,function ($scope,$state,$ionicLoading,userAuth,ser
 
 app.controller('timelineCtrl' ,function ($scope,$ionicLoading,$cordovaSocialSharing,userAuth,serverConnection) {
   
-  $ionicLoading.show();
   serverConnection.get('timeline',function(rsp) {
     $scope.timeline = rsp.data;
-    $ionicLoading.hide();
   },function(rsp){
-    //console.log("ERROR GET DATA TIMELINE");
-    $ionicLoading.hide();
   },{ token: userAuth.getToken() });
 
   $scope.share = function() {
@@ -809,13 +726,9 @@ app.controller('timelineCtrl' ,function ($scope,$ionicLoading,$cordovaSocialShar
 
 app.controller('rankingCtrl' ,function ($rootScope,$scope,$ionicScrollDelegate,$ionicLoading,$cordovaSocialSharing,userAuth,serverConnection) {
   
-  $ionicLoading.show();
   serverConnection.get('ranking',function(rsp) {
     $scope.ranking = rsp.data;
-    $ionicLoading.hide();
   },function(rsp){
-    //console.log(rsp);
-    $ionicLoading.hide();
   },{ token: userAuth.getToken() });
 
   
@@ -948,8 +861,8 @@ app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicLoading,$cordo
     },
 
     getToken : function () {
-      //return '1e93ee47231575bd'; 
-      return $cordovaDevice.getUUID();
+      return '1e93ee47231575bd'; 
+      //return $cordovaDevice.getUUID();
     },
 
     instagramProfile: function (token,success,error) {
@@ -1030,34 +943,36 @@ app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicLoading,$cordo
 
 app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$cordovaGeolocation,$cordovaSocialSharing,$ionicPopup,$cordovaFileTransfer) {
   //var host = 'http://festivales.icox.mobi';
-  //var host = 'http://local.coolway.192.168.1.100.xip.io';
-  var host = 'http://62.75.210.58';
+  //var host = 'http://local.coolway.192.168.1.101.xip.io';
+  var host = 'http://local.coolway/app_dev.php';
+  //var host = 'http://62.75.210.58';
   var api = host+'/api/';
   return {
 
     getHost : function () {
       return host;
     },
+
     share : function (section,params) {
       that = this;
       switch (section) {
-        case 'level': 
+        case 'level':
           message = "Ranking Posición "+$rootScope.position+" con "+$rootScope.points+" Puntos. Baile: "+$rootScope.dance+" , Músic: "+$rootScope.music+" , Feast: "+$rootScope.feast;
           subject = "Coolway Let´s Dance";
           file = host+'/images/icon.png';
-          link = api+'download';
+          link = 'http://www.coolway.com/coolway-on-tour';
           break;
 
-        case 'timeline': 
+        case 'timeline':
           message = "¡Mira cuánto me divierto! Descarga tú también la app y mide tu nivel de diversión";
           subject = "Coolway Let´s Dance";
-          link = api+'download';
+          link = 'http://www.coolway.com/coolway-on-tour';
           break;
 
         case 'ranking':
           message = "¡Mira cuánto me divierto! Descarga tú también la app y mide tu nivel de diversión";
           subject = "Coolway Let´s Dance";
-          link = api+'download';
+          link = 'http://www.coolway.com/coolway-on-tour';
           break;
       }
 
@@ -1118,85 +1033,20 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$cordovaGe
 
     get : function (url,success,error,params) {
       var that = this;
-      
-      if( $rootScope.isOffline ) {
-        cache = that.getCache(url);
-        if(cache.status == 'success')
-          success(cache);
+      $http({
+        method: "POST",
+        url: api+url,
+        data: params,
+      }).success(function (rsp) {
+        if(rsp.status == "success")
+          success(rsp);
         else
-          error(cache);
-      }
-      else {
-        $http({
-          method: "POST",
-          url: api+url,
-          data: params,
-        }).success(function (rsp) {
-          if(rsp.status == "success")
-          {
-            that.setCache(url,rsp);
-            success(rsp);
-          }
-          else
-            error(rsp);
-        })
-        .error(function(rsp){
-          rsp = {};
-          rsp.message = "Not Found";
           error(rsp);
-        });
-      }
-    },
-
-    setCache: function (url,rsp) {
-      var str = JSON.stringify(rsp);
-      window.localStorage.setItem(url,str);
-      if( rsp.status == "success" &&  typeof rsp.data != "undefined" && typeof rsp.data.image != "undefined" )
-      {
-        this.downloadFile(rsp.data.image,url,"png");
-        if(url == 'awards')
-          this.downloadFile(rsp.data.background,"background","jpg");
-      }
-    },
-
-    getCache: function (url) {
-      if(data = window.localStorage.getItem(url))
-      {
-
-        if( url == 'map' && window.localStorage.getItem('isFirstTime') == 0 )
-          $rootScope.map = cordova.file.dataDirectory + "map.png";
-        
-        else if( url == 'awards' && window.localStorage.getItem('isFirstTime') == 0 )
-        {
-          $rootScope.awards = cordova.file.dataDirectory + "awards.png";
-          $rootScope.background = cordova.file.dataDirectory + "background.jpg";
-        }
-
-        return JSON.parse(data);
-      }
-      return {status:'error',message:'not cached'};
-    },
-
-    downloadFile: function(url,name,format) {
-      var targetPath = cordova.file.dataDirectory + name + "." +format;
-      var trustHosts = true
-      var options = {};
-
-      $cordovaFileTransfer.download(url, targetPath, options, trustHosts)
-        .then(function(result) {
-          //console.log("succes download");
-          if(name == 'awards')
-            $rootScope.awards = targetPath;
-          else if(name == 'map')
-            $rootScope.map = targetPath;
-          else if(name == 'background')
-            $rootScope.background = targetPath;
-        }, function(err) {
-          //console.log("error download");
-        }, function (progress) {
-          /*$timeout(function () {
-            //console.log((progress.loaded / progress.total) * 100);
-          })*/
+      })
+      .error(function(rsp){
+        rsp = {};
+        rsp.message = "Not Found";
+        error(rsp);
       });
     },
 

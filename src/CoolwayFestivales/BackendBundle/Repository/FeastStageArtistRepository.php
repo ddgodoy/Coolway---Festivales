@@ -14,7 +14,7 @@ class FeastStageArtistRepository extends EntityRepository {
 
 	public function getLineup()
 	{
-		$now = date('Y-m-d 00:00:00');
+		$now = date('Y-m-d H:i:00');
 		$q = $this->getEntityManager()->createQuery(
 			"SELECT fsa.time, fsa.date, a.name as artist, a.id as artist_id, s.name as stage, s.id as stage_id FROM BackendBundle:FeastStageArtist fsa
 			LEFT JOIN BackendBundle:FeastStage fs WITH fsa.feast_stage = fs.id

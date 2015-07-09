@@ -15,6 +15,7 @@
 	</div>
 	<ion-content class="has-search-box ranking-content">
 		<ion-list class="ranking-list">
+			<div class="text-center" ng-hide="ranking" ><ion-spinner style="stroke: #fff;fill: #fff;"></ion-spinner></div>
 			<ion-item ng-repeat="item in ranking | filter:searchFriend" ng-class="{ active: item.favorite }" >
 				<span class="ranking-position">{{ item.position }}.</span>
 				<span class="ranking-name">{{ item.name }} ( {{ item.point }} pt )</span>

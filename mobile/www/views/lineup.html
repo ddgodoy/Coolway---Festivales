@@ -5,7 +5,7 @@
 			<div class="list list-inset">
 				<label class="item item-input">
 					<i class="icon ion-search placeholder-icon"></i>
-					<input type="text" ng-change="scrollTop()" placeholder="Search Concerts" ng-model="searchArtist">
+					<input type="text" ng-change="scrollTop()" placeholder="Busca tu concierto" ng-model="searchArtist">
 				</label>
 				<button class="input-button" ng-class="{ favorite: isFavorite }" ng-click="filterFavorite()">
 					<i class="icon ion-star"></i>
@@ -13,18 +13,19 @@
 			</div>
 		</div>
 	</div>
-	<ion-content class="has-search-box">
-			<ion-list class="lineup-list">
-				<ion-item ng-repeat="item in lineup | filter: { stages: { artist: { name: searchArtist , favorite: isFavorite } } }" >
-					<span class="lineup-date">{{ item.date }}.</span>
-					<div ng-repeat="stage in item.stages | filter: { artist: { name: searchArtist , favorite: isFavorite } }">
-						<span class="lineup-stage">{{ stage.name }}</span>
-						<span class="lineup-artist" ng-repeat="artist in stage.artist | filter: { name:searchArtist , favorite: isFavorite }">
-							{{ artist.name }}  {{ artist.hour }} 
-							<button class="lineup-add-favorite" ng-click="addFavorite(artist)" ng-class="{ favorite: artist.favorite == 1 , wait: artist.favorite == 2  }"><i class="icon ion-star"></i></button>
-						</span>
-					</div>
-				</ion-item>
-			</ion-list>
+	<ion-content class="has-search-box" >
+		<ion-list class="lineup-list">
+			<div class="text-center" ng-hide="lineup" ><ion-spinner style="stroke: #fff;fill: #fff;"></ion-spinner></div>
+			<ion-item ng-show="lineup" ng-repeat="item in lineup | filter: { stages: { artist: { name: searchArtist , favorite: isFavorite } } }" >
+				<span class="lineup-date">{{ item.date }}.</span>
+				<div ng-repeat="stage in item.stages | filter: { artist: { name: searchArtist , favorite: isFavorite } }">
+					<span class="lineup-stage">{{ stage.name }}</span>
+					<span class="lineup-artist" ng-repeat="artist in stage.artist | filter: { name:searchArtist , favorite: isFavorite }">
+						{{ artist.name }}  {{ artist.hour }} 
+						<button class="lineup-add-favorite" ng-click="addFavorite(artist)" ng-class="{ favorite: artist.favorite == 1 , wait: artist.favorite == 2  }"><i class="icon ion-star"></i></button>
+					</span>
+				</div>
+			</ion-item>
+		</ion-list>
 	</ion-content>
 </ion-view>

@@ -21,7 +21,7 @@ use CoolwayFestivales\BackendBundle\Entity\UserFeastData;
  * @Route("/api")
  */
 class ApiController extends Controller {
-
+    
     protected $days = array(1 =>'Lunes',2 =>'Martes',3 =>'Miercoles',4 =>'Jueves',5 =>'Viernes',6 =>'Sabado',7 =>'Domingo');
 
     protected $months = array (1 => 'Enero',2 => 'Febrero',3 => 'Marzo',4 => 'Abril',5 => 'Mayo',6 => 'Junio',7 => 'Julio',8 => 'Agosto',9 => 'Septiembre',10 => 'Octubre',11 => 'Noviembre',12 => 'Diciembre');
@@ -42,19 +42,22 @@ class ApiController extends Controller {
         $data = $this->getData();
         $user = $this->checkToken($data);
         if($user){
-
             $em = $this->getDoctrine()->getManager();
-
             $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
             $lastValue = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findLastDataNotNull($feast->getId(),$user->getId());
             $lastShare = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findLastShare($feast->getId(),$user->getId());
 
             $checkTime = date('Y-m-d H:i:00',strtotime("-5 minutes"));
             if(!$lastShare || $lastShare['date']->format('Y-m-d H:i:00') < $checkTime) {
-
                 if($lastValue)
                 {
+                    $inConcert = $this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo());
                     $totalShare = 5 * $lastValue['total'] / 100;
+
+                    if($inConcert) {
+                        $user->setTotal($user->getTotal() + $totalShare );
+                        $em->persist($user);
+                    }
 
                     $newData = new UserFeastData();
                     $newData->setUser($user);
@@ -65,11 +68,11 @@ class ApiController extends Controller {
                     $newData->setTotalShare(5);
                     $newData->setLatitude($data['latitude']);
                     $newData->setLongitude($data['longitude']);
-                    $newData->setInConcert($this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo()));
+                    $newData->setInConcert($inConcert);
                     $newData->setDate(new \Datetime());
+
                     $em->persist($newData);
                     $em->flush();
-
 
                     $title = "Felicitaciones!!";
                     $message= "Has aumentado tu puntuación en un 5%. Sigue de fiesta y consigue nuestro premio.";
@@ -82,7 +85,6 @@ class ApiController extends Controller {
                     if($user->getOs())
                     {
                         $recipients[$user->getOs()][]= $user->getNotificationId();
-
                         $this->send($title,$message,$recipients);
                     }
                 }
@@ -117,8 +119,16 @@ class ApiController extends Controller {
 
         $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
         
-        if($data['first'] == "0" && $data['logged'] == "1" && $user )
+        if($data['first'] == "0" && $data['logged'] == "1" && $user && $user->getName() )
         {
+            $em = $this->getDoctrine()->getManager();
+            $inConcert = $this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo());
+
+            if($inConcert) {
+                $user->setTotal( $user->getTotal() + $data['total'] );
+                $em->persist($user);
+            }
+
             $d = new \DateTime();
             $fd = new UserFeastData();
             $fd->setUser($user);
@@ -130,8 +140,7 @@ class ApiController extends Controller {
             $fd->setLongitude($data['longitude']);
             $fd->setTotalShare('0');
             $fd->setDate($d);
-            $fd->setInConcert($this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo()));
-            $em = $this->getDoctrine()->getManager();
+            $fd->setInConcert($inConcert);
             $em->persist($fd);
             $em->flush();
         }
@@ -144,25 +153,12 @@ class ApiController extends Controller {
 
         if($data['logged'] == "1" && $user )
         {
-            $total = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findMyTotal($feast->getId(),$user->getId());
 
-            if($total)            
-                $information['total'] = ceil($total['total']*$this->convertPoint);
+            $ranking = $this->getDoctrine()->getRepository('SafetyBundle:User')->getPosition($user->getId());
 
-            $ranking_list = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findRanking($feast->getId());
-            $i = 1;
-
-            foreach($ranking_list as $r)
-            {
-                if( $r['user_id'] == $user->getId() )
-                {
-                    $information['position'] = $i;
-                    $information['points'] = ceil($r['total']*$this->convertPoint);
-                    break;
-                }
-                $i++;
-            }
-            
+            $information['total'] = ceil( $user->getTotal() * $this->convertPoint );
+            $information['points'] = $information['total'];
+            $information['position'] = $ranking['position'];            
             
             $lastData = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findLastData($user->getId());
             if($lastData)
@@ -187,14 +183,11 @@ class ApiController extends Controller {
             $information['music'] = "0";
             $information['feast'] = "0";
         }
-
-        //$total_day = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotalDay($feast->getId(),$tmpDate);
-        //$user_day = count( $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findUsersForDay($feast->getId(),$tmpDate) );
             
-        $totalForFeast = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotal($feast->getId());
-        $usersForFeast = count ( $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findUsersForFeast($feast->getId()) );
+        $totalForFeast = $this->getDoctrine()->getRepository('SafetyBundle:User')->getTotalFeast();
+        $usersForFeast = $this->getDoctrine()->getRepository('SafetyBundle:User')->getTotalUsers();
         if($usersForFeast)
-            $media = $totalForFeast['total'] / $usersForFeast;
+            $media = $totalForFeast / $usersForFeast;
         else
             $media = 0;
         
@@ -245,8 +238,7 @@ class ApiController extends Controller {
 		if($user = $this->checkToken($data))
 		{
 
-            $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-            $ranking_list = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findRanking($feast->getId());
+            $ranking_list = $this->getDoctrine()->getRepository('SafetyBundle:User')->findRanking();
             $favorite_list = $this->getDoctrine()->getRepository('BackendBundle:UserFavorites')->findByUser($user);
 
             $favorites = array();
@@ -255,35 +247,37 @@ class ApiController extends Controller {
 
             $ranking = array();
             $i = 1;
-            foreach( $ranking_list as $r ) {
-                //if(!$r['total'])
-                //    break;
+            $has_user = false;
+            foreach( $ranking_list as $u ) {
+
                 $ranking[] = array(
-                    'id' => $r['user_id'],
+                    'id' => $u->getId(),
                     'position' => $i,
-                    'point'=>ceil($r['total']*$this->convertPoint),
-                    'name' => $r['user'],
-                    'favorite' => isset($favorites[$r['user_id']]) || $r['user_id'] == $user->getId() ? 1 : 0,
+                    'point'=>ceil($u->getTotal()*$this->convertPoint),
+                    'name' => $u->getName(),
+                    'favorite' => isset($favorites[$u->getId()]) || $u->getId() == $user->getId() ? 1 : 0,
                 );
-                if($i == 400)
-                    break;
+                if($u->getId() == $user->getId())
+                    $has_user=true;
                 $i++;
             }
 
-            if(!count($ranking))
+            if(!$has_user)
             {
-                $data = array(
-                    'status' => 'error',
-                    'message' => 'ranking'
+                $position = $this->getDoctrine()->getRepository('SafetyBundle:User')->getPosition($user->getId());
+                $ranking[] = array(
+                    'id' => $user->getId(),
+                    'position' => $position['position'],
+                    'point'=>ceil($user->getTotal()*$this->convertPoint),
+                    'name' => $user->getName(),
+                    'favorite' => 1,
                 );
             }
-            else
-            {
-    			$data = array(
-    				'status' => 'success',
-    				'data' => $ranking
-    			);
-            }
+
+            $data = array(
+                'status' => 'success',
+                'data' => $ranking
+            );
 		}
 		else {
 			$data = array(
@@ -360,7 +354,6 @@ class ApiController extends Controller {
      * @Template()
      */
     public function lineupAction() {
-
         $data = $this->getData();
         $user = $this->checkToken($data);
 
@@ -409,24 +402,22 @@ class ApiController extends Controller {
                 $d--;
 
             $stageExist = false;
-            //if($stage != $last_stage)
-            //{
-                foreach($lineup[$d]['stages'] as $k => $s) {
-                    if ($s['name'] == $f['stage'] ) {
-                        $stageExist = $k;
-                        break;
-                    }
-                        
-                }
 
-                if($stageExist === false ) {
-                    $j++;
-                    $lineup[$d]['stages'][$j] = array(
-                        'name' => $f['stage'],
-                        'artist' => array()
-                    );
+            foreach($lineup[$d]['stages'] as $k => $s) {
+                if ($s['name'] == $f['stage'] ) {
+                    $stageExist = $k;
+                    break;
                 }
-            //}
+                    
+            }
+
+            if($stageExist === false ) {
+                $j++;
+                $lineup[$d]['stages'][$j] = array(
+                    'name' => $f['stage'],
+                    'artist' => array()
+                );
+            }
 
             if($stageExist === false)
                 $t = $j;
@@ -446,7 +437,6 @@ class ApiController extends Controller {
             $last_stage = $stage;
 
         }
-
         $data = array(
             'status' => 'success',
             'data' => $lineup
@@ -513,13 +503,23 @@ class ApiController extends Controller {
      * @Template()
      */
     public function timelineAction() {
-        $data = $this->getData();
+        $data = array(
+            'token' => '1e93ee47231575bd',
+            'latitude' => '-31.392201582502466',
+            'longitude' => '-64.1831481456756',
+            'logged' => '1',
+            'first' => '1',
+            'total' => '0.7',
+            'dance' => '0.3',
+            'music' => '0.4',
+            'is_favorite' => '1',
+            'id' => '64',
+        );
+        //$data = $this->getData();
         $user = $this->checkToken($data);
         if($user)
         {
-            //$feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
             $timeline_list = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTimeline($user->getId());
-
             $timeline = array();
             foreach($timeline_list as $l) {
                 if( $l['date']->format('d/m/Y') == date('d/m/Y') )
@@ -532,16 +532,9 @@ class ApiController extends Controller {
                 $music =  round( $l['music'] * $this->kf * $this->kr  / $l['total'] * 100 );
                 $dance = 100 - $music;
 
-                //$tmpDate = $l['date']->format('Y-m-d');
-                //$total_day = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findTotalDay($feast->getId(),$tmpDate);
-                //$user_day = count( $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findUsersForDay($feast->getId(),$tmpDate) );
-
-                //$media = ceil ( ($total_day['total']/$user_day )*$this->convertPoint );
-
                 $timeline[]=array(
                     'date' => $date,
                     'total' => ceil($l['total']*$this->convertPoint),
-                    //'media' => $media,
                     'music' => $music,
                     'dance' => $dance,
                 );
@@ -562,149 +555,6 @@ class ApiController extends Controller {
 
         return $this->setResponse($data);
 
-    }
-
-    /**
-     * Slider
-     *
-     * @Route("/slider", name="api_slider")
-     * @Template()
-     */
-    public function sliderAction() {
-
-        $slider = array();
-        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-        if($feast){
-            $slider_list = $this->getDoctrine()->getRepository('BackendBundle:Step')->findSlider($feast->getId());
-
-
-            foreach($slider_list as $s) {
-                $slider[]=array(
-                    'text' => $s->getText(),
-                );
-            }
-        }
-
-        $data = array(
-            'status' => 'success',
-            'data' => $slider
-        );
-        return $this->setResponse($data);
-    }
-
-    /**
-     * Map
-     *
-     * @Route("/map", name="api_map")
-     * @Template()
-     */
-    public function mapAction() {
-        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-
-        $img = $this->getDoctrine()->getRepository('BackendBundle:Images')->findOneBy(array(
-            'feast'=>$feast->getId(),
-            'code_name' => 'plano'
-        ));
-
-        if($img) {
-            $images = array(
-                'image' => $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/images/'.$img->getPath(),
-                'title' => $feast->getName()
-            );
-
-            $data = array(
-                'status' => 'success',
-                'data' => $images
-            );
-        }
-        else {
-            $data = array(
-                'status' => 'error',
-                'message' => 'map'
-            );
-        }
-
-        return $this->setResponse($data);
-    }
-
-    /**
-     * Awards
-     *
-     * @Route("/awards", name="api_awards")
-     * @Template()
-     */
-    public function awardsAction() {       
-            
-        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-        
-        $background = $this->getDoctrine()->getRepository('BackendBundle:Images')->findOneBy(array(
-            'feast'=>$feast->getId(),
-            'code_name' => 'background'
-        ));
-
-        $a = $this->getDoctrine()->getRepository('BackendBundle:Award')->findOneBy(array(
-            'feast'=>$feast->getId()
-        ));
-
-        if($a)
-        {
-            $award = array (
-                'image' => $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/awards/'.$a->getPath(),
-                'title' => $a->getName(),
-                'text' => $a->getTermsConditions(),
-
-            );
-            if($background)
-            $award['background'] = $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/images/'.$background->getPath();
-
-            $data = array(
-                'status' => 'success',
-                'data' => $award
-            );
-        }
-        else {
-            $data = array(
-                'status' => 'error',
-                'message' => 'awards'
-            );
-        }
-
-        return $this->setResponse($data);
-    }
-
-    /**
-     * Terms
-     *
-     * @Route("/terms", name="api_terms")
-     * @Template()
-     */
-    public function termsAction() {
-            
-        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-        $a = $this->getDoctrine()->getRepository('BackendBundle:Terms')->findOneBy(array(
-            'id'=>1
-        ));
-
-        if($a)
-        {
-            $terms = array (
-                'title' => $a->getName(),
-                'text' => $a->getText()
-            );
-
-            $data = array(
-                'status' => 'success',
-                'data' => $terms
-            );
-        }
-        else {
-            $data = array(
-                'status' => 'error',
-                'message' => 'terms'
-            );
-        }
-
-        return $this->setResponse($data);
     }
 
     /**
@@ -812,6 +662,22 @@ class ApiController extends Controller {
     /**
      * Notification Artist
      *
+     * @Route("/ranking/clean", name="api_ranking_clean")
+     * @Template()
+     */
+    public function rankingCleanAction()
+    {
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent(true);
+        $user = $this->getDoctrine()->getRepository('SafetyBundle:User')->findOneById(1);
+        if( $feast && ( !$user->getFeast() || $user->getFeast()->getId() != $feast->getId() ) )
+        {
+            $this->getDoctrine()->getRepository('SafetyBundle:User')->cleanRanking($feast->getId());
+        }
+    }
+
+    /**
+     * Notification Artist
+     *
      * @Route("/notification/artist", name="api_notification_artist")
      * @Template()
      */
@@ -831,7 +697,8 @@ class ApiController extends Controller {
 
                 foreach($users as $u)
                 {
-                    $recipients[$u['os']][] = $u['notificationId'];
+                    if($u['os'] && $u['notificationId'])
+                        $recipients[$u['os']][] = $u['notificationId'];
                 }
 
                 $title = "Quedan 15 minutos";
@@ -884,14 +751,14 @@ class ApiController extends Controller {
             "Te mueves menos que un Playmobil.",
             "Para estar así vete a un concierto de Julio Iglesias!",
         );
-        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-        $ranking_list = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findRanking($feast->getId());
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent(true);
+        if(!$feast)
+            die("no hay un festival activo");
+        
+        $total = $this->getDoctrine()->getRepository('SafetyBundle:User')->getTotalUsers();
 
-        $ids = array();
-        $total = count($ranking_list );
-        $partial25  = round(25 / $total * 100);
+        $partial25  = round(25 * $total / 100);
 
-        $i = 1; 
 
         $ids = array(
             'top' => array(
@@ -908,14 +775,16 @@ class ApiController extends Controller {
             )
         );
 
+        $i = 1;
+        $ranking_list = $this->getDoctrine()->getRepository('SafetyBundle:User')->findRanking();
         foreach($ranking_list as $r)
         {
             if($i <= $partial25)
-                $ids['top'][$r['os']][]= $r['notificationId'];
+                $ids['top'][$r->getOs()][]= $r->getNotificationId();
             else if( $i <= $partial25*2 )
-                $ids['middle'][$r['os']][]= $r['notificationId'];
+                $ids['middle'][$r->getOs()][]= $r->getNotificationId();
             else
-                $ids['bottom'][$r['os']][]= $r['notificationId'];
+                $ids['bottom'][$r->getOs()][]= $r->getNotificationId();
             $i++;
         }
 
@@ -943,30 +812,6 @@ class ApiController extends Controller {
 
         die();
 
-    }
-
-
-    /**
-     * download
-     *
-     * @Route("/download", name="api_download")
-     * @Template()
-     */
-    public function downlodAction() {
-        //Detect special conditions devices
-        $iPod    = stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
-        $iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
-        $iPad    = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
-        $Android = stripos($_SERVER['HTTP_USER_AGENT'],"Android");
-        $webOS   = stripos($_SERVER['HTTP_USER_AGENT'],"webOS");
-
-        //do something with this information
-        if( $iPod || $iPhone || $iPad )
-            $link = "https://itunes.apple.com/es/app/coolway-let-s-dance/id995819166?mt=8";
-        else
-            $link = "https://play.google.com/store/apps/details?id=com.coolway.letsdance";
-
-        return $this->redirect($link);
     }
 
     private function send($title,$message,$recipients) { 
@@ -1047,8 +892,10 @@ class ApiController extends Controller {
             }
             if(!$create)
                 return false;
-        	
+        	$feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
             $user = new User();
+            $user->setTotal(0);
+            $user->setFeast($feast);
         	$user->setTokenPhone($token);
         	$user->setUsername($token);
         	$user->setPassword(md5(time().rand()));
@@ -1071,9 +918,8 @@ class ApiController extends Controller {
     }
 
     private function checkInConcert($userLatitude,$userLongitude,$feastLatitude,$feastLongitude,$feastDateFrom,$feastDateTo ) {
-        return false;
-        $now = date('Y-m-d');
-        if($now >= $feastDateFrom->format('Y-m-d') && $now <= $feastDateTo->format('Y-m-d'))
+        $now = date('Y-m-d H:i:00');
+        if($now >= $feastDateFrom->format('Y-m-d H:i:00') && $now <= $feastDateTo->format('Y-m-d H:i:00'))
         {
             $distance = pow($userLatitude - $feastLatitude, 2) + pow($userLongitude - $feastLongitude,2);
             $theta = $userLongitude - $feastLongitude;
@@ -1103,110 +949,174 @@ class ApiController extends Controller {
 		return $response;
     }
 
+/************************************************* REMOVE **********************************************/
+    
     /**
-     * Add Data
+     * download
      *
-     * @Route("/extra-data", name="api_extra_data")
+     * @Route("/download", name="api_download")
      * @Template()
      */
+    public function downlodAction() {
+        //Deprecated        
+        //Detect special conditions devices
+        $iPod    = stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
+        $iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
+        $iPad    = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
+        $Android = stripos($_SERVER['HTTP_USER_AGENT'],"Android");
+        $webOS   = stripos($_SERVER['HTTP_USER_AGENT'],"webOS");
 
-    public function extraAction (){
-        $data_list = array(
-            array(
-                'dance'=>0,
-                'music'=>0,
-                'total'=>0,
-                'token'=>'EEAE6654-E7A6-4B4B-8C17-37383D1FCF40',//cesar
-                'latitude'=>'39.4647527',
-                'longitude'=>'-0.3655201',
-            ),
-            array(
-                'dance'=>0,
-                'music'=>0,
-                'total'=>0,
-                'token'=>'ED7638E1-78F7-4D14-AACE-F9309279462D',//pilar
-                'latitude'=>'39.4647527',
-                'longitude'=>'-0.3655201',
-            ),
-            array(
-                'dance'=>0,
-                'music'=>0,
-                'total'=>0,
-                'token'=>'22549698-B1F4-48CD-B17B-1D774D81D38A',//carlos
-                'latitude'=>'39.4647527',
-                'longitude'=>'-0.3655201',
-            ),
-            array(
-                'dance'=>0,
-                'music'=>0,
-                'total'=>0,
-                'token'=>'FD28441E-2B32-4139-8836-9EBC78BFB57D',//santiago
-                'latitude'=>'39.4647527',
-                'longitude'=>'-0.3655201',
-            ),/*
-            array(
-                'dance'=>0,
-                'music'=>0,
-                'total'=>0,
-                'token'=>'9F23170A-9647-499E-8436-6DF95BD1879E',//pepe
-                'latitude'=>'39.4647527',
-                'longitude'=>'-0.3655201',
-            ),
-            array(
-                'dance'=>0,
-                'music'=>0,
-                'total'=>0,
-                'token'=>'E97BB910-7B98-44B2-9148-B5D989658BD1',//pepe
-                'latitude'=>'39.4647527',
-                'longitude'=>'-0.3655201',
-            ),*/
-            array(
-                'dance'=>0,
-                'music'=>0,
-                'total'=>0,
-                'token'=>'6ADEE59B-62F9-4F9E-A8FB-F1281392D0C2',//pipo
-                'latitude'=>'39.4647527',
-                'longitude'=>'-0.3655201',
-            ),
-            array(
-                'dance'=>0,
-                'music'=>0,
-                'total'=>0,
-                'token'=>'AB3039BB-D480-4A53-91CE-CFB8F791D1E8',//cristina
-                'latitude'=>'39.4647527',
-                'longitude'=>'-0.3655201',
-            ),
-        );
+        //do something with this information
+        if( $iPod || $iPhone || $iPad )
+            $link = "https://itunes.apple.com/es/app/coolway-let-s-dance/id995819166?mt=8";
+        else
+            $link = "https://play.google.com/store/apps/details?id=com.coolway.letsdance";
 
+        return $this->redirect($link);
+    }
 
+    /**
+     * Slider
+     *
+     * @Route("/slider", name="api_slider")
+     * @Template()
+     */
+    public function sliderAction() {
+        //deprecated
+        $slider = array();
         $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
-        
-        foreach($data_list as $data)
-        {
-            $user = $this->checkToken($data);
-            if($user)
-            {
-                $data['dance'] = rand(100000000000,5000000000000)/10000000000000;
-                $data['music'] = rand(100000000000,5000000000000)/10000000000000;
-                $data['total'] = ($this->kf * ($this->km*$data['dance']+$this->kr*$data['music']));
+        if($feast){
+            $slider_list = $this->getDoctrine()->getRepository('BackendBundle:Step')->findSlider($feast->getId());
 
-                $d = new \DateTime();
-                $fd = new UserFeastData();
-                $fd->setUser($user);
-                $fd->setFeast($feast);
-                $fd->setTotal($data['total']);
-                $fd->setDance($data['dance']);
-                $fd->setMusic($data['music']);
-                $fd->setLatitude($data['latitude']);
-                $fd->setLongitude($data['longitude']);
-                $fd->setTotalShare('0');
-                $fd->setDate($d);
-                $fd->setInConcert($this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo()));
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($fd);
-                $em->flush();
+
+            foreach($slider_list as $s) {
+                $slider[]=array(
+                    'text' => $s->getText(),
+                );
             }
         }
-        die();
+
+        $data = array(
+            'status' => 'success',
+            'data' => $slider
+        );
+        return $this->setResponse($data);
     }
+
+    /**
+     * Map
+     *
+     * @Route("/map", name="api_map")
+     * @Template()
+     */
+    public function mapAction() {
+        //deprecated
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+
+        $img = $this->getDoctrine()->getRepository('BackendBundle:Images')->findOneBy(array(
+            'feast'=>$feast->getId(),
+            'code_name' => 'plano'
+        ));
+
+        if($img) {
+            $images = array(
+                'image' => $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/images/'.$img->getPath(),
+                'title' => $feast->getName()
+            );
+
+            $data = array(
+                'status' => 'success',
+                'data' => $images
+            );
+        }
+        else {
+            $data = array(
+                'status' => 'error',
+                'message' => 'map'
+            );
+        }
+
+        return $this->setResponse($data);
+    }
+
+    /**
+     * Awards
+     *
+     * @Route("/awards", name="api_awards")
+     * @Template()
+     */
+    public function awardsAction() {       
+        //deprecated 
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        
+        $background = $this->getDoctrine()->getRepository('BackendBundle:Images')->findOneBy(array(
+            'feast'=>$feast->getId(),
+            'code_name' => 'background'
+        ));
+
+        $a = $this->getDoctrine()->getRepository('BackendBundle:Award')->findOneBy(array(
+            'feast'=>$feast->getId()
+        ));
+
+        if($a)
+        {
+            $award = array (
+                'image' => $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/awards/'.$a->getPath(),
+                'title' => $a->getName(),
+                'text' => $a->getTermsConditions(),
+
+            );
+            if($background)
+            $award['background'] = $this->getRequest()->getScheme().'://'.$this->getRequest()->getHost().'/uploads/images/'.$background->getPath();
+
+            $data = array(
+                'status' => 'success',
+                'data' => $award
+            );
+        }
+        else {
+            $data = array(
+                'status' => 'error',
+                'message' => 'awards'
+            );
+        }
+
+        return $this->setResponse($data);
+    }
+
+    /**
+     * Terms
+     *
+     * @Route("/terms", name="api_terms")
+     * @Template()
+     */
+    public function termsAction() {
+        //deprecated
+        $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+        $a = $this->getDoctrine()->getRepository('BackendBundle:Terms')->findOneBy(array(
+            'id'=>1
+        ));
+
+        if($a)
+        {
+            $terms = array (
+                'title' => $a->getName(),
+                'text' => $a->getText()
+            );
+
+            $data = array(
+                'status' => 'success',
+                'data' => $terms
+            );
+        }
+        else {
+            $data = array(
+                'status' => 'error',
+                'message' => 'terms'
+            );
+        }
+
+        return $this->setResponse($data);
+    }
+
 }

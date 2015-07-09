@@ -485,6 +485,7 @@
 .lineup-artist {
 	display: block;
 	margin-left: 25px;
+	white-space: normal;
 }
 .lineup-add-favorite {
 	background: none;

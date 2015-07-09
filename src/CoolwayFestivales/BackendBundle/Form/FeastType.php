@@ -15,19 +15,9 @@ class FeastType extends AbstractType {
                 ->add('longitude', null, array('label' => 'Longitud'))
                 ->add('date_from', null, array(
                     'label' => 'Desde:',
-                    'widget' => 'single_text',
-                    'format' => 'MM/dd/yyyy',
-                    'attr' => array(
-                        'class' => 'datepicker',
-                    )
                 ))
                 ->add('date_to', null, array(
                     'label' => 'Hasta:',
-                    'widget' => 'single_text',
-                    'format' => 'MM/dd/yyyy',
-                    'attr' => array(
-                        'class' => 'datepicker',
-                    )
         ));
     }
 
