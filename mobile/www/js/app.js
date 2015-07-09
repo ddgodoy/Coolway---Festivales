@@ -766,7 +766,7 @@ app.controller('rankingCtrl' ,function ($rootScope,$scope,$ionicScrollDelegate,$
   
 });
 
-app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicLoading,$cordovaDevice,$cordovaOauthUtility,serverConnection) {
+app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicPopup,$ionicLoading,$cordovaDevice,$cordovaOauthUtility,serverConnection) {
   return {
 
     login : function (social,token) {
@@ -814,6 +814,19 @@ app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicLoading,$cordo
       serverConnection.get('login',function(){
         window.localStorage.setItem('isLogged',1);
         $ionicLoading.hide();
+        $ionicPopup.show({
+          template: '<p style="color:#000;">Para poder sumar puntos debes tener activado tu gps</p>',
+          title: 'Activar GPS',
+          buttons: [
+            {
+              text: '<b>Aceptar</b>',
+              type: 'button-positive',
+              onTap: function(e) {
+                this.close();
+              }
+            }
+          ]
+        });
         if(obj.email)
           $state.go('layout.level');
         else
@@ -861,8 +874,8 @@ app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicLoading,$cordo
     },
 
     getToken : function () {
-      return '1e93ee47231575bd'; 
-      //return $cordovaDevice.getUUID();
+      //return '1e93ee47231575bd'; 
+      return $cordovaDevice.getUUID();
     },
 
     instagramProfile: function (token,success,error) {
@@ -942,9 +955,9 @@ app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicLoading,$cordo
 });
 
 app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$cordovaGeolocation,$cordovaSocialSharing,$ionicPopup,$cordovaFileTransfer) {
-  //var host = 'http://festivales.icox.mobi';
-  //var host = 'http://local.coolway.192.168.1.101.xip.io';
-  var host = 'http://local.coolway/app_dev.php';
+  var host = 'http://festivales.icox.mobi';
+  //var host = 'http://local.coolway.192.168.1.102.xip.io';
+  //var host = 'http://local.coolway/app_dev.php';
   //var host = 'http://62.75.210.58';
   var api = host+'/api/';
   return {
