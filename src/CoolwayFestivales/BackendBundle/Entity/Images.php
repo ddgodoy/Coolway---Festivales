@@ -214,7 +214,7 @@ class Images {
      */
     public function preUpload() {
         if (NULL !== $this->image) {
-            $this->path = uniqid($this->code_name . '_') . '.' . $this->getImage()->guessExtension();
+            $this->path = $this->code_name . '_55a0034121857' . '.' . $this->getImage()->guessExtension();
         }
     }
 

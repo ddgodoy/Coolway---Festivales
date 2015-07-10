@@ -2,9 +2,9 @@ document.addEventListener('deviceready', function onDeviceReady() {
   angular.bootstrap(document, ['app']);
 }, false);
 
-app = angular.module('app', ['ionic','ionic.contrib.drawer','ngCordova'])
+app = angular.module('app', ['ionic','ionic.contrib.drawer','ngCordova','ImgCache'])
 
-app.config(function ($stateProvider,$urlRouterProvider,$ionicConfigProvider) {
+app.config(function ($stateProvider,$urlRouterProvider,$ionicConfigProvider,ImgCacheProvider) {
   $stateProvider
     .state('tutorial', {
       cache: false,
@@ -117,10 +117,15 @@ app.config(function ($stateProvider,$urlRouterProvider,$ionicConfigProvider) {
 
   $urlRouterProvider.otherwise("/");
   $ionicConfigProvider.views.swipeBackEnabled(false);
+  ImgCacheProvider.setOptions({
+        debug: true,
+        usePersistentCache: true
+    });
+  ImgCacheProvider.manualInit = true;
 
 });
 
-app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordovaNoiseMeter,$cordovaDeviceMotion,$cordovaDevice,$cordovaGeolocation,$cordovaPush,$cordovaNetwork,userAuth,serverConnection) {
+app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordovaNoiseMeter,$cordovaDeviceMotion,$cordovaDevice,$cordovaGeolocation,$cordovaPush,$cordovaNetwork,userAuth,serverConnection,ImgCache) {
   
   $rootScope.notificacionId = "";
   $rootScope.OS = "IOS";
@@ -133,6 +138,7 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
   $rootScope.media = "...";
 
   $ionicPlatform.ready(function() {
+    ImgCache.$init();
     if(window.cordova) {
       /*if(!cordova.plugins.backgroundMode.isEnabled())
       {
@@ -652,10 +658,11 @@ app.controller('lineupCtrl' ,function ($rootScope,$scope,$ionicLoading,$ionicScr
 
 });
 
-app.controller('infoFestCtrl' ,function ($scope,$ionicLoading,userAuth,serverConnection) {
+app.controller('infoFestCtrl' ,function ($scope,$ionicLoading,userAuth,serverConnection,ImgCache) {
   $scope.height = function () {
     return (screen.height - 90);
   };
+  $scope.map = userAuth.getMap();
 });
 
 app.controller('awardsCtrl' ,function ($scope,$ionicLoading,$ionicModal,serverConnection,userAuth) {
@@ -768,7 +775,9 @@ app.controller('rankingCtrl' ,function ($rootScope,$scope,$ionicScrollDelegate,$
 
 app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicPopup,$ionicLoading,$cordovaDevice,$cordovaOauthUtility,serverConnection) {
   return {
-
+    getMap : function() {
+      return  serverConnection.getHost()+'/uploads/images/plano_55a0034121857.png';
+    },
     login : function (social,token) {
       $ionicLoading.show();
       var that = this;
