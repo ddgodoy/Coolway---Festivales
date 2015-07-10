@@ -32,7 +32,7 @@ class FeastStageArtistRepository extends EntityRepository {
 	{
 		$time_from = date('H:i:00');
                 $time_to = date('H:i:00',strtotime("+15 minutes"));
-		$date = date('Y-m-d');
+		$date = date('Y-m-d 00:00:00');
 		//$date= '2015-04-29';
 		//$time = '20:00:00';
 		$q = $this->getEntityManager()->createQuery(
@@ -40,7 +40,7 @@ class FeastStageArtistRepository extends EntityRepository {
 			LEFT JOIN BackendBundle:Artist a WITH fsa.artist = a.id
 			LEFT JOIN BackendBundle:FeastStage fs WITH fsa.feast_stage = fs.id
 			LEFT JOIN BackendBundle:Stage s WITH fs.stage = s.id
-			WHERE fsa.time = '$time_from' AND fsa.date = '$date'"
+			WHERE fsa.time = '$time_to' AND fsa.date = '$date'"
 		);
 
 		$q->setMaxResults(1);
