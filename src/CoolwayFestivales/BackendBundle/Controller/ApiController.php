@@ -707,7 +707,7 @@ class ApiController extends Controller {
                 $this->send($title,$message,$recipients); 
             }
         }
-        die();
+        die(date('d-m-Y H:i:s'));
     }
 
     /**
