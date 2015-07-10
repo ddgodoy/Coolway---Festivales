@@ -640,7 +640,7 @@ class ApiController extends Controller {
             $ids[$u->getOs()][]= $u->getNotificationId();
         }
 
-        if(!count($ids['Android']) || !count($ids['IOS']) )
+        if(!count($ids['Android']) && !count($ids['IOS']) )
             die("not user to send");
 
         $em = $this->getDoctrine()->getManager();
