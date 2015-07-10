@@ -673,6 +673,7 @@ class ApiController extends Controller {
         {
             $this->getDoctrine()->getRepository('SafetyBundle:User')->cleanRanking($feast->getId());
         }
+        die();
     }
 
     /**
