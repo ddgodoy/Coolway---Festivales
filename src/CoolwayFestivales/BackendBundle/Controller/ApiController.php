@@ -383,7 +383,7 @@ class ApiController extends Controller {
             $d = $i;
             if($date != $last_date ) {
                 $date_array[] = $date; 
-                if($first || $f['time']->format('G') > '06')
+                if($first || $f['time']->format('G') > '08')
                 {
                     $first= false;
                     $i++;
