@@ -919,10 +919,9 @@ class ApiController extends Controller {
     }
 
     private function checkInConcert($userLatitude,$userLongitude,$feastLatitude,$feastLongitude,$feastDateFrom,$feastDateTo ) {
-        //return false;
         $now = date('Y-m-d H:i:00');
-        if($now >= $feastDateFrom->format('Y-m-d H:i:00') && $now <= $feastDateTo->format('Y-m-d H:i:00'))
-        {
+        //if($now >= $feastDateFrom->format('Y-m-d H:i:00') && $now <= $feastDateTo->format('Y-m-d H:i:00'))
+        //{
             $distance = pow($userLatitude - $feastLatitude, 2) + pow($userLongitude - $feastLongitude,2);
             $theta = $userLongitude - $feastLongitude;
             $dist = sin(deg2rad($userLatitude)) * sin(deg2rad($feastLatitude)) +  cos(deg2rad($userLatitude)) * cos(deg2rad($feastLatitude)) * cos(deg2rad($theta));
@@ -932,7 +931,7 @@ class ApiController extends Controller {
             $km = $miles * 1.609344;
             if($km <= 50)
                 return true;
-        }
+        //}
         return false;
     }
 
