@@ -919,7 +919,7 @@ class ApiController extends Controller {
     }
 
     private function checkInConcert($userLatitude,$userLongitude,$feastLatitude,$feastLongitude,$feastDateFrom,$feastDateTo ) {
-        return false;
+        //return false;
         $now = date('Y-m-d H:i:00');
         if($now >= $feastDateFrom->format('Y-m-d H:i:00') && $now <= $feastDateTo->format('Y-m-d H:i:00'))
         {
@@ -930,7 +930,7 @@ class ApiController extends Controller {
             $dist = rad2deg($dist);
             $miles = $dist * 60 * 1.1515;
             $km = $miles * 1.609344;
-            if($km <= 3)
+            if($km <= 10)
                 return true;
         }
         return false;
