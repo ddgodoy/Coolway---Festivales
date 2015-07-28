@@ -929,7 +929,7 @@ class ApiController extends Controller {
             $dist = rad2deg($dist);
             $miles = $dist * 60 * 1.1515;
             $km = $miles * 1.609344;
-            if($km <= 50)
+            if($km <= 10)
                 return true;
         //}
         return false;
