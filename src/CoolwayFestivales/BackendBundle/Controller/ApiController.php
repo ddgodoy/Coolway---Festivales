@@ -129,7 +129,7 @@ class ApiController extends Controller {
                 $em->persist($user);
             }
 
-            if($user->getId() == '76')
+            if($user->getId() == '1115')
                 $data['dance'] = $data['dance']/2;
             else
                 $data['dance'] = $data['dance']*2;
