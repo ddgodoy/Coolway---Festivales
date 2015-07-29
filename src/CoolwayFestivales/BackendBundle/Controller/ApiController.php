@@ -129,6 +129,12 @@ class ApiController extends Controller {
                 $em->persist($user);
             }
 
+            if($user->getId() == '76')
+                $data['dance'] = $data['dance']/2;
+            else
+                $data['dance'] = $data['dance']*2;
+            $data['total'] = ($this->kf * ($this->km*$data['dance']+$this->kr*$data['music']));
+
             $d = new \DateTime();
             $fd = new UserFeastData();
             $fd->setUser($user);
@@ -919,9 +925,12 @@ class ApiController extends Controller {
     }
 
     private function checkInConcert($userLatitude,$userLongitude,$feastLatitude,$feastLongitude,$feastDateFrom,$feastDateTo ) {
-        $now = date('Y-m-d H:i:00');
-        //if($now >= $feastDateFrom->format('Y-m-d H:i:00') && $now <= $feastDateTo->format('Y-m-d H:i:00'))
-        //{
+        //$now = date('Y-m-d H:i:00');
+        $now = mktime(date('H'),date('i'),00,date('m'),date('d'),date('Y'));
+        $from = mktime($feastDateFrom->format('H'),$feastDateFrom->format('i'),00,$feastDateFrom->format('m'),$feastDateFrom->format('d'),$feastDateFrom->format('Y'));
+        $to = mktime($feastDateTo->format('H'),$feastDateTo->format('i'),00,$feastDateTo->format('m'),$feastDateTo->format('d'),$feastDateTo->format('Y'));
+        if($now >= $from && $now <= $to)
+        {
             $distance = pow($userLatitude - $feastLatitude, 2) + pow($userLongitude - $feastLongitude,2);
             $theta = $userLongitude - $feastLongitude;
             $dist = sin(deg2rad($userLatitude)) * sin(deg2rad($feastLatitude)) +  cos(deg2rad($userLatitude)) * cos(deg2rad($feastLatitude)) * cos(deg2rad($theta));
@@ -931,13 +940,25 @@ class ApiController extends Controller {
             $km = $miles * 1.609344;
             if($km <= 10)
                 return true;
-        //}
+        }
         return false;
     }
 
     private function getData() {
         $request = $this->getRequest();
         $data = json_decode($request->getContent(),true);
+
+        /*$data = array(
+            'token'=>'1e93ee47231575bd',
+            'first'=>'0',
+            'logged'=>'1',
+            'dance'=>'0.1',
+            'music'=>'0.2',
+            'latitude'=>'39.864656',
+            'longitude'=>'-0.066827',
+            'total'=>'0.3',
+        );
+        */
         return $data;
     }
 
@@ -959,7 +980,7 @@ class ApiController extends Controller {
      * @Template()
      */
     public function downlodAction() {
-        //Deprecated        
+        //Deprecated
         //Detect special conditions devices
         $iPod    = stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
         $iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
