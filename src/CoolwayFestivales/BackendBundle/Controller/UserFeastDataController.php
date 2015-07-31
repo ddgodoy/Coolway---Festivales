@@ -41,7 +41,7 @@ class UserFeastDataController extends Controller {
         //if($feast){
             //$entities = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findRankingDashboard($feast->getId());
         //}
-        $entities = $this->getDoctrine()->getRepository('SafetyBundle:User')->findRanking();
+        $entities = $this->getDoctrine()->getRepository('SafetyBundle:User')->findRankingDash();
         return $this->render('BackendBundle:Backend:userfeastdata.html.twig', array("entities" => $entities, "feast" => $feast));
     }
 
