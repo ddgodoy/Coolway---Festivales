@@ -31,13 +31,13 @@
                         <tr>
 
                             <td>
-                                {{entity["user_id"]}}
+                                {{entity.id}}
                             </td>
                             <td>
-                                {{entity["user"]}}
+                                {{entity}}
                             </td>
                             <td>
-                                {{entity["total"]}}
+                                {{ (entity.total * 100) | round(0,'ceil') }}
                             </td>
 
 
