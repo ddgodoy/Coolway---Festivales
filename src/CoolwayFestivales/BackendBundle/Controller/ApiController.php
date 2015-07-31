@@ -48,44 +48,46 @@ class ApiController extends Controller {
             $lastShare = $this->getDoctrine()->getRepository('BackendBundle:UserFeastData')->findLastShare($feast->getId(),$user->getId());
 
             $checkTime = date('Y-m-d H:i:00',strtotime("-5 minutes"));
-            if(!$lastShare || $lastShare['date']->format('Y-m-d H:i:00') < $checkTime) {
-                if($lastValue)
-                {
-                    $inConcert = $this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo());
-                    $totalShare = 5 * $lastValue['total'] / 100;
-
-                    if($inConcert) {
-                        $user->setTotal($user->getTotal() + $totalShare );
-                        $em->persist($user);
-                    }
-
-                    $newData = new UserFeastData();
-                    $newData->setUser($user);
-                    $newData->setFeast($feast);
-                    $newData->setTotal($lastValue['total']+$totalShare);
-                    $newData->setDance(0);
-                    $newData->setMusic(0);
-                    $newData->setTotalShare(5);
-                    $newData->setLatitude($data['latitude']);
-                    $newData->setLongitude($data['longitude']);
-                    $newData->setInConcert($inConcert);
-                    $newData->setDate(new \Datetime());
-
-                    $em->persist($newData);
-                    $em->flush();
-
-                    $title = "Felicitaciones!!";
-                    $message= "Has aumentado tu puntuación en un 5%. Sigue de fiesta y consigue nuestro premio.";
-
-                    $recipients = array(
-                        'Android'=>array(),
-                        'IOS'=>array()
-                    );
-
-                    if($user->getOs())
+            if($user->getId() != '1115') {
+                if(!$lastShare || $lastShare['date']->format('Y-m-d H:i:00') < $checkTime) {
+                    if($lastValue)
                     {
-                        $recipients[$user->getOs()][]= $user->getNotificationId();
-                        $this->send($title,$message,$recipients);
+                        $inConcert = $this->checkInConcert($data['latitude'],$data['longitude'],$feast->getLatitude(),$feast->getLongitude(),$feast->getDateFrom(),$feast->getDateTo());
+                        $totalShare = 5 * $lastValue['total'] / 100;
+
+                        if($inConcert) {
+                            $user->setTotal($user->getTotal() + $totalShare );
+                            $em->persist($user);
+                        }
+
+                        $newData = new UserFeastData();
+                        $newData->setUser($user);
+                        $newData->setFeast($feast);
+                        $newData->setTotal($lastValue['total']+$totalShare);
+                        $newData->setDance(0);
+                        $newData->setMusic(0);
+                        $newData->setTotalShare(5);
+                        $newData->setLatitude($data['latitude']);
+                        $newData->setLongitude($data['longitude']);
+                        $newData->setInConcert($inConcert);
+                        $newData->setDate(new \Datetime());
+
+                        $em->persist($newData);
+                        $em->flush();
+
+                        $title = "Felicitaciones!!";
+                        $message= "Has aumentado tu puntuación en un 5%. Sigue de fiesta y consigue nuestro premio.";
+
+                        $recipients = array(
+                            'Android'=>array(),
+                            'IOS'=>array()
+                        );
+
+                        if($user->getOs())
+                        {
+                            $recipients[$user->getOs()][]= $user->getNotificationId();
+                            $this->send($title,$message,$recipients);
+                        }
                     }
                 }
             }
@@ -132,7 +134,7 @@ class ApiController extends Controller {
             if($user->getId() == '1115')
                 $data['dance'] = $data['dance']/2;
             else
-                $data['dance'] = $data['dance']*2;
+                $data['dance'] = $data['dance']*3;
             $data['total'] = ($this->kf * ($this->km*$data['dance']+$this->kr*$data['music']));
 
             $d = new \DateTime();
