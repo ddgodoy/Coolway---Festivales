@@ -52,7 +52,7 @@ class UserRepository extends EntityRepository implements ContainerAwareInterface
     public function findRankingDash() {
         $q = $this->getEntityManager()->createQuery(
             "SELECT u FROM SafetyBundle:User u
-            ORDER BY u.total DESC WHERE id > 1011"
+            WHERE u.id > 1011 ORDER BY u.total DESC "
         );
         
         return $q->getResult();
