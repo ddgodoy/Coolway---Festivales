@@ -140,13 +140,19 @@ app.run(function($ionicPlatform,$rootScope,$state,$interval,$ionicPopup,$cordova
   $ionicPlatform.ready(function() {
     ImgCache.$init();
     if(window.cordova) {
-      /*if(!cordova.plugins.backgroundMode.isEnabled())
+      if(!cordova.plugins.backgroundMode.isEnabled())
       {
+        cordova.plugins.backgroundMode.setDefaults({
+            title:  'Coolway Let´s Dance',
+            text:   ''
+        });
+
         cordova.plugins.backgroundMode.configure({
           silent: true
-        })
+        });
+        
         cordova.plugins.backgroundMode.enable();
-      }*/
+      }
     
       //Accelerometer
       var Kacc = 70;
@@ -671,8 +677,8 @@ app.controller('awardsCtrl' ,function ($scope,$ionicLoading,$ionicModal,serverCo
     return (screen.height - (90+45));
   };
 
-  $scope.title = 'PREMIO CONCURSO ARENAL SOUND.';
-  $scope.text = '1. Ámbito de la promoción: este es un sorteo promocional organizado en España y de conformidad con la legislación española, en el que pueden participar únicamente usuarios residentes en España. Se anulará automáticamente cualquier participación procedente de un territorio donde esté prohibido por normativas o por legislación.2. Objeto: La organización de esta promoción es llevada a cabo por la empresa VANYOR S.A con número de CIF A96304134 y sita en la Calle Charles Robert Darwin 34-36, CP: 46980 Paterna, España. Durante el periodo promocional los participantes entrarán en el sorteo de un viaje a Coachella.3. Período promocional: Del día 28/07/2015 al 02/08/2015, durante el festival del ARENAL SOUND 2015.4. Participación: La participación en la promoción tiene carácter gratuito y puede participar cualquier persona física mayor de 18 años que resida en España y que se descargue y registre correctamente en la aplicación de Coolway. La inclusión en la promoción de aquellos consumidores que cumplan los requisitos del punto anterior será automática. El consumidor agraciado podrá renunciar al premio, pero en todo caso la aceptación del mismo llevará implícita la aceptación sin reservas de las bases de esta promoción. El premio no podrá ser canjeables por gratificación económica u otro regalo. El ganador del primer premio será la persona que más puntos consiga y que quede primero en la clasificación general del festival.5. Concurso: El día 03/08/2015 anunciaremos al ganador tras verificar que su participación ha sido correcta. El mismo día 03/08/2015 se comunicará la noticia a los agraciados por correo electrónico, y una vez que confirmen su asistencia, se publicará el nombre de ellos en la página oficial de facebook de Coolway.6. La empresa organizadora de la promoción se reserva expresamente el derecho a efectuar cualquier cambio en las bases de la promoción así como suspender o ampliar la misma por causa justificada.7. Estas bases generales y cualquier base específica publicada por Coolway se rigen por la legislación española y cualquier litigio que no pueda resolverse de forma amistosa será competencia exclusiva de los tribunales de Valencia (España).8. Tratamiento de datos personales de los participantes: De conformidad con La Ley Orgánica 15/1999, de Protección de Datos de Carácter Personal, le informamos que los datos suministrados a través del formulario pasarán automáticamente a ser registros de usuarios en la plataforma Vanyor y Yorga y serán incorporados a los ficheros titularidad de VANYOR S.A cuya finalidad es el envío de publicidad e información comercial sobre los productos, así como de productos, servicios y promociones que realizan las mismas, mediante los siguientes medios: servicios de mensajería, SMS, correo electrónico y/o correo postal, o cualquier otro medio. Los datos no serán cedidos o comunicados a terceros, salvo en los supuestos necesarios para la organización, desarrollo y control de las finalidades expresadas, así como en los supuestos previstos, según Ley. Usted puede acceder, rectificar, cancelar u oponerse al tratamiento de los datos, así como revocar el consentimiento inicialmente prestado, enviando un correo electrónico desde la dirección e-mail que utilizó en su registro, a info@coolway.com, indicando en el asunto "BAJA Publicidad".';
+  $scope.title = 'PREMIO CONCURSO GRANADA SOUND.';
+  $scope.text = '1. Ámbito de la promoción: este es un sorteo promocional organizado en España y de conformidad con la legislación española, en el que pueden participar únicamente usuarios residentes en España. Se anulará automáticamente cualquier participación procedente de un territorio donde esté prohibido por normativas o por legislación.2. Objeto: La organización de esta promoción es llevada a cabo por la empresa VANYOR S.A con número de CIF A96304134 y sita en la Calle Charles Robert Darwin 34-36, CP: 46980 Paterna, España. Durante el periodo promocional los participantes entrarán en el sorteo de un viaje a Estambul.3. Período promocional: Del día 18/09/2015 al 19/09/2015, durante el festival del GRANADA SOUND 2015.4. Participación: La participación en la promoción tiene carácter gratuito y puede participar cualquier persona física mayor de 18 años que resida en España y que se descargue y registre correctamente en la aplicación de Coolway. La inclusión en la promoción de aquellos consumidores que cumplan los requisitos del punto anterior será automática. El consumidor agraciado podrá renunciar al premio, pero en todo caso la aceptación del mismo llevará implícita la aceptación sin reservas de las bases de esta promoción. El premio no podrá ser canjeables por gratificación económica u otro regalo. El ganador del primer premio será la persona que más puntos consiga y que quede primero en la clasificación general del festival.5. Concurso: El día 03/08/2015 anunciaremos al ganador tras verificar que su participación ha sido correcta. El mismo día 03/08/2015 se comunicará la noticia a los agraciados por correo electrónico, y una vez que confirmen su asistencia, se publicará el nombre de ellos en la página oficial de facebook de Coolway.6. La empresa organizadora de la promoción se reserva expresamente el derecho a efectuar cualquier cambio en las bases de la promoción así como suspender o ampliar la misma por causa justificada.7. Estas bases generales y cualquier base específica publicada por Coolway se rigen por la legislación española y cualquier litigio que no pueda resolverse de forma amistosa será competencia exclusiva de los tribunales de Valencia (España).8. Tratamiento de datos personales de los participantes: De conformidad con La Ley Orgánica 15/1999, de Protección de Datos de Carácter Personal, le informamos que los datos suministrados a través del formulario pasarán automáticamente a ser registros de usuarios en la plataforma Vanyor y Yorga y serán incorporados a los ficheros titularidad de VANYOR S.A cuya finalidad es el envío de publicidad e información comercial sobre los productos, así como de productos, servicios y promociones que realizan las mismas, mediante los siguientes medios: servicios de mensajería, SMS, correo electrónico y/o correo postal, o cualquier otro medio. Los datos no serán cedidos o comunicados a terceros, salvo en los supuestos necesarios para la organización, desarrollo y control de las finalidades expresadas, así como en los supuestos previstos, según Ley. Usted puede acceder, rectificar, cancelar u oponerse al tratamiento de los datos, así como revocar el consentimiento inicialmente prestado, enviando un correo electrónico desde la dirección e-mail que utilizó en su registro, a info@coolway.com, indicando en el asunto "BAJA Publicidad".';
   
   $ionicModal.fromTemplateUrl('views/modal.html', {
     scope: $scope,
@@ -776,7 +782,8 @@ app.controller('rankingCtrl' ,function ($rootScope,$scope,$ionicScrollDelegate,$
 app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicPopup,$ionicLoading,$cordovaDevice,$cordovaOauthUtility,serverConnection) {
   return {
     getMap : function() {
-      return  serverConnection.getHost()+'/uploads/images/plano_55a0034121857.png';
+      var d = new Date();
+      return  serverConnection.getHost()+'/uploads/images/plano_55a0034121857.png?cache='+d.getDate()+'-'+d.getMonth()+'-'+d.getFullYear();
     },
     login : function (social,token) {
       $ionicLoading.show();
@@ -966,10 +973,12 @@ app.factory('userAuth',function ($rootScope,$state,$q,$http,$ionicPopup,$ionicLo
 });
 
 app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$cordovaGeolocation,$cordovaSocialSharing,$ionicPopup,$cordovaFileTransfer) {
-  var host = 'http://festivales.icox.mobi';
+  //var host = 'http://festivales.icox.mobi';
   //var host = 'http://local.coolway.192.168.1.102.xip.io';
   //var host = 'http://local.coolway/app_dev.php';
   //var host = 'http://62.75.210.58';
+  var host = 'http://mobile.letsdancecoolway.com';
+  //var host = 'http://62.75.142.156';
   var api = host+'/api/';
   return {
 
