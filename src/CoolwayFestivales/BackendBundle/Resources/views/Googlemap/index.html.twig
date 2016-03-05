@@ -1,0 +1,114 @@
+{%extends "::dashboardBase.html.twig"%}
+
+{% block stylesheets %}
+    {{parent()}}
+
+{% endblock %}
+
+{%block content%}
+    <h3 class="page-title">
+        Panel de control
+    </h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="{{path("admin_dashboard")}}">Panel de control</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="{{path("admin_googlemap")}}">Gestionar Mapa de Google</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="portlet box blue-madison">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-feasts"></i>Gestionar Mapa de Google
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-9">
+
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover" id="sample_1">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%">
+                                    Secuencial Autom&aacute;tico
+                                </th>
+                                <th>
+                                    Nombre
+                                </th>
+                                <th>
+                                    Latitud
+                                </th>
+                                <th>
+                                    Longitud
+                                </th>
+                                <th>
+                                    Desde
+                                </th>
+                                <th>
+                                    Hasta
+                                </th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+
+                                <tr>
+                                    <td>
+                                        xxxxx
+                                    </td>
+                                    <td>
+                                        xxxx
+                                    </td>
+                                    <td>
+                                        xxxxx
+                                    </td>
+                                    <td>
+                                        xxxxx
+                                    </td>
+                                    <td>
+                                        xxxxx
+                                    </td>
+                                    <td>
+                                        xxxx
+                                    </td>
+
+                                </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{%endblock%}
+
+
+{%block base_script%}
+    {{parent()}}
+{%endblock%}
+{%block inline_script%}
+
+    {{parent()}}
+    <script>
+        
+    </script>
+{%endblock%}
