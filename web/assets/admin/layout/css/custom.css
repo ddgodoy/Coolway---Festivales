@@ -58,3 +58,13 @@ Change Quick Sidebar Width
   margin-left: -370px;
 }
 */
+.gm_f_r {
+    float: right;
+    cursor: pointer;
+    margin-right: 5px;
+    margin-top: 8px;
+}
+.gm_f_lw {
+    float: left;
+    width: 95%;
+}

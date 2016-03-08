@@ -5,6 +5,8 @@ namespace CoolwayFestivales\BackendBundle\Entity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\HttpFoundation\Image\UploadedImage;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * CoolwayFestivales\BackendBundle\Entity\Feast
@@ -42,7 +44,7 @@ class Feast {
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="date_from", type="datetime",  nullable=true)
+     * @ORM\Column(name="date_from", type="datetime",  nullable=false)
      */
     private $date_from;
 
@@ -51,6 +53,12 @@ class Feast {
      * @ORM\Column(name="date_to", type="datetime",  nullable=true)
      */
     private $date_to;
+	
+    /**
+     * @var string $path
+     * @ORM\Column(name="path", type="string", nullable=true)
+     */
+    private $path;
 
     /**
      * @OneToMany(targetEntity="FeastStage", mappedBy="feast", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
@@ -233,5 +241,26 @@ class Feast {
     public function getFeastUserdfeastdata() {
         return $this->feast_userdfeastdata;
     }
+	
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return User
+     */
+    public function setPath($path) {
+        $this->path = $path;
 
-}
+        return $this;
+    }
+
+    /**
+     * Get path
+     *
+     * @return string
+     */
+    public function getPath() {
+        return $this->path;
+    }
+
+} // end class
