@@ -64,6 +64,9 @@
                                     Secuencial Autom&aacute;tico
                                 </th>
                                 <th>
+                                    Imagen
+                                </th>
+                                <th>
                                     Nombre
                                 </th>
                                 <th>
@@ -82,6 +85,13 @@
                                 <tr>
                                     <td>
                                         {{entity.id}}
+                                    </td>
+                                    <td style="width: 12%;">
+                                        {% if entity.path %}
+                                            <img class="img-responsive" src="{{asset(entity.getWebPath)}}"/>
+                                        {% else %}
+                                            <img class="img-responsive" src="{{asset('images/sinimagen.jpg')}}"/>
+                                        {% endif %}
                                     </td>
                                     <td>
                                         {{entity.name}}

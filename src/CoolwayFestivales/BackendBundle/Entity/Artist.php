@@ -35,37 +35,37 @@ class Artist {
     /**
      * @var description
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
      * @var string $id_spotify
-     * @ORM\Column(name="id_spotify", type="string", length=50)
+     * @ORM\Column(name="id_spotify", type="string", length=50, nullable=true)
      */
     private $id_spotify;
 
     /**
      * @var string $website
-     * @ORM\Column(name="website", type="string", length=250)
+     * @ORM\Column(name="website", type="string", length=250, nullable=true)
      */
     private $website;
 
     /**
      * @var string $twitter
-     * @ORM\Column(name="twitter", type="string", length=250)
+     * @ORM\Column(name="twitter", type="string", length=250, nullable=true)
      */
     private $twitter;
 
     /**
      * @var string $facebook
-     * @ORM\Column(name="facebook", type="string", length=250)
+     * @ORM\Column(name="facebook", type="string", length=250, nullable=true)
      */
     private $facebook;
 
     /**
      * @var string $instagram
-     * @ORM\Column(name="instagram", type="string", length=250)
+     * @ORM\Column(name="instagram", type="string", length=250, nullable=true)
      */
     private $instagram;
 
@@ -298,7 +298,7 @@ class Artist {
     }
 
     protected function getUploadDir() {
-        return 'uploads/artist/';
+        return 'uploads/artist';
     }
 
     protected function getUploadRootDir() {
