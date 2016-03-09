@@ -13,3 +13,5 @@
 /.DS_Store
 /nbproject/private/
 /nbproject/
+.idea/
+web/uploads/

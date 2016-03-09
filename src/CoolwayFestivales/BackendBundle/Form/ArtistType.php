@@ -14,7 +14,14 @@ class ArtistType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-                ->add('name', null, array('label' => 'Nombre'))
+            ->add('name', null, array('label' => 'Nombre'))
+            ->add('description', null, array('label' => 'Descripción'))
+            ->add('id_spotify', null, array('label' => 'Spotify'))
+            ->add('website', null, array('label' => 'Website'))
+            ->add('twitter', null, array('label' => 'Twitter'))
+            ->add('facebook', null, array('label' => 'Facebook'))
+            ->add('instagram', null, array('label' => 'Instagram'))
+            ->add('image', 'file', array('label' => 'Imagen', "required" => ""))
         ;
     }
 

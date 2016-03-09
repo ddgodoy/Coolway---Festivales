@@ -1,5 +1,4 @@
 
-
 <table class="table table-striped">
     <tbody>
         <tr>
@@ -10,7 +9,32 @@
             <th>Nombre</th>
             <td>{{ entity.name }}</td>
         </tr>
-
-
+        <tr>
+            <th>Descripción</th>
+            <td>{{ entity.description }}</td>
+        </tr>
+        <tr>
+            <th>Spotify</th>
+            <td>{{ entity.idSpotify }}</td>
+        </tr>
+        <tr>
+            <th>Website</th>
+            <td>{{ entity.website }}</td>
+        </tr>
+        <tr>
+            <th>Twitter</th>
+            <td>{{ entity.twitter }}</td>
+        </tr>
+        <tr>
+            <th>Facebook</th>
+            <td>{{ entity.facebook }}</td>
+        </tr>
+        <tr>
+            <th>Instagram</th>
+            <td>{{ entity.instagram }}</td>
+        </tr>
+        <tr>
+            <td colspan="2"><img class="img-responsive" src="{{asset(entity.getWebPath)}}" alt="{{entity.name}}" title="{{entity.name}}"/></td>
+        </tr>
     </tbody>
 </table>

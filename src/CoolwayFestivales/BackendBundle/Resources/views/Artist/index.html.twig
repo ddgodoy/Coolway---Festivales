@@ -66,14 +66,19 @@
                                 <th>
                                     Nombre
                                 </th>
-
-
-
+                                <th>
+                                    Descripción
+                                </th>
+                                <th>
+                                    Website
+                                </th>
+                                <th>
+                                    Spotify
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             {%for entity in entities%}
-
                                 <tr>
                                     <td>
                                         {{entity.id}}
@@ -81,13 +86,17 @@
                                     <td>
                                         {{entity.name}}
                                     </td>
-
-
+                                    <td>
+                                        {{entity.description}}
+                                    </td>
+                                    <td>
+                                        {{entity.website}}
+                                    </td>
+                                    <td>
+                                        {{entity.idSpotify}}
+                                    </td>
                                 </tr>
-
                             {%endfor%}
-
-
                         </tbody>
                     </table>
                 </div>
