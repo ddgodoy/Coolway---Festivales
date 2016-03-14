@@ -24,7 +24,10 @@ class UserController extends Controller {
      * @Route("/", name="admin_user")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Unable to access this page!');
+
         $em = $this->getDoctrine()->getManager();
         $entities = $this->getDoctrine()->getRepository('SafetyBundle:User')->findAll();
         return $this->render('SafetyBundle:User:index.html.twig', array("entities" => $entities));

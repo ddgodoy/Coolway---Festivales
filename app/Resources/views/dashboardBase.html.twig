@@ -134,16 +134,18 @@
                                         <i class="fa fa-dashboard"></i>
                                         Panel de control</a>
                                 </li>
-                                <li class="active">
-                                    <a href="{{path("admin_user")}}">
-                                        <i class="icon-users"></i>
-                                        Usuarios</a>
-                                </li>
-                                <li class="active">
-                                    <a href="{{path("admin_feast")}}">
-                                        <i class="icon-magic-wand"></i>
-                                        Festivales</a>
-                                </li>
+                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                    <li class="active">
+                                        <a href="{{path("admin_user")}}">
+                                            <i class="icon-users"></i>
+                                            Usuarios</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="{{path("admin_feast")}}">
+                                            <i class="icon-magic-wand"></i>
+                                            Festivales</a>
+                                    </li>
+                                {% endif %}
                                 <li class="active">
                                     <a href="{{path("admin_artist")}}">
                                         <i class="icon-star"></i>

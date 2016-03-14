@@ -17,6 +17,7 @@ class UserType extends AbstractType {
 //                    'first_name' => 'password',
 //                    'second_name' => 'confirmar',
 //                    'type' => 'password'))
+                ->add('feast', null, array('label' => 'Festival'))
                 ->add('user_roles', null, array('label' => 'Roles'));
     }
 

@@ -6,16 +6,30 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class FeastStageType extends AbstractType {
+class FeastStageType extends AbstractType
+{
+    private $filtro;
 
+    public function __construct($filtro)
+    {
+        $this->filtro = $filtro;
+    }
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
-                ->add('feast', null, array('label' => 'Festival'))
-                ->add('stage', null, array('label' => 'Escenario'))
+            ->add('feast', 'entity', array(
+                'label'   => 'Festival',
+                'class' => 'BackendBundle:Feast',
+                'query_builder' => function($repository)
+                {
+                    return $repository->createQueryBuilder('f')->where($this->filtro);
+                }
+            ))
+            ->add('stage', null, array('label' => 'Escenario'))
         ;
     }
 
@@ -35,4 +49,4 @@ class FeastStageType extends AbstractType {
         return 'coolwayfestivales_backendbundle_feaststage';
     }
 
-}
+} // end class

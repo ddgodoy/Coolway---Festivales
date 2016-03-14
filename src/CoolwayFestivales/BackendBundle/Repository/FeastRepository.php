@@ -38,10 +38,10 @@ class FeastRepository extends EntityRepository
         }
     }
     //
-    public function listOfFeast()
+    public function listOfFeast($filtro)
     {
         $q = $this->getEntityManager()->createQuery(
-            "SELECT f.id AS f_id, f.name AS f_name, f.latitude AS f_latitud, f.longitude AS f_longitud, f.path AS f_path FROM BackendBundle:Feast f ORDER BY f.name"
+            "SELECT f.id AS f_id, f.name AS f_name, f.latitude AS f_latitud, f.longitude AS f_longitud, f.path AS f_path FROM BackendBundle:Feast f WHERE $filtro ORDER BY f.name"
         );
         try {
             return $q->getResult();

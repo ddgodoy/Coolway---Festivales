@@ -23,7 +23,10 @@ class FeastController extends Controller {
      * @Route("/", name="admin_feast")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Unable to access this page!');
+
         $em = $this->getDoctrine()->getManager();
         $entities = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findAll();
         return $this->render('BackendBundle:Feast:index.html.twig', array("entities" => $entities));

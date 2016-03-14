@@ -23,9 +23,20 @@ class AwardController extends Controller {
      * @Route("/", name="admin_award")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+        $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:Award')->findAll();
+
+        if ($auth_checker->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Award')->findAll();
+        } else {
+            $token = $this->get('security.token_storage')->getToken();
+            $user = $token->getUser();
+
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Award')->findInFestival($user->getFeast()->getId());
+        }
         return $this->render('BackendBundle:Award:index.html.twig', array("entities" => $entities));
     }
 
@@ -85,9 +96,13 @@ class AwardController extends Controller {
      * @Route("/create", name="admin_award_create")
      * @Method("post")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Award();
-        $form = $this->createForm(new AwardType(), $entity);
+        $form = $this->createForm(new AwardType($filtro), $entity);
         $form->bind($request);
         $result = array();
 
@@ -123,9 +138,13 @@ class AwardController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Award();
-        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\AwardType(), $entity);
+        $form = $this->createForm(new AwardType($filtro), $entity);
 
         return array(
             'entity' => $entity,
@@ -165,7 +184,11 @@ class AwardController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function editAction() {
+    public function editAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
         $id = $this->getRequest()->get("id");
 
@@ -175,7 +198,7 @@ class AwardController extends Controller {
             throw $this->createNotFoundException('Unable to find award entity.');
         }
 
-        $editForm = $this->createForm(new AwardType(), $entity);
+        $editForm = $this->createForm(new AwardType($filtro), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -191,7 +214,11 @@ class AwardController extends Controller {
      * @Route("/{id}", name="admin_award_update")
      * @Method("PUT")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BackendBundle:Award')->find($id);
@@ -200,7 +227,7 @@ class AwardController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Award entity.');
         }
-        $editForm = $this->createForm(new AwardType(), $entity);
+        $editForm = $this->createForm(new AwardType($filtro), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {

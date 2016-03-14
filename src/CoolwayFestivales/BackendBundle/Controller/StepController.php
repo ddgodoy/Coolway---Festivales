@@ -23,9 +23,20 @@ class StepController extends Controller {
      * @Route("/", name="admin_step")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+        $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:Step')->findAll();
+
+        if ($auth_checker->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Step')->findAll();
+        } else {
+            $token = $this->get('security.token_storage')->getToken();
+            $user = $token->getUser();
+
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Step')->findSlider($user->getFeast()->getId());
+        }
         return $this->render('BackendBundle:Step:index.html.twig', array("entities" => $entities));
     }
 
@@ -85,9 +96,13 @@ class StepController extends Controller {
      * @Route("/create", name="admin_step_create")
      * @Method("post")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Step();
-        $form = $this->createForm(new StepType(), $entity);
+        $form = $this->createForm(new StepType($filtro), $entity);
         $form->bind($request);
         $result = array();
 
@@ -123,9 +138,13 @@ class StepController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Step();
-        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\StepType(), $entity);
+        $form = $this->createForm(new StepType($filtro), $entity);
 
         return array(
             'entity' => $entity,
@@ -165,7 +184,11 @@ class StepController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function editAction() {
+    public function editAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
         $id = $this->getRequest()->get("id");
 
@@ -175,7 +198,7 @@ class StepController extends Controller {
             throw $this->createNotFoundException('Unable to find step entity.');
         }
 
-        $editForm = $this->createForm(new StepType(), $entity);
+        $editForm = $this->createForm(new StepType($filtro), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -191,16 +214,19 @@ class StepController extends Controller {
      * @Route("/{id}", name="admin_step_update")
      * @Method("PUT")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('BackendBundle:Step')->find($id);
         $result = array();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Step entity.');
         }
-        $editForm = $this->createForm(new StepType(), $entity);
+        $editForm = $this->createForm(new StepType($filtro), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {

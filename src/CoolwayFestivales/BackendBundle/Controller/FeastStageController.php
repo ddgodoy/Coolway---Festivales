@@ -23,9 +23,20 @@ class FeastStageController extends Controller {
      * @Route("/", name="admin_feaststage")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+        $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:FeastStage')->findAll();
+
+        if ($auth_checker->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:FeastStage')->findAll();
+        } else {
+            $token = $this->get('security.token_storage')->getToken();
+            $user = $token->getUser();
+
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:FeastStage')->findInFestival($user->getFeast()->getId());
+        }
         return $this->render('BackendBundle:FeastStage:index.html.twig', array("entities" => $entities));
     }
 
@@ -85,9 +96,13 @@ class FeastStageController extends Controller {
      * @Route("/create", name="admin_feaststage_create")
      * @Method("post")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\FeastStage();
-        $form = $this->createForm(new FeastStageType(), $entity);
+        $form = $this->createForm(new FeastStageType($filtro), $entity);
         $form->bind($request);
         $result = array();
 
@@ -123,9 +138,13 @@ class FeastStageController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\FeastStage();
-        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\FeastStageType(), $entity);
+        $form = $this->createForm(new FeastStageType($filtro), $entity);
 
         return array(
             'entity' => $entity,
@@ -165,7 +184,11 @@ class FeastStageController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function editAction() {
+    public function editAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
         $id = $this->getRequest()->get("id");
 
@@ -175,7 +198,7 @@ class FeastStageController extends Controller {
             throw $this->createNotFoundException('Unable to find feaststage entity.');
         }
 
-        $editForm = $this->createForm(new FeastStageType(), $entity);
+        $editForm = $this->createForm(new FeastStageType($filtro), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -191,16 +214,19 @@ class FeastStageController extends Controller {
      * @Route("/{id}", name="admin_feaststage_update")
      * @Method("PUT")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('BackendBundle:FeastStage')->find($id);
         $result = array();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find FeastStage entity.');
         }
-        $editForm = $this->createForm(new FeastStageType(), $entity);
+        $editForm = $this->createForm(new FeastStageType($filtro), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {

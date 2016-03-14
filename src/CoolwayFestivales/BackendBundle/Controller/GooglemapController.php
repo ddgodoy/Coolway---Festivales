@@ -23,12 +23,15 @@ class GooglemapController extends Controller
      */
     public function indexAction(Request $request, $getfestival = 0)
     {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $cImage     = $request->request->get('h_image'  , '');
         $cFestival  = $request->request->get('cfestival', $getfestival);
         $cLatitud   = $request->request->get('clatitud' , '');
         $cLongitud  = $request->request->get('clongitud', '');
         $objImage   = $request->files->get('cimage');
-        $festivales = $this->getDoctrine()->getRepository('BackendBundle:Feast')->listOfFeast();
+        $festivales = $this->getDoctrine()->getRepository('BackendBundle:Feast')->listOfFeast($filtro);
 
         if ($request->isMethod('post'))
         {
