@@ -1,70 +1,14 @@
 {%extends "::dashboardBase.html.twig"%}
 {% block content %}
-    <h3 class="page-title">
-        Panel de control
-    </h3>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
                 <i class="fa fa-home"></i>
-                <a href="{{path("admin_dashboard")}}">Panel de control</a>
-
+                <a href="{{path("admin_dashboard")}}">Inicio</a>
             </li>
-
         </ul>
-
     </div>
-    {{ render (controller("BackendBundle:UserFeastData:userfeastdatapotlet")) }}
 {%endblock %}
 {%block inline_script%}
     {{parent()}}
-    <script>
-
-
-        var initTable1 = function () {
-            var table = $('#sample_1');
-
-
-            $.extend(true, $.fn.DataTable.TableTools.classes, {
-                "container": "btn-group tabletools-dropdown-on-portlet",
-                "buttons": {
-                    "normal": "btn btn-sm default",
-                    "disabled": "btn btn-sm default disabled"
-                },
-                "collection": {
-                    "container": "DTTT_dropdown dropdown-menu tabletools-dropdown-menu"
-                }
-            });
-
-            var oTable = table.dataTable({
-                "order": [
-                    [2, 'desc']
-                ],
-                "lengthMenu": [
-                    [5, 15, 20, -1],
-                    [5, 15, 20, "All"] // change per page values here
-                ],
-                // set the initial value
-                "pageLength": 10,
-                "dom": "<'row' <'col-md-12'T>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
-
-                "tableTools": {
-                    "sSwfPath": "../../assets/global/plugins/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-                    "aButtons": []
-                },
-                "language": {
-                    "url": "{{asset('assets/js/i18n/Spanish.json')}}"
-                }
-
-            });
-
-            var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
-
-            tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
-        }
-
-        initTable1();
-
-
-    </script>
 {%endblock%}
