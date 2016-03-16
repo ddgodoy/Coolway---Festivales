@@ -2,6 +2,7 @@
 
 namespace CoolwayFestivales\BackendBundle\Controller;
 
+use Proxies\__CG__\CoolwayFestivales\BackendBundle\Entity\FeastStage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -23,9 +24,20 @@ class StageController extends Controller {
      * @Route("/", name="admin_stage")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+        $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:Stage')->findAll();
+
+        if ($auth_checker->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Stage')->findAll();
+        } else {
+            $token = $this->get('security.token_storage')->getToken();
+            $user = $token->getUser();
+
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Stage')->findInFestival($user->getFeast()->getId());
+        }
         return $this->render('BackendBundle:Stage:index.html.twig', array("entities" => $entities));
     }
 
@@ -85,26 +97,29 @@ class StageController extends Controller {
      * @Route("/create", name="admin_stage_create")
      * @Method("post")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Stage();
         $form = $this->createForm(new StageType(), $entity);
         $form->bind($request);
         $result = array();
-
 
         $em = $this->getDoctrine()->getManager();
         try {
             $em->persist($entity);
             $em->flush();
 
-            /*
-              //Integración con las ACLs
+            if (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
+            {
+                $this->getDoctrine()->getRepository('BackendBundle:Stage')->addStageToFestival(
+                    $entity->getId(), $this->get('security.context')->getToken()->getUser()->getFeast()->getId()
+                );
+            }
+            /* Integración con las ACLs
               $user = $this->get('security.context')->getToken()->getUser();
               $provider = $this->get('Apptibase.acl_manager');
               $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
-              //-----------------------------
              */
-
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
         } catch (\Exception $exc) {
@@ -227,22 +242,28 @@ class StageController extends Controller {
      * @Route("/{id}", name="admin_stage_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, $id) {
+    public function deleteAction(Request $request, $id)
+    {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid())
+        {
+            if (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN'))
+            {
+                $this->getDoctrine()->getRepository('BackendBundle:Stage')->delStageFromFestival(
+                    $id, $this->get('security.context')->getToken()->getUser()->getFeast()->getId()
+                );
+            }
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('BackendBundle:Stage')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Stage entity.');
             }
-
             $em->remove($entity);
             $em->flush();
         }
-
         return $this->redirect($this->generateUrl('admin_stage'));
     }
 

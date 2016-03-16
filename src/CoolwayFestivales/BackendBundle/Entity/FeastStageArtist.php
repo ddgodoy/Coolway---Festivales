@@ -183,4 +183,4 @@ class FeastStageArtist {
         return $this->artist;
     }
 
-}
+} // end class

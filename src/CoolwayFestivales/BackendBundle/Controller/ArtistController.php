@@ -23,9 +23,20 @@ class ArtistController extends Controller {
      * @Route("/", name="admin_artist")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+        $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:Artist')->findAll();
+
+        if ($auth_checker->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Artist')->findAll();
+        } else {
+            $token = $this->get('security.token_storage')->getToken();
+            $user = $token->getUser();
+
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Artist')->findInFestival($user->getFeast()->getId());
+        }
         return $this->render('BackendBundle:Artist:index.html.twig', array("entities" => $entities));
     }
 

@@ -5,9 +5,138 @@
             <li>
                 <i class="fa fa-home"></i>
                 <a href="{{path("admin_dashboard")}}">Inicio</a>
+                <i class="fa fa-angle-right"></i>
+                <label style="color:#999;">
+                    Gestión de contenidos
+                    {% if not is_granted('ROLE_SUPER_ADMIN') %}
+                        para <strong style="font-size:16px;">{{ app.user.feast.name }}</strong>
+                    {% endif %}
+                </label>
             </li>
         </ul>
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="portlet box blue-madison" style="margin-top:10px;">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-arrow-up"></i>Registrar
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-striped" style="margin-bottom:0px;">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <i class="icon-plus" style="font-size:12px;"></i>&nbsp;
+                                            <a data-toggle="modal" data-target="#ajax1" href="{{path("admin_stage_new")}}" style="color:#666;font-size:14px;">Nuevo Escenario</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <i class="icon-plus" style="font-size:12px;"></i>&nbsp;
+                                            <a data-toggle="modal" data-target="#ajax2" href="{{path("admin_artist_new")}}" style="color:#666;font-size:14px;">Nuevo Artista</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <i class="icon-plus" style="font-size:12px;"></i>&nbsp;
+                                            <a data-toggle="modal" data-target="#ajax3" href="{{path("admin_feaststageartist_new")}}" style="color:#666;font-size:14px;">Nuevo Horario</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <i class="icon-plus" style="font-size:12px;"></i>&nbsp;
+                                            <a data-toggle="modal" data-target="#ajax4" href="{{path("admin_images_new")}}" style="color:#666;font-size:14px;">Nuevo Gráfico</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <i class="icon-plus" style="font-size:12px;"></i>&nbsp;
+                                            <a href="{{path("admin_googlemap")}}" style="color:#666;font-size:14px;">Nueva Ubicación</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="portlet box blue-madison" style="margin-top:10px;">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-list"></i>Listar
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-striped" style="margin-bottom:0px;">
+                                    <tbody>
+                                    <tr>
+                                        <td><a href="{{path("admin_stage")}}" style="font-size:14px;">Escenarios</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="{{path("admin_artist")}}" style="font-size:14px;">Artistas</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="{{path("admin_feaststageartist")}}" style="font-size:14px;">Horarios</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="{{path("admin_images")}}" style="font-size:14px;">Gráficos</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="{{path("admin_googlemap")}}" style="font-size:14px;">Ubicaciones</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- -->
+    <div class="modal fade" id="ajax1" role="basic" aria-hidden="true">
+        <div class="page-loading page-loading-boxed">
+            <img src="{{asset('assets/global/img/loading-spinner-grey.gif')}}" alt="" class="loading">
+            <span>&nbsp;&nbsp;Cargando... </span>
+        </div>
+        <div class="modal-dialog"><div class="modal-content"></div></div>
+    </div>
+    <!-- -->
+    <div class="modal fade" id="ajax2" role="basic" aria-hidden="true">
+        <div class="page-loading page-loading-boxed">
+            <img src="{{asset('assets/global/img/loading-spinner-grey.gif')}}" alt="" class="loading">
+            <span>&nbsp;&nbsp;Cargando... </span>
+        </div>
+        <div class="modal-dialog"><div class="modal-content"></div></div>
+    </div>
+    <!-- -->
+    <div class="modal fade" id="ajax3" role="basic" aria-hidden="true">
+        <div class="page-loading page-loading-boxed">
+            <img src="{{asset('assets/global/img/loading-spinner-grey.gif')}}" alt="" class="loading">
+            <span>&nbsp;&nbsp;Cargando... </span>
+        </div>
+        <div class="modal-dialog"><div class="modal-content"></div></div>
+    </div>
+    <!-- -->
+    <div class="modal fade" id="ajax4" role="basic" aria-hidden="true">
+        <div class="page-loading page-loading-boxed">
+            <img src="{{asset('assets/global/img/loading-spinner-grey.gif')}}" alt="" class="loading">
+            <span>&nbsp;&nbsp;Cargando... </span>
+        </div>
+        <div class="modal-dialog"><div class="modal-content"></div></div>
+    </div>
+    <!-- -->
 {%endblock %}
 {%block inline_script%}
     {{parent()}}

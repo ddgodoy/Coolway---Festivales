@@ -24,7 +24,10 @@ class UserController extends Controller {
      * @Route("/", name="admin_user")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Unable to access this page!');
+
         $em = $this->getDoctrine()->getManager();
         $entities = $this->getDoctrine()->getRepository('SafetyBundle:User')->findAll();
         return $this->render('SafetyBundle:User:index.html.twig', array("entities" => $entities));
@@ -92,12 +95,13 @@ class UserController extends Controller {
      * @Route("/create", name="admin_user_create")
      * @Method("post")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
         $entity = new User();
         $form = $this->createForm(new UserType(), $entity);
         $form->bind($request);
-        $result = array();
 
+        $result = array();
 
         $em = $this->getDoctrine()->getManager();
 
@@ -129,7 +133,8 @@ class UserController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction()
+    {
         $entity = new User();
         $form = $this->createForm(new UserType(), $entity);
 

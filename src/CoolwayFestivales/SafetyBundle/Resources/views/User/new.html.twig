@@ -1,1 +1,7 @@
 {% include 'BackendBundle:includes:admin_create.html.twig' with {'module': 'User', 'label': 'Usuario'} %}
+
+<script>
+    $(document).ready(function(){
+        $("#coolway_safetybundle_usertype_user_roles").removeAttr('multiple');
+    })
+</script>

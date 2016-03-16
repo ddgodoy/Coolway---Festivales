@@ -13,7 +13,8 @@ class SecuredController extends Controller {
      * @Route("/login", name="_admin_login")
      * @Template()
      */
-    public function loginAction() {
+    public function loginAction()
+    {
         if ($this->get('request')->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $this->get('request')->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {

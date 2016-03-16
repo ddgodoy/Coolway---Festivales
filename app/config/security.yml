@@ -5,11 +5,11 @@ security:
     encoders:
         CoolwayFestivales\SafetyBundle\Entity\User: {algorithm: sha512, encode_as_base64: true, iterations: 10}
 
-    role_hierarchy:
-        ROLE_CUSTOMER: ROLE_ALLOWED_TO_SWITCH
-        ROLE_CMS: ROLE_ALLOWED_TO_SWITCH
-        ROLE_USER: ROLE_ALLOWED_TO_SWITCH
-        ROLE_ADMIN: [ROLE_CUSTOMER, ROLE_USER, ROLE_CMS, ROLE_EMPRESA]
+    #role_hierarchy:
+    #    ROLE_CUSTOMER: ROLE_ALLOWED_TO_SWITCH
+    #    ROLE_CMS: ROLE_ALLOWED_TO_SWITCH
+    #    ROLE_USER: ROLE_ALLOWED_TO_SWITCH
+    #    ROLE_ADMIN: [ROLE_CUSTOMER, ROLE_USER, ROLE_CMS, ROLE_EMPRESA]
 
     providers:
         chain_provider:
@@ -31,9 +31,6 @@ security:
         login_cms:
             pattern:  ^/login$
             security: false
-
-
-
 
         # Firewall global utilizado en la parte pública o frontend
 #        frontend:
@@ -68,6 +65,6 @@ security:
                 key:        admin
                 lifetime:   86400
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-        - { path: ^/admin, roles: ROLE_ADMIN}
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN]}

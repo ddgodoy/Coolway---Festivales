@@ -23,9 +23,20 @@ class ImagesController extends Controller {
      * @Route("/", name="admin_images")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+        $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:Images')->findAll();
+
+        if ($auth_checker->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Images')->findAll();
+        } else {
+            $token = $this->get('security.token_storage')->getToken();
+            $user = $token->getUser();
+
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Images')->findInFestival($user->getFeast()->getId());
+        }
         return $this->render('BackendBundle:Images:index.html.twig', array("entities" => $entities));
     }
 
@@ -85,9 +96,13 @@ class ImagesController extends Controller {
      * @Route("/create", name="admin_images_create")
      * @Method("post")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Images();
-        $form = $this->createForm(new ImagesType(), $entity);
+        $form = $this->createForm(new ImagesType($filtro), $entity);
         $form->bind($request);
         $result = array();
 
@@ -123,9 +138,13 @@ class ImagesController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Images();
-        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\ImagesType(), $entity);
+        $form = $this->createForm(new ImagesType($filtro), $entity);
 
         return array(
             'entity' => $entity,
@@ -165,7 +184,11 @@ class ImagesController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function editAction() {
+    public function editAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
         $id = $this->getRequest()->get("id");
 
@@ -175,7 +198,7 @@ class ImagesController extends Controller {
             throw $this->createNotFoundException('Unable to find images entity.');
         }
 
-        $editForm = $this->createForm(new ImagesType(), $entity);
+        $editForm = $this->createForm(new ImagesType($filtro), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -191,16 +214,19 @@ class ImagesController extends Controller {
      * @Route("/{id}", name="admin_images_update")
      * @Method("PUT")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('BackendBundle:Images')->find($id);
         $result = array();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Images entity.');
         }
-        $editForm = $this->createForm(new ImagesType(), $entity);
+        $editForm = $this->createForm(new ImagesType($filtro), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
