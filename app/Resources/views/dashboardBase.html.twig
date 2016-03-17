@@ -127,66 +127,74 @@
                                 <span class="arrow open"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="active">
-                                    <a href="{{path("admin_dashboard")}}">
-                                        <i class="fa fa-home"></i>
-                                        Inicio</a>
-                                </li>
-                                <li class="active">
-                                    <a style="background-color:#CCC !important;color:#4e5b6c;">Contenidos</a>
-                                </li>
-                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                {% if is_granted('ROLE_COOLWAY') %}
                                     <li class="active">
-                                        <a href="{{path("admin_feast")}}">
-                                            <i class="icon-energy"></i>
-                                            Festivales</a>
+                                        <a href="#">
+                                            <i class="fa fa-picture-o"></i>
+                                            Galería de Imágenes</a>
+                                    </li>
+                                {% else %}
+                                    <li class="active">
+                                        <a href="{{path("admin_dashboard")}}">
+                                            <i class="fa fa-home"></i>
+                                            Inicio</a>
+                                    </li>
+                                    <li class="active">
+                                        <a style="background-color:#CCC !important;color:#4e5b6c;">Contenidos</a>
+                                    </li>
+                                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                        <li class="active">
+                                            <a href="{{path("admin_feast")}}">
+                                                <i class="icon-energy"></i>
+                                                Festivales</a>
+                                        </li>
+                                    {% endif %}
+                                    <li class="active">
+                                        <a href="{{path("admin_stage")}}">
+                                            <i class="icon-grid"></i>
+                                            Escenarios</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="{{path("admin_artist")}}">
+                                            <i class="icon-star"></i>
+                                            Artistas</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="{{path("admin_feaststageartist")}}">
+                                            <i class="fa icon-clock"></i>
+                                            Horarios</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="{{path("admin_images")}}">
+                                            <i class="fa fa-picture-o"></i>
+                                            Gráficos</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="{{path("admin_googlemap")}}">
+                                            <i class="icon-pointer"></i>
+                                            Ubicaciones</a>
+                                    </li>
+                                    <li class="active">
+                                        <a style="background-color:#CCC !important;color:#4e5b6c;">Sistema</a>
+                                    </li>
+                                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                        <li class="active">
+                                            <a href="{{path("admin_user")}}">
+                                                <i class="icon-users"></i>
+                                                Cuentas de Usuario</a>
+                                        </li>
+                                    {% endif %}
+                                    <li class="active">
+                                        <a href="{{path("admin_notification")}}">
+                                            <i class="icon-envelope"></i>
+                                            Notificaciones</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="{{path("admin_terms")}}">
+                                            <i class="icon-book-open"></i>
+                                            Términos y Condiciones</a>
                                     </li>
                                 {% endif %}
-                                <li class="active">
-                                    <a href="{{path("admin_stage")}}">
-                                        <i class="icon-grid"></i>
-                                        Escenarios</a>
-                                </li>
-                                <li class="active">
-                                    <a href="{{path("admin_artist")}}">
-                                        <i class="icon-star"></i>
-                                        Artistas</a>
-                                </li>
-                                <li class="active">
-                                    <a href="{{path("admin_feaststageartist")}}">
-                                        <i class="fa icon-clock"></i>
-                                        Horarios</a>
-                                </li>
-                                <li class="active">
-                                    <a href="{{path("admin_images")}}">
-                                        <i class="fa fa-picture-o "></i>
-                                        Gráficos</a>
-                                </li>
-                                <li class="active">
-                                    <a href="{{path("admin_googlemap")}}">
-                                        <i class="icon-pointer"></i>
-                                        Ubicaciones</a>
-                                </li>
-                                <li class="active">
-                                    <a style="background-color:#CCC !important;color:#4e5b6c;">Sistema</a>
-                                </li>
-                                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                    <li class="active">
-                                        <a href="{{path("admin_user")}}">
-                                            <i class="icon-users"></i>
-                                            Cuentas de Usuario</a>
-                                    </li>
-                                {% endif %}
-                                <li class="active">
-                                    <a href="{{path("admin_notification")}}">
-                                        <i class="icon-envelope"></i>
-                                        Notificaciones</a>
-                                </li>
-                                <li class="active">
-                                    <a href="{{path("admin_terms")}}">
-                                        <i class="icon-book-open"></i>
-                                        Términos y Condiciones</a>
-                                </li>
                             </ul>
                         </li>
                     </ul>

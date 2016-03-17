@@ -25,6 +25,8 @@ class ArtistController extends Controller {
      */
     public function indexAction()
     {
+        //if ($this->get('security.context')->isGranted('ROLE_COOLWAY')) { return $this->redirect($this->generateUrl('admin_gallery')); }
+
         $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
 

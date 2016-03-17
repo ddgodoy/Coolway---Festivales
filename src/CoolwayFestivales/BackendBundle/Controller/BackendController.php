@@ -15,7 +15,17 @@ class BackendController extends Controller {
      * @Route("/dashboard", name="admin_dashboard")
      * @Template()
      */
-    public function dashboardAction() {
+    public function dashboardAction()
+    {
+        $auth_checker = $this->get('security.authorization_checker');
+
+        if ($auth_checker->isGranted('ROLE_COOLWAY'))
+        {
+            $user = $this->get('security.context')->getToken()->getUser();
+
+            //$feast_id = $user->getFeast()->getId();
+            //return $this->redirect($this->generateUrl('admin_gallery')); exit();
+        }
         return array();
     }
 
@@ -29,8 +39,6 @@ class BackendController extends Controller {
     /**
      * @Route("/logout", name="_logout")
      */
-    public function logoutAction() {
+    public function logoutAction() {}
 
-    }
-
-}
+} // end class
