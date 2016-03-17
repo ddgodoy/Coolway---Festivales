@@ -10,9 +10,16 @@ class FeastStageType extends AbstractType
 {
     private $filtro;
 
-    public function __construct($filtro)
+    public function __construct($filtro, $accion)
     {
         $this->filtro = $filtro;
+        $this->tipoCampo = null;
+        $this->tipoArray['label'] = 'Escenario';
+
+        if ($accion == 'crear') {
+            $this->tipoCampo = 'text';
+            $this->tipoArray['mapped'] = false;
+        }
     }
     /**
      * @param FormBuilderInterface $builder
@@ -29,8 +36,7 @@ class FeastStageType extends AbstractType
                     return $repository->createQueryBuilder('f')->where($this->filtro);
                 }
             ))
-            ->add('stage', null, array('label' => 'Escenario'))
-        ;
+            ->add('stage', $this->tipoCampo, $this->tipoArray);
     }
 
     /**

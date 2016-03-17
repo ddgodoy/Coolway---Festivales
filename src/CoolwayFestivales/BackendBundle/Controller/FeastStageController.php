@@ -2,6 +2,7 @@
 
 namespace CoolwayFestivales\BackendBundle\Controller;
 
+use Proxies\__CG__\CoolwayFestivales\BackendBundle\Entity\Stage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -98,35 +99,20 @@ class FeastStageController extends Controller {
      */
     public function createAction(Request $request)
     {
-        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
-            $this->get('security.authorization_checker'), $this->get('security.token_storage')
-        );
-        $entity = new \CoolwayFestivales\BackendBundle\Entity\FeastStage();
-        $form = $this->createForm(new FeastStageType($filtro), $entity);
-        $form->bind($request);
-        $result = array();
+        $postData  = $request->request->get('coolwayfestivales_backendbundle_feaststage');
+        $feast_id  = $postData["feast"];
+        $escenario = $postData["stage"];
 
-
-        $em = $this->getDoctrine()->getManager();
-        try {
-            $em->persist($entity);
-            $em->flush();
-
-            /*
-              //Integración con las ACLs
-              $user = $this->get('security.context')->getToken()->getUser();
-              $provider = $this->get('Apptibase.acl_manager');
-              $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
-              //-----------------------------
-             */
+        if (!empty($feast_id) && !empty($escenario))
+        {
+            $this->getDoctrine()->getRepository('BackendBundle:FeastStage')->addStageOnTheFly($feast_id, $escenario);
 
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
-        } catch (\Exception $exc) {
+        } else {
             $result['success'] = false;
-            $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
+            $result['errores'] = array('causa' => 'e_interno', 'mensaje' => 'los valores no pueden ser nulos');
         }
-
         echo json_encode($result);
         die;
     }
@@ -144,7 +130,7 @@ class FeastStageController extends Controller {
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\FeastStage();
-        $form = $this->createForm(new FeastStageType($filtro), $entity);
+        $form = $this->createForm(new FeastStageType($filtro, 'crear'), $entity);
 
         return array(
             'entity' => $entity,
@@ -198,7 +184,7 @@ class FeastStageController extends Controller {
             throw $this->createNotFoundException('Unable to find feaststage entity.');
         }
 
-        $editForm = $this->createForm(new FeastStageType($filtro), $entity);
+        $editForm = $this->createForm(new FeastStageType($filtro, 'editar'), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -226,7 +212,7 @@ class FeastStageController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find FeastStage entity.');
         }
-        $editForm = $this->createForm(new FeastStageType($filtro), $entity);
+        $editForm = $this->createForm(new FeastStageType($filtro, 'editar'), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {

@@ -2,7 +2,9 @@
 
 namespace CoolwayFestivales\BackendBundle\Repository;
 
+use CoolwayFestivales\BackendBundle\Entity\FeastStage;
 use Doctrine\ORM\EntityRepository;
+use Proxies\__CG__\CoolwayFestivales\BackendBundle\Entity\Stage;
 
 /**
  *
@@ -32,6 +34,23 @@ class FeastStageRepository extends EntityRepository
             $filtro = 'fs.feast = '.$user->getFeast()->getId();
         }
         return $filtro;
+    }
+    //
+    public function addStageOnTheFly($feast, $stage)
+    {
+        $em = $this->getEntityManager();
+        $oF = $em->getRepository('BackendBundle:Feast')->find($feast);
+
+        $oStage = new Stage();
+        $oStage->setName($stage);
+
+        $em->persist($oStage); $em->flush();
+
+        $oRel = new FeastStage();
+        $oRel->setFeast($oF);
+        $oRel->setStage($oStage);
+
+        $em->persist($oRel); $em->flush();
     }
 
 } // end class

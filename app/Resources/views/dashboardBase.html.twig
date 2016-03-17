@@ -131,7 +131,7 @@
                                     <li class="active">
                                         <a href="#">
                                             <i class="fa fa-picture-o"></i>
-                                            Galería de Imágenes</a>
+                                            Concurso</a>
                                     </li>
                                 {% else %}
                                     <li class="active">
@@ -148,12 +148,18 @@
                                                 <i class="icon-energy"></i>
                                                 Festivales</a>
                                         </li>
+                                        <li class="active">
+                                            <a href="{{path("admin_feaststage")}}">
+                                                <i class="icon-grid"></i>
+                                                Escenarios</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="active">
+                                            <a href="{{path("admin_stage")}}">
+                                                <i class="icon-grid"></i>
+                                                Escenarios</a>
+                                        </li>
                                     {% endif %}
-                                    <li class="active">
-                                        <a href="{{path("admin_stage")}}">
-                                            <i class="icon-grid"></i>
-                                            Escenarios</a>
-                                    </li>
                                     <li class="active">
                                         <a href="{{path("admin_artist")}}">
                                             <i class="icon-star"></i>

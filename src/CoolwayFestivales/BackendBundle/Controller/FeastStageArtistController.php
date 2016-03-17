@@ -320,7 +320,6 @@ class FeastStageArtistController extends Controller {
                 return new \Symfony\Component\HttpFoundation\Response($result);
             }
         }
-
         try {
             $em->flush();
             $response = array("success" => true, "message" => "Transacci&oacute;n realizada satisfactoriamente.");
@@ -332,13 +331,4 @@ class FeastStageArtistController extends Controller {
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
 
-    /*
-     * ==================================== Funciones específicas ==================
-     */
-
-
-
-    /*
-     * =============================================================================
-     */
-}
+} // end class
