@@ -36,17 +36,17 @@ class User implements AdvancedUserInterface, \Serializable {
 
     /**
      * @var string $total
-     * @ORM\Column(name="total", type="float")
+     * @ORM\Column(name="total", type="float", nullable=true)
      */
     private $total;
 
     /**
-     * @ORM\Column(type="text", length=255,nullable=true)
+     * @ORM\Column(type="text", length=255, nullable=true)
      */
     protected $notificationId;
 
     /**
-     * @ORM\Column(type="text", length=255,nullable=true)
+     * @ORM\Column(type="text", length=255, nullable=true)
      */
     protected $os;
 
