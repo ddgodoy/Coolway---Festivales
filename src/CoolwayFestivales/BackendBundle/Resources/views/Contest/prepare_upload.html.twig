@@ -1,0 +1,130 @@
+{%extends "::dashboardBase.html.twig"%}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+    <link href="{{asset('assets/admin/multiple/jquery.fileupload.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('assets/admin/multiple/jquery.fileupload-ui.css')}}" rel="stylesheet" type="text/css"/>
+
+    <noscript><link rel="stylesheet" href="{{asset('assets/admin/multiple/jquery.fileupload-noscript.css')}}"></noscript>
+    <noscript><link rel="stylesheet" href="{{asset('assets/admin/multiple/jquery.fileupload-ui-noscript.css')}}"></noscript>
+{% endblock %}
+
+{% block content %}
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="{{path("admin_dashboard")}}">Inicio</a>
+                <i class="fa fa-angle-right"></i>
+                <label style="color:#999;">Cargar nuevas imágenes</label>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form id="fileupload" action="{{ path('admin_run_upload') }}" method="POST" enctype="multipart/form-data">
+                <div class="row fileupload-buttonbar">
+                    <div class="col-lg-7">
+                        <span class="btn btn-success fileinput-button">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            <span>Seleccionar imágenes...</span>
+                            <input type="file" name="files[]" multiple>
+                        </span>
+                        <button type="submit" class="btn btn-primary start">
+                            <i class="glyphicon glyphicon-upload"></i>
+                            <span>Comenzar la subida</span>
+                        </button>
+                        <button type="reset" class="btn btn-warning cancel">
+                            <i class="glyphicon glyphicon-ban-circle"></i>
+                            <span>Cancelar la subida</span>
+                        </button>
+                        <span class="fileupload-process"></span>
+                    </div>
+                    <div class="col-lg-5 fileupload-progress fade">
+                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                        </div>
+                        <div class="progress-extended">&nbsp;</div>
+                    </div>
+                </div>
+                <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+            </form>
+            <!--  -->
+            <script id="template-upload" type="text/x-tmpl">
+            {% verbatim %}
+            {% for (var i=0, file; file=o.files[i]; i++) { %}
+            <tr class="template-upload fade">
+                <td>
+                    <span class="preview"></span>
+                </td>
+                <td>
+                    <p class="name">{%=file.name%}</p>
+                    <strong class="error text-danger"></strong>
+                </td>
+                <td>
+                    <p class="size">Procesando...</p>
+                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+                </td>
+                <td>
+                    {% if (!i && !o.options.autoUpload) { %}
+                        <button class="btn btn-primary start" disabled>
+                            <i class="glyphicon glyphicon-upload"></i>
+                            <span>Comenzar</span>
+                        </button>
+                    {% } %}
+                    {% if (!i) { %}
+                        <button class="btn btn-warning cancel">
+                            <i class="glyphicon glyphicon-ban-circle"></i>
+                            <span>Cancelar</span>
+                        </button>
+                    {% } %}
+                </td>
+            </tr>
+            {% } %}
+            {% endverbatim %}
+            </script>
+            <!--  -->
+            <script id="template-download" type="text/x-tmpl">
+            </script>
+        </div>
+    </div>
+{%endblock %}
+
+{%block base_script%}
+    {{parent()}}
+    <script src="//blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
+    <script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+    <script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <script src="{{asset('assets/admin/multiple/jquery.iframe-transport.js')}}"></script>
+    <script src="{{asset('assets/admin/multiple/jquery.fileupload.js')}}"></script>
+    <script src="{{asset('assets/admin/multiple/jquery.fileupload-process.js')}}"></script>
+    <script src="{{asset('assets/admin/multiple/jquery.fileupload-image.js')}}"></script>
+    <script src="{{asset('assets/admin/multiple/jquery.fileupload-validate.js')}}"></script>
+    <script src="{{asset('assets/admin/multiple/jquery.fileupload-ui.js')}}"></script>
+    <!--[if (gte IE 8)&(lt IE 10)]>
+    <script src="{{asset('assets/admin/multiple/jquery.xdr-transport.js')}}"></script>
+    <![endif]-->
+{%endblock%}
+
+{%block inline_script%}
+    {{parent()}}
+    <script>
+    $(function () {
+        'use strict';
+        $('#fileupload').fileupload({
+            url: '{{ path('admin_run_upload') }}'
+        });
+        $('#fileupload').fileupload(
+            'option',
+            'redirect',
+            window.location.href.replace(
+                    /\/[^\/]*$/,
+                    '/cors/result.html?%s'
+            )
+        );
+    });
+    </script>
+{%endblock%}
