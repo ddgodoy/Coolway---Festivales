@@ -132,13 +132,9 @@ class SafetyController extends Controller
                 "dom_obj"=>$dom_obj, 
               )
         );
-
-        
-        
     }
-    
 
-/**
+    /**
      * @Route("/safety/dashboard", name="safety_dashboard")
      * @Template()
      */
@@ -146,6 +142,5 @@ class SafetyController extends Controller
         /* em */
         return array();
     }
-
   
-}
+} // end class

@@ -21,5 +21,28 @@ class ContestRepository extends EntityRepository
         $em->persist($obj);
         $em->flush();
     }
+    //
+    public function findInFestival($feast_id)
+    {
+        $q = $this->getEntityManager()->createQuery(
+            "SELECT c FROM BackendBundle:Contest c
+			WHERE c.feast = $feast_id
+			ORDER BY c.id DESC"
+        );
+        return $q->getResult();
+    }
+    //
+    public function clearAllAndSetNew($contest)
+    {
+        $e = $this->getEntityManager();
+        $q = $e->createQuery("UPDATE BackendBundle:Contest c SET c.winner = NULL");
+        $q->execute();
+
+        if (!$contest->getWinner())
+        {
+            $contest->setWinner(true);
+            $e->flush();
+        }
+    }
 
 } // end class

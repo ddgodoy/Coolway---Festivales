@@ -2,7 +2,6 @@
 
 {% block stylesheets %}
     {{parent()}}
-    <link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
     <link href="{{asset('assets/admin/multiple/jquery.fileupload.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{asset('assets/admin/multiple/jquery.fileupload-ui.css')}}" rel="stylesheet" type="text/css"/>
 
@@ -14,8 +13,12 @@
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                <i class="fa fa-home"></i>
-                <a href="{{path("admin_dashboard")}}">Inicio</a>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <a href="{{path("admin_contest")}}">Concurso</a>
+                {% else %}
+                    <i class="fa fa-home"></i>
+                    <a href="{{path("admin_dashboard")}}">Inicio</a>
+                {% endif %}
                 <i class="fa fa-angle-right"></i>
                 <label style="color:#999;">Cargar nuevas imágenes</label>
             </li>
@@ -68,7 +71,7 @@
                 </td>
                 <td>
                     {% if (!i && !o.options.autoUpload) { %}
-                        <button class="btn btn-primary start" disabled>
+                        <button class="btn btn-primary start" disabled style="display:none;">
                             <i class="glyphicon glyphicon-upload"></i>
                             <span>Comenzar</span>
                         </button>
@@ -125,6 +128,7 @@
                     '/cors/result.html?%s'
             )
         );
+        $('#fileupload').bind('fileuploaddone', function (e, data) { document.location = '{{ path('admin_contest') }}'; });
     });
     </script>
 {%endblock%}

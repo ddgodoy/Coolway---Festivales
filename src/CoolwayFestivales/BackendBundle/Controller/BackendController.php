@@ -18,6 +18,18 @@ class BackendController extends Controller {
      */
     public function dashboardAction(Request $request)
     {
+        $feast_id = null;
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if ($user->getFeast())
+        {
+            $feast_id = $user->getFeast()->getId();
+        } else {
+            $feast_id = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent()->getId();
+        }
+        $session = $request->getSession();
+        $session->set('user_feast_id', $feast_id);
+        //
         $auth_checker = $this->get('security.authorization_checker');
 
         if ($auth_checker->isGranted('ROLE_COOLWAY'))
@@ -31,7 +43,8 @@ class BackendController extends Controller {
     /**
      * @Route("/login_check", name="_security_check")
      */
-    public function securityCheckAction() {
+    public function securityCheckAction()
+    {
         // The security layer will intercept this request
     }
 

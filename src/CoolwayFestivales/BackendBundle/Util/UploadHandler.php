@@ -42,12 +42,17 @@ class UploadHandler
 
     protected $image_objects = array();
 
-    function __construct($options = null, $initialize = true, $error_messages = null) {
+    function __construct($options = null, $initialize = true, $error_messages = null)
+    {
+        $feastIdDir = $options['feast']->getId().'/concurso/';
+        $fUploadDir = dirname($this->get_server_var('SCRIPT_FILENAME')).'/uploads/festivals/'.$feastIdDir;
+        $fUploadWeb = $this->get_full_url().'/uploads/festivals/'.$feastIdDir;
+
         $this->response = array();
         $this->options = array(
             'script_url' => $this->get_full_url().'/'.basename($this->get_server_var('SCRIPT_NAME')).'/admin/run_upload',
-            'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/uploads/contest/',
-            'upload_url' => $this->get_full_url().'/uploads/contest/',
+            'upload_dir' => $fUploadDir,
+            'upload_url' => $fUploadWeb,
             'input_stream' => 'php://input',
             'user_dirs' => false,
             'mkdir_mode' => 0755,
@@ -138,26 +143,24 @@ class UploadHandler
                     // Automatically rotate images based on EXIF meta data:
                     'auto_orient' => true
                 ),
-                // Uncomment the following to create medium sized images:
-                /*
                 'medium' => array(
-                    'max_width' => 800,
-                    'max_height' => 600
+                    'upload_dir' => $fUploadDir.'400/',
+                    'upload_url' => $fUploadWeb.'400/',
+                    'crop' => true,
+                    'max_width' => 400,
+                    'max_height' => 400
                 ),
-                */
                 'thumbnail' => array(
                     // Uncomment the following to use a defined directory for the thumbnails
                     // instead of a subdirectory based on the version identifier.
                     // Make sure that this directory doesn't allow execution of files if you
                     // don't pose any restrictions on the type of uploaded files, e.g. by
                     // copying the .htaccess file from the files directory for Apache:
-                    //'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/thumb/',
-                    //'upload_url' => $this->get_full_url().'/thumb/',
-                    // Uncomment the following to force the max
-                    // dimensions and e.g. create square thumbnails:
+                    'upload_dir' => $fUploadDir.'200/',
+                    'upload_url' => $fUploadWeb.'200/',
                     'crop' => true,
-                    'max_width' => 120,
-                    'max_height' => 120
+                    'max_width' => 200,
+                    'max_height' => 200
                 )
             ),
             'print_response' => true

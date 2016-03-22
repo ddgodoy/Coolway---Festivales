@@ -20,7 +20,6 @@ class SecuredController extends Controller {
         } else {
             $error = $this->get('request')->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
         }
-
         return array(
             'last_username' => $this->get('request')->getSession()->get(SecurityContext::LAST_USERNAME),
             'error' => $error,
@@ -41,4 +40,4 @@ class SecuredController extends Controller {
         // ...
     }
 
-}
+} // end class

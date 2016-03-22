@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     {{parent()}}
+    <link href="{{asset('assets/admin/multiple/blueimp-gallery.min.css')}}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {%block content%}
@@ -10,7 +11,13 @@
             <div class="portlet box blue-madison">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-magic"></i>Gestionar Imágenes del Concurso
+                        Gestionar Imágenes del Concurso para
+                        <select class="form-control input-inline" onchange="loadValuesForThisFeast(this.value);">
+                            {% for festival in festivales %}
+                                <option value="{{ festival.f_id }}"{% if festival.f_id==cfestival %} selected="selected"{% endif %}>{{ festival.f_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <img id="loading_feast" src="{{asset('assets/admin/layout/img/ajax-modal-loading.gif')}}" style="margin-left:10px;width:35px;display:none;"/>
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -41,6 +48,7 @@
                                 <th>
                                     Acciones
                                 </th>
+                                <th style="display:none;width:0px;border:none;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,8 +57,10 @@
                                     <td>
                                         {{entity.id}}
                                     </td>
-                                    <td>
-                                        <img src="{{ asset('uploads/contest/thumbnail/') }}{{ entity.name }}"/>
+                                    <td style="width:100px;">
+                                        <a href="{{ asset('uploads/festivals/') }}{{ entity.Feast.Id }}/concurso/{{ entity.name }}" title="{{ entity.name }}" download="{{ entity.name }}" data-gallery>
+                                            <img src="{{ asset('uploads/festivals/') }}{{ entity.Feast.Id }}/concurso/200/{{ entity.name }}" style="width:100px;"/>
+                                        </a>
                                     </td>
                                     <td>
                                         {{entity.name}}
@@ -59,7 +69,15 @@
                                         {{entity.loadDate | date("d/m/Y H:i")}}
                                     </td>
                                     <td>
-                                        <a class="btn red" href="{{path("admin_del_upload", { 'id': entity.id })}}"><i class="fa fa-trash-o"></i> Eliminar</a>
+                                        <a class="btn {% if entity.winner %}blue{% else %}default{% endif %}" href="{{path("admin_set_winner", { 'id': entity.id })}}">
+                                            <i class="glyphicon glyphicon-{% if entity.winner %}check{% else %}unchecked{% endif %}"></i>
+                                            {% if entity.winner %}G{% else %}No g{% endif %}anadora
+                                        </a>
+                                        <a class="btn red" onclick="return confirmaBorrar({{ entity.id }});"><i class="fa fa-trash-o"></i> Eliminar</a>
+                                        <input type="hidden" id="hd_del_{{ entity.id }}" value="{{path("admin_del_upload", { 'id': entity.id })}}" />
+                                    </td>
+                                    <td style="display:none;width:0px;border:none;">
+                                        {{ entity.winner }}
                                     </td>
                                 </tr>
                             {%endfor%}
@@ -69,10 +87,22 @@
             </div>
         </div>
     </div>
+    <!-- The blueimp Gallery widget -->
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+        <div class="slides"></div>
+        <h3 class="title"></h3>
+        <a class="prev"><</a>
+        <a class="next">></a>
+        <a class="close">X</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+    </div>
 {%endblock%}
 
 {%block base_script%}
     {{parent()}}
+    <!-- blueimp Gallery script -->
+    <script src="{{asset('assets/admin/multiple/jquery.blueimp-gallery.min.js')}}"></script>
 {%endblock%}
 {%block inline_script%}
     {{parent()}}
@@ -116,7 +146,7 @@
 
             var oTable = table.dataTable({
                 "order": [
-                    [0, 'asc']
+                    [5, 'desc']
                 ],
                 "lengthMenu": [
                     [5, 15, 20, -1],
@@ -155,6 +185,29 @@
             tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
         }
         initTable1();
+        //
+        function loadValuesForThisFeast(feast)
+        {
+            $('#loading_feast').show();
+
+            jQuery.ajax(
+            {
+                type: 'POST',
+                url: '{{ path("admin_upd_feast_session") }}',
+                data: 'id='+feast,
+                success: function (data)
+                {
+                    document.location = '{{ path("admin_contest") }}';
+                }
+            });
+        }
+        //
+        function confirmaBorrar(id)
+        {
+            var r = confirm("¿Confirma la eliminación de esta imagen?");
+
+            if (r == true) { document.location = $('#hd_del_'+id).val(); }
+            else { return false; }
+        }
     </script>
 {%endblock%}
-
