@@ -30,10 +30,13 @@ class ImagesType extends AbstractType
                 }
             ))
             ->add('cartel', 'file', array('label' => 'Imagen', 'mapped' => false, 'required' => false))
-            ->add('code_name', 'choice', array('choices' => array('plano' => 'Plano', 'background' => 'Background'), 'label' => 'Nombre de código'))
             ->add('enabled', null, array('label' => 'Habilitado'))
+            ->add('code_name', 'hidden', array('data' => 'background'))
         ;
     }
+    /*
+     * ->add('code_name', 'choice', array('choices' => array('plano' => 'Plano', 'background' => 'Background'), 'label' => 'Nombre de código'))
+     */
 
     /**
      * @param OptionsResolverInterface $resolver
