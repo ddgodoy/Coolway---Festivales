@@ -27,14 +27,19 @@ class ContestController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $session = $request->getSession();
+        $sFeastI = $session->get('user_feast_id', '');
         $this->handleTargetFoldersAction($request);
 
         $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
-        $session    = $request->getSession();
-        $entities   = $this->getDoctrine()->getRepository('BackendBundle:Contest')->findInFestival($session->get('user_feast_id'));
         $festivales = $this->getDoctrine()->getRepository('BackendBundle:Feast')->listOfFeast($filtro);
+
+        if (empty($sFeastI)) {
+            foreach ($festivales as $fvalue) { $session->set('user_feast_id', $fvalue->getId()); break; }
+        }
+        $entities = $this->getDoctrine()->getRepository('BackendBundle:Contest')->findInFestival($session->get('user_feast_id'));
 
         return $this->render(
             'BackendBundle:Contest:index.html.twig',
