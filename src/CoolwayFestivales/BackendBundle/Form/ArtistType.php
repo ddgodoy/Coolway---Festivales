@@ -22,6 +22,7 @@ class ArtistType extends AbstractType
             ->add('facebook', null, array('label' => 'Facebook'))
             ->add('instagram', null, array('label' => 'Instagram'))
             ->add('foto', 'file', array('label' => 'Foto', 'mapped' => false, 'required' => false))
+            ->add('portada', 'file', array('label' => 'Portada', 'mapped' => false, 'required' => false))
         ;
     }
 

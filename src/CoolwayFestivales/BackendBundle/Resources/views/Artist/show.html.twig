@@ -35,9 +35,16 @@
         {% if entity.path %}
         <tr>
             <td colspan="2" style="text-align:center;">
-                <img src="{{asset('uploads/artists/')}}{{ entity.id }}/400/{{ entity.path }}" alt="{{entity.name}}" title="{{entity.name}}"/>
+                <img src="{{asset('uploads/artists/')}}{{ entity.id }}/400/{{ entity.path }}" alt="{{entity.path}}" title="{{entity.path}}"/>
             </td>
         </tr>
+        {% endif %}
+        {% if entity.cover %}
+            <tr>
+                <td colspan="2" style="text-align:center;">
+                    <img class="img-responsive" src="{{asset('uploads/artists/')}}{{ entity.id }}/cover/{{ entity.cover }}" alt="{{entity.cover}}" title="{{entity.cover}}"/>
+                </td>
+            </tr>
         {% endif %}
     </tbody>
 </table>

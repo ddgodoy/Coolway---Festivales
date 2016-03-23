@@ -107,7 +107,7 @@ class ArtistController extends Controller
             $em->persist($entity); $em->flush();
 
             // upload images if any
-            $this->handleImage($form->get('foto')->getData(), $entity->getId());
+            $this->handleImage($form->get('foto')->getData(), $form->get('portada')->getData(), $entity->getId());
 
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
@@ -204,7 +204,7 @@ class ArtistController extends Controller
                 $em->persist($entity); $em->flush();
 
                 // upload images if any
-                $this->handleImage($editForm->get('foto')->getData(), $entity->getId());
+                $this->handleImage($editForm->get('foto')->getData(), $editForm->get('portada')->getData(), $entity->getId());
 
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
@@ -287,19 +287,16 @@ class ArtistController extends Controller
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
     //
-    public function handleImage($foto, $id)
+    public function handleImage($foto, $portada, $id)
     {
-        if ($foto) {
+        if ($foto || $portada)
+        {
+            $oR = new ResizeImage();
+            $em = $this->getDoctrine()->getManager();
             $oArtist = $this->getDoctrine()->getRepository('BackendBundle:Artist')->find($id);
 
-            if ($oArtist) {
-                $nm = $foto->getClientOriginalName();
-                $em = $this->getDoctrine()->getManager();
-
-                $oArtist->setPath($nm);
-                $em->persist($oArtist);
-                $em->flush();
-                //
+            if ($oArtist)
+            {
                 $dArtist = $this->get('kernel')->getRootDir().'/../web/uploads/artists/';
                 if (!is_dir($dArtist)) { mkdir($dArtist, 0777); chmod($dArtist, 0777); }
 
@@ -310,14 +307,26 @@ class ArtistController extends Controller
                 if (!is_dir($dId.'100/')) { mkdir($dId.'100/', 0777); chmod($dId.'100/', 0777);}
                 if (!is_dir($dId.'200/')) { mkdir($dId.'200/', 0777); chmod($dId.'200/', 0777);}
                 if (!is_dir($dId.'400/')) { mkdir($dId.'400/', 0777); chmod($dId.'400/', 0777);}
+                if (!is_dir($dId.'cover/')) { mkdir($dId.'cover/', 0777); chmod($dId.'cover/', 0777);}
                 //
-                $foto->move($dId, $nm);
+                if ($foto)
+                {
+                    $nm = $foto->getClientOriginalName(); $oArtist->setPath($nm);
 
-                $oR = new ResizeImage();
-                $oR->setSimple($nm, $nm, $dId, 400, 400, 0, 0, '', array('destino' => $dId.'400/', 'metodo' => 'full'));
-                $oR->setSimple($nm, $nm, $dId.'400/', 200, 200, 0, 0, '', array('destino' => $dId.'200/', 'metodo' => 'full'));
-                $oR->setSimple($nm, $nm, $dId.'200/', 100, 100, 0, 0, '', array('destino' => $dId.'100/', 'metodo' => 'full'));
-                $oR->setSimple($nm, $nm, $dId.'100/',  80,  80, 0, 0, '', array('destino' => $dId.'80/' , 'metodo' => 'full'));
+                    $foto->move($dId, $nm);
+                    $oR->setSimple($nm, $nm, $dId, 400, 400, 0, 0, '', array('destino' => $dId.'400/', 'metodo' => 'full'));
+                    $oR->setSimple($nm, $nm, $dId.'400/', 200, 200, 0, 0, '', array('destino' => $dId.'200/', 'metodo' => 'full'));
+                    $oR->setSimple($nm, $nm, $dId.'200/', 100, 100, 0, 0, '', array('destino' => $dId.'100/', 'metodo' => 'full'));
+                    $oR->setSimple($nm, $nm, $dId.'100/',  80,  80, 0, 0, '', array('destino' => $dId.'80/' , 'metodo' => 'full'));
+                }
+                if ($portada)
+                {
+                    $nc = $portada->getClientOriginalName(); $oArtist->setCover($nc);
+
+                    $portada->move($dId.'cover', $nc);
+                    $oR->setSimple($nc, $nc, $dId.'cover/', 600, 450, 0, 0, '', array('metodo' => 'full'));
+                }
+                $em->persist($oArtist); $em->flush();
             }
         }
     }

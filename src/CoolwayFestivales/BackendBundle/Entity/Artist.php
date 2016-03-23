@@ -74,6 +74,13 @@ class Artist {
      * @ORM\Column(name="path", type="string", length=255, nullable=true)
      */
     private $path;
+
+    /**
+     * @var string $cover
+     * @ORM\Column(name="cover", type="string", length=255, nullable=true)
+     */
+    private $cover;
+
     private $temp;
 
     /**
@@ -267,6 +274,27 @@ class Artist {
      */
     public function getPath() {
         return $this->path;
+    }
+
+    /**
+     * Set cover
+     *
+     * @param string $cover
+     * @return Artist
+     */
+    public function setCover($cover) {
+        $this->cover = $cover;
+
+        return $this;
+    }
+
+    /**
+     * Get cover
+     *
+     * @return string
+     */
+    public function getCover() {
+        return $this->cover;
     }
 
     /**
