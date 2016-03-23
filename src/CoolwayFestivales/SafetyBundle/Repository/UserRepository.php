@@ -14,12 +14,13 @@ class UserRepository extends EntityRepository implements ContainerAwareInterface
 {
     private $container;
 
-
-    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
+    {
         $this->container = $container;
     }    
-    
-     public function getList(){
+    //
+     public function getList()
+     {
         $qb = $this->getEntityManager()
             ->createQueryBuilder()
             ->from("SafetyBundle:User", "user")
@@ -102,4 +103,12 @@ class UserRepository extends EntityRepository implements ContainerAwareInterface
         
         return $q->getResult();
     }
-}
+    //
+    public function getAllButAdmin()
+    {
+        $q = $this->getEntityManager()->createQuery("SELECT u FROM SafetyBundle:User u WHERE u.username != 'admin'");
+
+        return $q->getResult();
+    }
+
+} // end class

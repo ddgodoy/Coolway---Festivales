@@ -29,7 +29,8 @@ class UserController extends Controller {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Unable to access this page!');
 
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('SafetyBundle:User')->findAll();
+        $entities = $this->getDoctrine()->getRepository('SafetyBundle:User')->getAllButAdmin();
+
         return $this->render('SafetyBundle:User:index.html.twig', array("entities" => $entities));
     }
 
@@ -39,7 +40,8 @@ class UserController extends Controller {
      * @Route("/list", name="admin_user_list")
      * @Template()
      */
-    public function listAction() {
+    public function listAction()
+    {
         $this->_datatable();
         return $this->render('SafetyBundle:User:list.html.twig');
     }
@@ -48,8 +50,8 @@ class UserController extends Controller {
      * set datatable configs
      * @return \CoolwayFestivales\DatatableBundle\Util\Datatable
      */
-    private function _datatable() {
-
+    private function _datatable()
+    {
         $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
         $qb->from("SafetyBundle:User", "e")
                 ->orderBy("e.id", "desc");
