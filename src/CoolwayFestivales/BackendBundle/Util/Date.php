@@ -1,5 +1,6 @@
 <?php 
 namespace CoolwayFestivales\BackendBundle\Util;
+
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\SqlWalker;

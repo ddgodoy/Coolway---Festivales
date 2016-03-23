@@ -14,7 +14,6 @@ namespace CoolwayFestivales\BackendBundle\Util;
 
 class UploadHandler
 {
-
     protected $options;
 
     // PHP File Upload error message codes:

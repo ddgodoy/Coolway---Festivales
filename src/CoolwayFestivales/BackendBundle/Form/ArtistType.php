@@ -6,8 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ArtistType extends AbstractType {
-
+class ArtistType extends AbstractType
+{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -21,14 +21,15 @@ class ArtistType extends AbstractType {
             ->add('twitter', null, array('label' => 'Twitter'))
             ->add('facebook', null, array('label' => 'Facebook'))
             ->add('instagram', null, array('label' => 'Instagram'))
-            ->add('image', 'file', array('label' => 'Imagen', "required" => ""))
+            ->add('foto', 'file', array('label' => 'Foto', 'mapped' => false, 'required' => false))
         ;
     }
 
     /**
      * @param OptionsResolverInterface $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => 'CoolwayFestivales\BackendBundle\Entity\Artist'
         ));
@@ -37,8 +38,9 @@ class ArtistType extends AbstractType {
     /**
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return 'coolwayfestivales_backendbundle_artist';
     }
 
-}
+} // end class

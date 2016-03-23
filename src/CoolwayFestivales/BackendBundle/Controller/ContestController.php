@@ -2,6 +2,7 @@
 
 namespace CoolwayFestivales\BackendBundle\Controller;
 
+use CoolwayFestivales\BackendBundle\Util\ResizeImage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -109,13 +110,13 @@ class ContestController extends Controller
         $dFeastId = $dFestival.$feast_id.'/';
         if (!is_dir($dFeastId)) { mkdir($dFeastId, 0777); chmod($dFeastId, 0777); }
 
-        $dContest = $dFestival.$feast_id.'/concurso/';
+        $dContest = $dFeastId.'concurso/';
         if (!is_dir($dContest)) { mkdir($dContest, 0777); chmod($dContest, 0777);}
 
-        $dThum200 = $dFestival.$feast_id.'/concurso/200/';
+        $dThum200 = $dContest.'200/';
         if (!is_dir($dThum200)) { mkdir($dThum200, 0777); chmod($dThum200, 0777);}
 
-        $dThum400 = $dFestival.$feast_id.'/concurso/400/';
+        $dThum400 = $dContest.'400/';
         if (!is_dir($dThum400)) { mkdir($dThum400, 0777); chmod($dThum400, 0777);}
 
         return;
