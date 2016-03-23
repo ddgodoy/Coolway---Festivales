@@ -37,7 +37,7 @@ class ContestController extends Controller
         $festivales = $this->getDoctrine()->getRepository('BackendBundle:Feast')->listOfFeast($filtro);
 
         if (empty($sFeastI)) {
-            foreach ($festivales as $fvalue) { $session->set('user_feast_id', $fvalue->getId()); break; }
+            foreach ($festivales as $fvalue) { $session->set('user_feast_id', $fvalue['id']); break; }
         }
         $entities = $this->getDoctrine()->getRepository('BackendBundle:Contest')->findInFestival($session->get('user_feast_id'));
 

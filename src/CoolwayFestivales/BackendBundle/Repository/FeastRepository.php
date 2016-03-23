@@ -25,9 +25,7 @@ class FeastRepository extends EntityRepository
                 return false;
 
             $q = $this->getEntityManager()->createQuery(
-                "SELECT f FROM BackendBundle:Feast f
-                WHERE f.date_to <= '$now'
-                ORDER BY f.date_to DESC"
+                "SELECT f FROM BackendBundle:Feast f ORDER BY f.id ASC"
             );
             $q->setMaxResults(1);
 
