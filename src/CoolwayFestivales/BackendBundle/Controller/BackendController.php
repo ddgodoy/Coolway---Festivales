@@ -25,7 +25,13 @@ class BackendController extends Controller {
         {
             $feast_id = $user->getFeast()->getId();
         } else {
-            $feast_id = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent()->getId();
+            $oFeast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
+
+            if ($oFeast) {
+                $feast_id = $oFeast->getId();
+            } else {
+                return array();
+            }
         }
         $session = $request->getSession();
         $session->set('user_feast_id', $feast_id);

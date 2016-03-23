@@ -14,27 +14,24 @@ class FeastRepository extends EntityRepository
     {
         $now = date('Y-m-d H:i:00');
         $q = $this->getEntityManager()->createQuery(
-                "SELECT f FROM BackendBundle:Feast f
-			WHERE f.date_from <= '$now' AND f.date_to >= '$now'"
+            "SELECT f FROM BackendBundle:Feast f WHERE f.date_from <= '$now' AND f.date_to >= '$now'"
         );
-
         $q->setMaxResults(1);
         try {
             return $q->getSingleResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
             
-            if($onlyCurrent)
+            if ($onlyCurrent)
                 return false;
 
             $q = $this->getEntityManager()->createQuery(
                 "SELECT f FROM BackendBundle:Feast f
                 WHERE f.date_to <= '$now'
                 ORDER BY f.date_to DESC"
-            );            
-            
+            );
             $q->setMaxResults(1);
-            
-            return $q->getSingleResult();
+
+            return $q->getOneOrNullResult();
         }
     }
     //
