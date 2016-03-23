@@ -1,11 +1,5 @@
-
-
 <table class="table table-striped">
     <tbody>
-        <tr>
-
-            <td colspan="2"><img class="img-responsive" src="{{asset(entity.getWebPath)}}" /></td>
-        </tr>
         <tr>
             <th>Id</th>
             <td>{{ entity.id }}</td>
@@ -19,9 +13,15 @@
             <td>{{ entity.getCodeName }}</td>
         </tr>
         <tr>
-            <th>Dance</th>
+            <th>Habilitado</th>
             <td>{{ entity.enabled }}</td>
         </tr>
-
+        {% if entity.path %}
+            <tr>
+                <td colspan="2" style="text-align:center;">
+                    <img src="{{asset('uploads/festivals/')}}{{ entity.feast.id }}/cartel/thumb1_{{ entity.path }}" alt="{{entity.path}}" title="{{entity.path}}"/>
+                </td>
+            </tr>
+        {% endif %}
     </tbody>
 </table>

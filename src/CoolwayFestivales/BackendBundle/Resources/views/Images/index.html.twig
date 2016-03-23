@@ -13,7 +13,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="{{path("admin_images")}}">Gestionar Gráficos</a>
+                <a href="{{path("admin_images")}}">Gestionar Carteles</a>
             </li>
         </ul>
     </div>
@@ -22,7 +22,7 @@
             <div class="portlet box blue-madison">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-picture-o"></i>Gestionar Gráficos
+                        <i class="fa fa-picture-o"></i>Gestionar Carteles
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -67,11 +67,13 @@
                                     <td >
                                         {{entity.id}}
                                     </td>
-
-                                    <td style="width: 12%;">
-                                        <img class="img-responsive" src="{{asset(entity.getWebPath)}}"/>
+                                    <td style="width:8%;text-align:center;">
+                                        {% if entity.path %}
+                                            <img src="{{asset('uploads/festivals/')}}{{ entity.feast.id }}/cartel/thumb2_{{ entity.path }}"/>
+                                        {% else %}
+                                            <img src="{{asset('images/sinimagen.jpg')}}" width="100"/>
+                                        {% endif %}
                                     </td>
-
                                     <td>
                                         {{entity.feast}}
                                     </td>
@@ -129,12 +131,10 @@
     </div>
 {%endblock%}
 
-
 {%block base_script%}
     {{parent()}}
 {%endblock%}
 {%block inline_script%}
-
     {{parent()}}
     <script>
         var columnas = new Array();
@@ -162,7 +162,6 @@
         var initTable1 = function () {
             var table = $('#sample_1');
 
-
             $.extend(true, $.fn.DataTable.TableTools.classes, {
                 "container": "btn-group tabletools-dropdown-on-portlet",
                 "buttons": {
@@ -173,7 +172,6 @@
                     "container": "DTTT_dropdown dropdown-menu tabletools-dropdown-menu"
                 }
             });
-
             var oTable = table.dataTable({
                 "order": [
                     [0, 'asc']
@@ -204,20 +202,16 @@
                         if (index > -1) {
                             columnas.splice(index, 1);
                         }
-
                     }
                 },
                 "language": {
                     "url": "{{asset('assets/js/i18n/Spanish.json')}}"
                 }
-
             });
-
             var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
 
             tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
         }
-
         initTable1();
 
         $("#modalDetail").on("show.bs.modal", function (e) {
@@ -228,7 +222,6 @@
             var link = "{{path("admin_images_edit")}}";
             $(this).find(".modal-content").load(link + "?id=" + columnas[0]);
         });
-
         $("#btndelete").on("click", function () {
             $.ajax({
                 url: "{{path("admin_images_batchdelete")}}",
@@ -242,9 +235,7 @@
                 }
                 else
                     toastr.error(data.message);
-
             });
         })
     </script>
 {%endblock%}
-

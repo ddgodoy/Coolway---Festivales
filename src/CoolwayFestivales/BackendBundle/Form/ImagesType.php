@@ -29,7 +29,7 @@ class ImagesType extends AbstractType
                     return $repository->createQueryBuilder('f')->where($this->filtro);
                 }
             ))
-            ->add('image', null, array('label' => 'Imagen', "required" => ""))
+            ->add('cartel', 'file', array('label' => 'Imagen', 'mapped' => false, 'required' => false))
             ->add('code_name', 'choice', array('choices' => array('plano' => 'Plano', 'background' => 'Background'), 'label' => 'Nombre de código'))
             ->add('enabled', null, array('label' => 'Habilitado'))
         ;
@@ -38,7 +38,8 @@ class ImagesType extends AbstractType
     /**
      * @param OptionsResolverInterface $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => 'CoolwayFestivales\BackendBundle\Entity\Images'
         ));
@@ -51,4 +52,4 @@ class ImagesType extends AbstractType
         return 'coolwayfestivales_backendbundle_images';
     }
 
-}
+} // end class

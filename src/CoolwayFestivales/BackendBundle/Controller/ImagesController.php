@@ -9,14 +9,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use CoolwayFestivales\BackendBundle\Form\ImagesType;
+use CoolwayFestivales\BackendBundle\Util\ResizeImage;
 
 /**
  * Images controller.
  *
  * @Route("/admin/images")
  */
-class ImagesController extends Controller {
-
+class ImagesController extends Controller
+{
     /**
      * Lists all Images entities.
      *
@@ -39,23 +40,23 @@ class ImagesController extends Controller {
         }
         return $this->render('BackendBundle:Images:index.html.twig', array("entities" => $entities));
     }
-
     /**
      * Lists all Images entities.
      *
      * @Route("/list", name="admin_images_list")
      * @Template()
      */
-    public function listAction() {
+    public function listAction()
+    {
         $this->_datatable();
         return $this->render('BackendBundle:Images:list.html.twig');
     }
-
     /**
      * set datatable configs
      * @return \CoolwayFestivales\DatatableBundle\Util\Datatable
      */
-    private function _datatable() {
+    private function _datatable()
+    {
         $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
         $qb->from("BackendBundle:Images", "entity")
                 ->orderBy("entity.id", "desc");
@@ -72,24 +73,23 @@ class ImagesController extends Controller {
         $datatable->getQueryBuilder()->setDoctrineQueryBuilder($qb);
         return $datatable;
     }
-
     /**
      * @Route("/admin_images_grid", name="admin_images_grid")
      * @Template()
      */
-    public function gridAction() {
+    public function gridAction()
+    {
         return $this->_datatable()->execute();
     }
-
     /**
      * @Route("/datatable", name="datatable_images")
      * @Template()
      */
-    public function datatableAction() {
+    public function datatableAction()
+    {
         $this->_datatable();
         return $this->render('BackendBundle:Images:index.html.twig');
     }
-
     /**
      * Crea una nueva images
      *
@@ -104,14 +104,16 @@ class ImagesController extends Controller {
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Images();
         $form = $this->createForm(new ImagesType($filtro), $entity);
         $form->bind($request);
+
         $result = array();
-
-
         $em = $this->getDoctrine()->getManager();
+
         try {
             $em->persist($entity);
             $em->flush();
 
+            // upload images if any
+            $this->handleImage($form->get('cartel')->getData(), $entity->getId(), $entity->getFeast()->getId());
             /*
               //Integración con las ACLs
               $user = $this->get('security.context')->getToken()->getUser();
@@ -119,18 +121,14 @@ class ImagesController extends Controller {
               $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
               //-----------------------------
              */
-
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
         } catch (\Exception $exc) {
             $result['success'] = false;
             $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
         }
-
-        echo json_encode($result);
-        die;
+        echo json_encode($result); die;
     }
-
     /**
      * Displays a form to create a new Images entity.
      *
@@ -151,7 +149,6 @@ class ImagesController extends Controller {
             'form' => $form->createView(),
         );
     }
-
     /**
      * Finds and displays a images entity.
      *
@@ -159,7 +156,8 @@ class ImagesController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function showAction() {
+    public function showAction()
+    {
         $id = $this->getRequest()->get("id");
         $em = $this->getDoctrine()->getManager();
 
@@ -168,7 +166,6 @@ class ImagesController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Images entity.');
         }
-
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -176,7 +173,6 @@ class ImagesController extends Controller {
             'delete_form' => $deleteForm->createView(),
         );
     }
-
     /**
      * Displays a form to edit an existing images entity.
      *
@@ -197,7 +193,6 @@ class ImagesController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find images entity.');
         }
-
         $editForm = $this->createForm(new ImagesType($filtro), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -207,7 +202,6 @@ class ImagesController extends Controller {
             'delete_form' => $deleteForm->createView(),
         );
     }
-
     /**
      * Edits an existing User entity.
      *
@@ -233,6 +227,10 @@ class ImagesController extends Controller {
             try {
                 $em->persist($entity);
                 $em->flush();
+
+                // upload images if any
+                $this->handleImage($editForm->get('cartel')->getData(), $entity->getId(), $entity->getFeast()->getId());
+
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
             } catch (\Exception $exc) {
@@ -240,20 +238,18 @@ class ImagesController extends Controller {
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
         } else {
-
             $result['success'] = false;
         }
-        echo json_encode($result);
-        die;
+        echo json_encode($result); die;
     }
-
     /**
      * Deletes a Images entity.
      *
      * @Route("/{id}", name="admin_images_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, $id) {
+    public function deleteAction(Request $request, $id)
+    {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -264,40 +260,33 @@ class ImagesController extends Controller {
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Images entity.');
             }
-
             $em->remove($entity);
             $em->flush();
         }
-
         return $this->redirect($this->generateUrl('admin_images'));
     }
-
     /**
      * Creates a form to delete a Images entity by id.
      *
      * @param mixed $id The entity id
-     *
      * @return Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id) {
-        return $this->createFormBuilder(array('id' => $id))
-                        ->add('id', 'hidden')
-                        ->getForm()
-        ;
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(array('id' => $id))->add('id', 'hidden')->getForm();
     }
-
     /**
      * Elimina a petición images entities.
      * dado un array de ids
      * @Route("/bachdelete", name="admin_images_batchdelete")
      * @Template()
      */
-    public function batchdeleteAction() {
+    public function batchdeleteAction()
+    {
         $peticion = $this->getRequest();
         $ids = $peticion->get("ids", 0, true);
         $ids = explode(",", $ids);
-
-        $em = $this->getDoctrine()->getManager();
+        $em  = $this->getDoctrine()->getManager();
 
         $repo_images = $this->getDoctrine()->getRepository('BackendBundle:Images');
 
@@ -311,25 +300,43 @@ class ImagesController extends Controller {
                 return new \Symfony\Component\HttpFoundation\Response($result);
             }
         }
-
         try {
             $em->flush();
             $response = array("success" => true, "message" => "Transacci&oacute;n realizada satisfactoriamente.");
         } catch (\Exception $e) {
             $response = array("success" => false, "message" => "No puede completar esta petición Error code: " . $e->getCode() . " Detalles:" . $e->getMessage());
         }
-
         $result = json_encode($response);
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
+    //
+    public function handleImage($cartel, $id, $feast_id)
+    {
+        if ($cartel)
+        {
+            $oR = new ResizeImage();
+            $em = $this->getDoctrine()->getManager();
+            $oCartel = $this->getDoctrine()->getRepository('BackendBundle:Images')->find($id);
 
-    /*
-     * ==================================== Funciones específicas ==================
-     */
+            if ($oCartel)
+            {
+                $dFestival = $this->get('kernel')->getRootDir().'/../web/uploads/festivals/';
+                if (!is_dir($dFestival)) { mkdir($dFestival, 0777); chmod($dFestival, 0777); }
 
+                $dId = $dFestival.$feast_id.'/';
+                if (!is_dir($dId)) { mkdir($dId, 0777); chmod($dId, 0777); }
+                if (!is_dir($dId.'cartel/')) { mkdir($dId.'cartel/', 0777); chmod($dId.'cartel/', 0777);}
+                //
+                $nm = $cartel->getClientOriginalName(); $oCartel->setPath($nm);
 
+                $cartel->move($dId.'cartel', $nm);
+                $oR->setSimple($nm, $nm, $dId.'cartel/', 1422, 2211, 0, 0, '', array('metodo' => 'full'));
+                $oR->setSimple($nm, 'thumb1_'.$nm, $dId.'cartel/', 300, 300, 0, 0, '', array('metodo' => 'full'));
+                $oR->setSimple($nm, 'thumb2_'.$nm, $dId.'cartel/', 100, 100, 0, 0, '', array('metodo' => 'full'));
 
-    /*
-     * =============================================================================
-     */
-}
+                $em->persist($oCartel); $em->flush();
+            }
+        }
+    }
+
+} //end class
