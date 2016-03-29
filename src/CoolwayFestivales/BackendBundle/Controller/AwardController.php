@@ -111,15 +111,12 @@ class AwardController extends Controller
         try {
             $em->persist($entity);
             $em->flush();
-
             /*
-              //Integración con las ACLs
+              Integración con las ACLs
               $user = $this->get('security.context')->getToken()->getUser();
               $provider = $this->get('Apptibase.acl_manager');
               $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
-              //-----------------------------
              */
-
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
         } catch (\Exception $exc) {
@@ -324,13 +321,4 @@ class AwardController extends Controller
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
 
-    /*
-     * ==================================== Funciones específicas ==================
-     */
-
-
-
-    /*
-     * =============================================================================
-     */
-}
+} // end class

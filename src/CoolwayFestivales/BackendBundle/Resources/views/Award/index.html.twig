@@ -15,33 +15,24 @@
                 <i class="fa fa-home"></i>
                 <a href="{{path("admin_dashboard")}}">Panel de control</a>
                 <i class="fa fa-angle-right"></i>
-
             </li>
             <li>
                 <a href="{{path("admin_award")}}">Gestionar Premios</a>
             </li>
-
         </ul>
-
     </div>
-
     <div class="row">
-
         <div class="col-md-12">
-
             <div class="portlet box blue-madison">
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="fa fa-magic"></i>Gestionar Premios
-
                     </div>
-
                 </div>
                 <div class="portlet-body">
                     <div class="table-toolbar">
                         <div class="row">
                             <div class="col-md-9">
-
                                 <a data-toggle="modal" data-target="#ajax" href="{{path("admin_award_new")}}" class=" btn green">
                                     Nuevo <i class="fa fa-plus"></i></a>
                                 <a data-toggle="modal" data-target="#modalEdit" href="javascript:void(0)" id="btnedit" class="btn blue" disabled="disabled">
@@ -50,11 +41,8 @@
                                     Eliminar <i class="fa fa-trash-o" ></i></button>
                                 <a data-toggle="modal" data-target="#modalDetail" id="btndetail" href="javascript:void(0)" class=" btn blue" disabled="disabled">
                                     Detalles <i class="fa fa-list"></i></a>
-
                             </div>
-                            <div class="col-md-6">
-
-                            </div>
+                            <div class="col-md-6"></div>
                         </div>
                     </div>
                     <table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -75,9 +63,6 @@
                                 <th>
                                     Habilitado
                                 </th>
-
-
-
                             </tr>
                         </thead>
                         <tbody>
@@ -99,18 +84,12 @@
                                     <td>
                                         {{entity.enabled}}
                                     </td>
-
-
                                 </tr>
-
                             {%endfor%}
-
-
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
     <div class="modal fade" id="ajax" role="basic" aria-hidden="true">

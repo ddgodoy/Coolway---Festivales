@@ -15,17 +15,28 @@ use CoolwayFestivales\BackendBundle\Form\TermsType;
  *
  * @Route("/admin/terms")
  */
-class TermsController extends Controller {
-
+class TermsController extends Controller
+{
     /**
      * Lists all Terms entities.
      *
      * @Route("/", name="admin_terms")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+        $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:Terms')->findAll();
+
+        if ($auth_checker->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Terms')->findAll();
+        } else {
+            $token = $this->get('security.token_storage')->getToken();
+            $user = $token->getUser();
+
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Terms')->findInFestival($user->getFeast()->getId());
+        }
         return $this->render('BackendBundle:Terms:index.html.twig', array("entities" => $entities));
     }
 
@@ -85,26 +96,26 @@ class TermsController extends Controller {
      * @Route("/create", name="admin_terms_create")
      * @Method("post")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Terms();
-        $form = $this->createForm(new TermsType(), $entity);
+        $form = $this->createForm(new TermsType($filtro), $entity);
         $form->bind($request);
         $result = array();
-
 
         $em = $this->getDoctrine()->getManager();
         try {
             $em->persist($entity);
             $em->flush();
-
             /*
-              //Integración con las ACLs
+              Integración con las ACLs
               $user = $this->get('security.context')->getToken()->getUser();
               $provider = $this->get('Apptibase.acl_manager');
               $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
-              //-----------------------------
              */
-
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
         } catch (\Exception $exc) {
@@ -123,9 +134,13 @@ class TermsController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Terms();
-        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\TermsType(), $entity);
+        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\TermsType($filtro), $entity);
 
         return array(
             'entity' => $entity,
@@ -165,7 +180,11 @@ class TermsController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function editAction() {
+    public function editAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
         $id = $this->getRequest()->get("id");
 
@@ -174,8 +193,7 @@ class TermsController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find stage entity.');
         }
-
-        $editForm = $this->createForm(new TermsType(), $entity);
+        $editForm = $this->createForm(new TermsType($filtro), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -191,7 +209,11 @@ class TermsController extends Controller {
      * @Route("/{id}", name="admin_terms_update")
      * @Method("PUT")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BackendBundle:Terms')->find($id);
@@ -200,7 +222,7 @@ class TermsController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Stage entity.');
         }
-        $editForm = $this->createForm(new TermsType(), $entity);
+        $editForm = $this->createForm(new TermsType($filtro), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
@@ -285,7 +307,6 @@ class TermsController extends Controller {
                 return new \Symfony\Component\HttpFoundation\Response($result);
             }
         }
-
         try {
             $em->flush();
             $response = array("success" => true, "message" => "Transacci&oacute;n realizada satisfactoriamente.");
@@ -297,13 +318,4 @@ class TermsController extends Controller {
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
 
-    /*
-     * ==================================== Funciones específicas ==================
-     */
-
-
-
-    /*
-     * =============================================================================
-     */
-}
+} // end class

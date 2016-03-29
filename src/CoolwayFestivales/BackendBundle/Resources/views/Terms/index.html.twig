@@ -51,6 +51,9 @@
                                 <th>
                                     Nombre
                                 </th>
+                                <th>
+                                    Festival
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,13 +65,11 @@
                                     <td>
                                         {{entity.name}}
                                     </td>
-
-
+                                    <td>
+                                        {{entity.feast}}
+                                    </td>
                                 </tr>
-
                             {%endfor%}
-
-
                         </tbody>
                     </table>
                 </div>
@@ -115,7 +116,6 @@
         </div>
     </div>
 {%endblock%}
-
 
 {%block base_script%}
     {{parent()}}
@@ -234,4 +234,3 @@
         })
     </script>
 {%endblock%}
-

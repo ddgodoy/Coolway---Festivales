@@ -26,6 +26,11 @@ class Terms {
     private $id;
 
     /**
+     * @ManyToOne(targetEntity="Feast", fetch="EAGER")
+     */
+    private $feast;
+
+    /**
      * @var name
      *
      * @ORM\Column(name="name", type="string")
@@ -39,9 +44,7 @@ class Terms {
      */
     private $text;
 
-    public function __construct() {
-
-    }
+    public function __construct() {}
 
     /**
      * Get id
@@ -53,10 +56,31 @@ class Terms {
     }
 
     /**
+     * Set feast
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\Feast $feast
+     * @return Terms
+     */
+    public function setFeast(\CoolwayFestivales\BackendBundle\Entity\Feast $feast = null) {
+        $this->feast = $feast;
+
+        return $this;
+    }
+
+    /**
+     * Get feast
+     *
+     * @return \CoolwayFestivales\BackendBundle\Entity\Feast
+     */
+    public function getFeast() {
+        return $this->feast;
+    }
+
+    /**
      * Set name
      *
      * @param string $name
-     * @return Step
+     * @return Terms
      */
     public function setName($name) {
         $this->name = $name;
@@ -78,7 +102,7 @@ class Terms {
      * Set text
      *
      * @param string $text
-     * @return Step
+     * @return Terms
      */
     public function setText($text) {
         $this->text = $text;
@@ -95,4 +119,4 @@ class Terms {
         return $this->text;
     }
 
-}
+} // end class

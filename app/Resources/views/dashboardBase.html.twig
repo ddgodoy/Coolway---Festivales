@@ -186,6 +186,11 @@
                                             Concurso</a>
                                     </li>
                                     <li class="active">
+                                        <a href="{{path("admin_terms")}}">
+                                            <i class="icon-book-open"></i>
+                                            Términos y Condiciones</a>
+                                    </li>
+                                    <li class="active">
                                         <a style="background-color:#CCC !important;color:#4e5b6c;">Sistema</a>
                                     </li>
                                     {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -199,11 +204,6 @@
                                         <a href="{{path("admin_notification")}}">
                                             <i class="icon-envelope"></i>
                                             Notificaciones</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="{{path("admin_terms")}}">
-                                            <i class="icon-book-open"></i>
-                                            Términos y Condiciones</a>
                                     </li>
                                 {% endif %}
                             </ul>
