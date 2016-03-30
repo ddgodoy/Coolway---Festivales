@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints\DateTime;
 use CoolwayFestivales\SafetyBundle\Entity\User;
+use CoolwayFestivales\BackendBundle\Entity\Notification;
 use CoolwayFestivales\BackendBundle\Entity\UserFavorites;
 use CoolwayFestivales\BackendBundle\Entity\ArtistFavorites;
 use CoolwayFestivales\BackendBundle\Entity\UserFeastData;
@@ -636,18 +637,16 @@ class ApiController extends Controller {
      */
     public function notificationSendAction()
     {
-        $users =  $this->getDoctrine()->getRepository('SafetyBundle:User')->findNotification();
-
         $ids = array(
-            'Android'=>array(),
-            'IOS'=>array()
+            'Android'=> array(),
+            'IOS'    => array()
         );
+        $users = $this->getDoctrine()->getRepository('SafetyBundle:User')->findNotification();
 
         foreach($users as $u)
         {
-            $ids[$u->getOs()][]= $u->getNotificationId();
+            $ids[$u->getOs()][] = $u->getNotificationId();
         }
-
         if(!count($ids['Android']) && !count($ids['IOS']) )
             die("not user to send");
 
@@ -656,14 +655,12 @@ class ApiController extends Controller {
 
         foreach($notification_list as $n)
         {
-
             $this->send($n->getName(),$n->getText(),$ids);
 
             $n->setSend(1);
             $em->persist($n);
         }
         $em->flush();
-
         die();
     }
 
@@ -818,26 +815,23 @@ class ApiController extends Controller {
                 $this->send($title,$message,$recipients);
             }
         }
-
         die();
-
     }
-
-    private function send($title,$message,$recipients) { 
+    //
+    private function send($title, $message, $recipients)
+    {
         $url = 'https://android.googleapis.com/gcm/send';
         $fields = array(
             "data"=>array(
-                'title'=>$title,
-                'message'=>$message,
+                'title'   => $title,
+                'message' => $message,
             ),
-            "registration_ids"=>$recipients['Android']
+            "registration_ids" => $recipients['Android']
         );
-
         $headers = array( 
             'Authorization: key=AIzaSyCFpBmNym9kaRPoUA-ZKogSk-QZzvLhlfc',
             'Content-Type: application/json'
         );
-        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url); 
         curl_setopt($ch, CURLOPT_POST, true); 
@@ -857,12 +851,11 @@ class ApiController extends Controller {
                 'sound' => 'bingbong.aiff'
             )
         );
-
         $payload = json_encode($fields);
-
         $passphrase = 'iY88bR62';
 
-        foreach( $recipients['IOS'] as $deviceToken ) {
+        foreach ($recipients['IOS'] as $deviceToken)
+        {
             $ctx = stream_context_create();
             stream_context_set_option($ctx, 'ssl', 'local_cert', $this->container->getParameter('kernel.root_dir').'/../mobile/certs/aps_production.pem');
             stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
@@ -870,21 +863,18 @@ class ApiController extends Controller {
                 'ssl://gateway.push.apple.com:2195', $err,
                 $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx
             );
-     
             if (!$fp) {
-                echo "Error de conexión with apple";
+                echo "Connection error with Apple";
             }
-
             $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
             $result = fwrite($fp, $msg, strlen($msg));
             fclose($fp);
         }
-        
         return true;
     }
-
-    private function checkToken($data, $create = false) {
-    	
+    //
+    private function checkToken($data, $create = false)
+    {
     	if (isset($data['token']) && $token = $data['token'])
     	{
     		$em = $this->getDoctrine()->getManager();
@@ -925,8 +915,9 @@ class ApiController extends Controller {
     	}
     	return false;
     }
-
-    private function checkInConcert($userLatitude,$userLongitude,$feastLatitude,$feastLongitude,$feastDateFrom,$feastDateTo ) {
+    //
+    private function checkInConcert($userLatitude,$userLongitude,$feastLatitude,$feastLongitude,$feastDateFrom,$feastDateTo)
+    {
         //$now = date('Y-m-d H:i:00');
         $now = mktime(date('H'),date('i'),00,date('m'),date('d'),date('Y'));
         $from = mktime($feastDateFrom->format('H'),$feastDateFrom->format('i'),00,$feastDateFrom->format('m'),$feastDateFrom->format('d'),$feastDateFrom->format('Y'));
@@ -945,8 +936,9 @@ class ApiController extends Controller {
         }
         return false;
     }
-
-    private function getData() {
+    //
+    private function getData()
+    {
         $request = $this->getRequest();
         $data = json_decode($request->getContent(),true);
 
@@ -963,7 +955,7 @@ class ApiController extends Controller {
         */
         return $data;
     }
-
+    //
     private function setResponse($data)
     {
     	$response = new JsonResponse();
@@ -971,6 +963,36 @@ class ApiController extends Controller {
 		$response->headers->set('Access-Control-Allow-Origin', '*');
 		$response->setData($data);
 		return $response;
+    }
+    /**
+     * Send to this notification
+     *
+     * @Route("/notification/sendToThisOne", name="api_notification_send_tothisone")
+     */
+    public function sendToThisNotificationAction($noti_id, $feast_id)
+    {
+        $ids = array(
+            'Android'=> array(),
+            'IOS'    => array()
+        );
+        $notif = $this->getDoctrine()->getRepository('BackendBundle:Notification')->find($noti_id);
+        $users = $this->getDoctrine()->getRepository('SafetyBundle:User')->findUsersInFestival($feast_id);
+
+        foreach($users as $u) {
+            $ids[$u->getOs()][] = $u->getNotificationId();
+        }
+        if (!count($ids['Android']) && !count($ids['IOS'])) {
+            die();
+        }
+        if ($notif) {
+            $em = $this->getDoctrine()->getManager();
+            $this->send($notif->getName(), $notif->getText(), $ids);
+
+            $notif->setSend(1);
+            $em->persist($notif);
+            $em->flush();
+        }
+        die();
     }
 
 /************************************************* REMOVE **********************************************/
@@ -1143,4 +1165,4 @@ class ApiController extends Controller {
         return $this->setResponse($data);
     }
 
-}
+} // end class

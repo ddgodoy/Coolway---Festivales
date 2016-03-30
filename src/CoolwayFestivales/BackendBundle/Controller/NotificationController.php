@@ -3,6 +3,7 @@
 namespace CoolwayFestivales\BackendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -11,21 +12,49 @@ use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use CoolwayFestivales\BackendBundle\Form\NotificationType;
 
 /**
- * Terms controller.
+ * Notification controller.
  *
  * @Route("/admin/notification")
  */
-class NotificationController extends Controller {
-
+class NotificationController extends Controller
+{
     /**
      * Lists all Terms entities.
      *
      * @Route("/", name="admin_notification")
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction()
+    {
+
+/*
+        $users = $this->getDoctrine()->getRepository('SafetyBundle:User')->findUsersInFestival);
+
+        foreach($users as $u) {
+            $ids[$u->getOs()][] = $u->getNotificationId();
+        }
+*/
+
+
+
+
+
+
+
+
+
+        $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('BackendBundle:Notification')->findAll();
+
+        if ($auth_checker->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Notification')->findAll();
+        } else {
+            $token = $this->get('security.token_storage')->getToken();
+            $user = $token->getUser();
+
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Notification')->findInFestival($user->getFeast()->getId());
+        }
         return $this->render('BackendBundle:Notification:index.html.twig', array("entities" => $entities));
     }
 
@@ -85,33 +114,32 @@ class NotificationController extends Controller {
      * @Route("/create", name="admin_notification_create")
      * @Method("post")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Notification();
-        $form = $this->createForm(new NotificationType(), $entity);
+        $form = $this->createForm(new NotificationType($filtro), $entity);
         $form->bind($request);
         $result = array();
-
 
         $em = $this->getDoctrine()->getManager();
         try {
             $em->persist($entity);
             $em->flush();
-
             /*
-              //Integración con las ACLs
+              Integración con las ACLs
               $user = $this->get('security.context')->getToken()->getUser();
               $provider = $this->get('Apptibase.acl_manager');
               $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
-              //-----------------------------
              */
-
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
         } catch (\Exception $exc) {
             $result['success'] = false;
             $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
         }
-
         echo json_encode($result);
         die;
     }
@@ -123,9 +151,13 @@ class NotificationController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function newAction() {
+    public function newAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Notification();
-        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\NotificationType(), $entity);
+        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\NotificationType($filtro), $entity);
 
         return array(
             'entity' => $entity,
@@ -149,7 +181,6 @@ class NotificationController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Stage entity.');
         }
-
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -159,13 +190,50 @@ class NotificationController extends Controller {
     }
 
     /**
+     * @Route("/toSend", name="admin_notification_tosend")
+     * @Method("GET")
+     * @Template()
+     */
+    public function notificationToSendAction(Request $request)
+    {
+        $id = $this->getRequest()->get("id");
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('BackendBundle:Notification')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find entity.');
+        }
+        return array('entity' => $entity);
+    }
+
+    /**
+     * @Route("/runSend", name="admin_notification_runsend")
+     * @Method("POST")
+     */
+    public function notificationRunSendAction(Request $request)
+    {
+        $id = $request->request->get('id', '');
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('BackendBundle:Notification')->find($id);
+
+        if ($entity) {
+            $this->forward('BackendBundle:Api:sendToThisNotification', array('noti_id' => $id, 'feast_id' => $entity->getFeast()->getId()));
+        }
+        return new Response('ok');
+    }
+
+    /**
      * Displays a form to edit an existing stage entity.
      *
      * @Route("/edit", name="admin_notification_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction() {
+    public function editAction()
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
         $id = $this->getRequest()->get("id");
 
@@ -175,7 +243,7 @@ class NotificationController extends Controller {
             throw $this->createNotFoundException('Unable to find stage entity.');
         }
 
-        $editForm = $this->createForm(new NotificationType(), $entity);
+        $editForm = $this->createForm(new NotificationType($filtro), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -191,16 +259,19 @@ class NotificationController extends Controller {
      * @Route("/{id}", name="admin_notification_update")
      * @Method("PUT")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id)
+    {
+        $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
+            $this->get('security.authorization_checker'), $this->get('security.token_storage')
+        );
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('BackendBundle:Notification')->find($id);
         $result = array();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Stage entity.');
         }
-        $editForm = $this->createForm(new NotificationType(), $entity);
+        $editForm = $this->createForm(new NotificationType($filtro), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
@@ -214,7 +285,6 @@ class NotificationController extends Controller {
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
         } else {
-
             $result['success'] = false;
         }
         echo json_encode($result);
@@ -297,13 +367,4 @@ class NotificationController extends Controller {
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
 
-    /*
-     * ==================================== Funciones específicas ==================
-     */
-
-
-
-    /*
-     * =============================================================================
-     */
-}
+} // end class

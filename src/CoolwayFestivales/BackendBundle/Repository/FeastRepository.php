@@ -53,5 +53,4 @@ class FeastRepository extends EntityRepository
         $q->execute();
     }
 
-
 } // end class

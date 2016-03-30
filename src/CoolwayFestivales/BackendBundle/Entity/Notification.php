@@ -33,6 +33,11 @@ class Notification {
     private $name;
 
     /**
+     * @ManyToOne(targetEntity="Feast", fetch="EAGER")
+     */
+    private $feast;
+
+    /**
      * @var text
      *
      * @ORM\Column(name="text", type="text")
@@ -45,6 +50,18 @@ class Notification {
      * @ORM\Column(name="send", type="boolean")
      */
     private $send;
+
+    /**
+     * @var \Date
+     * @ORM\Column(name="date_cron", type="date",  nullable=true)
+     */
+    private $date;
+
+    /**
+     * @var string $time
+     * @ORM\Column(name="time_cron", type="time",  nullable=true)
+     */
+    private $time;
 
     public function __construct() {
         $this->send = 0;
@@ -63,7 +80,7 @@ class Notification {
      * Set name
      *
      * @param string $name
-     * @return Step
+     * @return Notification
      */
     public function setName($name) {
         $this->name = $name;
@@ -80,12 +97,74 @@ class Notification {
         return $this->name;
     }
 
+    /**
+     * Set date
+     *
+     * @param \Date $date
+     * @return Notification
+     */
+    public function setDate($date) {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \Date
+     */
+    public function getDate() {
+        return $this->date;
+    }
+
+    /**
+     * Set time
+     *
+     * @param \DateTime $time
+     * @return Notification
+     */
+    public function setTime($time) {
+        $this->time = $time;
+
+        return $this;
+    }
+
+    /**
+     * Get time
+     *
+     * @return \DateTime
+     */
+    public function getTime() {
+        return $this->time;
+    }
+
+    /**
+     * Set feast
+     *
+     * @param \CoolwayFestivales\BackendBundle\Entity\Feast $feast
+     * @return Notification
+     */
+    public function setFeast(\CoolwayFestivales\BackendBundle\Entity\Feast $feast = null) {
+        $this->feast = $feast;
+
+        return $this;
+    }
+
+    /**
+     * Get feast
+     *
+     * @return \CoolwayFestivales\BackendBundle\Entity\Feast
+     */
+    public function getFeast() {
+        return $this->feast;
+    }
 
     /**
      * Set text
      *
      * @param string $text
-     * @return Step
+     * @return Notification
      */
     public function setText($text) {
         $this->text = $text;
@@ -106,7 +185,7 @@ class Notification {
      * Set send
      *
      * @param boolean $send
-     * @return Award
+     * @return Notification
      */
     public function setSend($send) {
         $this->send = $send;
@@ -123,4 +202,4 @@ class Notification {
         return $this->send;
     }
 
-}
+} // end class

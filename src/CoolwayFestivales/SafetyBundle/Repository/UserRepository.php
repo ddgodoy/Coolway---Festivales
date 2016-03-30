@@ -94,13 +94,13 @@ class UserRepository extends EntityRepository implements ContainerAwareInterface
             return 0;
         }
     }
-
-    public function findNotification() {
+    //
+    public function findNotification()
+    {
         $q = $this->getEntityManager()->createQuery(
             "SELECT u FROM SafetyBundle:User u
             WHERE u.notificationId != 'NULL'"
         );
-        
         return $q->getResult();
     }
     //
@@ -108,6 +108,14 @@ class UserRepository extends EntityRepository implements ContainerAwareInterface
     {
         $q = $this->getEntityManager()->createQuery("SELECT u FROM SafetyBundle:User u WHERE u.username != 'admin'");
 
+        return $q->getResult();
+    }
+    //
+    public function findUsersInFestival($feast_id)
+    {
+        $q = $this->getEntityManager()->createQuery(
+            "SELECT u FROM SafetyBundle:User u WHERE u.feast = $feast_id"
+        );
         return $q->getResult();
     }
 
