@@ -19,8 +19,9 @@ class FeastRepository extends EntityRepository
         $q->setMaxResults(1);
         try {
             return $q->getSingleResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
-            
+        }
+        catch (\Doctrine\ORM\NoResultException $e)
+        {
             if ($onlyCurrent)
                 return false;
 

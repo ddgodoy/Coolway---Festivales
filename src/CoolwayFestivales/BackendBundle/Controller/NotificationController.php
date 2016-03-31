@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use CoolwayFestivales\BackendBundle\Form\NotificationType;
+use CoolwayFestivales\SafetyBundle\Entity\User;
 
 /**
  * Notification controller.
@@ -26,23 +27,6 @@ class NotificationController extends Controller
      */
     public function indexAction()
     {
-
-/*
-        $users = $this->getDoctrine()->getRepository('SafetyBundle:User')->findUsersInFestival);
-
-        foreach($users as $u) {
-            $ids[$u->getOs()][] = $u->getNotificationId();
-        }
-*/
-
-
-
-
-
-
-
-
-
         $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
 
@@ -190,39 +174,6 @@ class NotificationController extends Controller
     }
 
     /**
-     * @Route("/toSend", name="admin_notification_tosend")
-     * @Method("GET")
-     * @Template()
-     */
-    public function notificationToSendAction(Request $request)
-    {
-        $id = $this->getRequest()->get("id");
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('BackendBundle:Notification')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find entity.');
-        }
-        return array('entity' => $entity);
-    }
-
-    /**
-     * @Route("/runSend", name="admin_notification_runsend")
-     * @Method("POST")
-     */
-    public function notificationRunSendAction(Request $request)
-    {
-        $id = $request->request->get('id', '');
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('BackendBundle:Notification')->find($id);
-
-        if ($entity) {
-            $this->forward('BackendBundle:Api:sendToThisNotification', array('noti_id' => $id, 'feast_id' => $entity->getFeast()->getId()));
-        }
-        return new Response('ok');
-    }
-
-    /**
      * Displays a form to edit an existing stage entity.
      *
      * @Route("/edit", name="admin_notification_edit")
@@ -365,6 +316,40 @@ class NotificationController extends Controller
 
         $result = json_encode($response);
         return new \Symfony\Component\HttpFoundation\Response($result);
+    }
+
+    /**
+     * @Route("/toSend", name="admin_notification_tosend")
+     * @Method("GET")
+     * @Template()
+     */
+    public function notificationToSendAction(Request $request)
+    {
+        $id = $this->getRequest()->get("id");
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('BackendBundle:Notification')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find entity.');
+        }
+        return array('entity' => $entity);
+    }
+
+    /**
+     * @Route("/runSend", name="admin_notification_runsend")
+     * @Method("POST")
+     */
+    public function notificationRunSendAction(Request $request)
+    {
+        $id = $request->request->get('id', '');
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('BackendBundle:Notification')->find($id);
+
+        if ($entity)
+        {
+            $em->getRepository('BackendBundle:Notification')->sendToMobile($id, $entity, $this->container->getParameter('kernel.root_dir'));
+        }
+        return new Response('ok');
     }
 
 } // end class

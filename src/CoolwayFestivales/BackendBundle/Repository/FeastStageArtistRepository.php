@@ -42,10 +42,9 @@ class FeastStageArtistRepository extends EntityRepository
 	public function findNextArtist()
 	{
 		$time_from = date('H:i:00');
-                $time_to = date('H:i:00',strtotime("+15 minutes"));
+		$time_to = date('H:i:00',strtotime("+15 minutes"));
 		$date = date('Y-m-d 00:00:00');
-		//$date= '2015-04-29';
-		//$time = '20:00:00';
+
 		$q = $this->getEntityManager()->createQuery(
 			"SELECT a.id as id, a.name as artist, s.name as stage FROM BackendBundle:FeastStageArtist fsa
 			LEFT JOIN BackendBundle:Artist a WITH fsa.artist = a.id
@@ -62,4 +61,5 @@ class FeastStageArtistRepository extends EntityRepository
 			return false;
 		}
 	}
-}
+
+} // end class
