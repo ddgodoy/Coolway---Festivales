@@ -1,112 +1,52 @@
 <?php
-//
-//namespace CoolwayFestivales\ApiBundle\Controller;
-//
-//use CoolwayFestivales\SafetyBundle\Entity\User;
-//use FOS\RestBundle\Controller\Annotations;
-//use FOS\RestBundle\Controller\FOSRestController;
-//use FOS\RestBundle\Routing\ClassResourceInterface;
-//use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-//use Symfony\Component\HttpFoundation\Request;
-//
-//
-//class ScheduleController extends FOSRestController implements ClassResourceInterface
-//{
-//
-//    /**
-//     * @param Request $request
-//     * @return array
-//     *
-//     * @ApiDoc(
-//     *  section="Customer",
-//     *  description="Login customer",
-//     *  requirements={
-//     *      {"name"="email", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Email Address"},
-//     *      {"name"="password", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Password"},
-//     *   },
-//     *  statusCodes={
-//     *         200="Returned when successful"
-//     *  },
-//     *  tags={
-//     *   "stable" = "#4A7023",
-//     *   "v1" = "#ff0000"
-//     *  }
-//     * )
-//     */
-//    public function getAction(Request $request)
-//    {
-//        $email = $request->get('email');
-//        $password = $request->get('password');
-//        $social = $request->get('social', false);
-//        $em = $this->getDoctrine()->getManager();
-//
-//        $user = $em->getRepository('SafetyBundle:User')
-//            ->findOneBy(array('email' => $email));
-//
-//        if ($user) {
-//            $encoder = $this->get('security.encoder_factory')->getEncoder($user);
-//            $passwordEncoded = $encoder->encodePassword($password, $user->getSalt());
-//
-//            if ($passwordEncoded === $user->getPassword() || $social) {
-//                $user->setAccessToken(md5($user->getId() . '-' . date('Y-m-d-H-i-s')));
-//                $em->persist($user);
-//                $em->flush();
-//
-//                $response = array(
-//                    'success' => true,
-//                    'access_token' => $user->getAccessToken(),
-//                    'email' => $user->getEmail());
-//            } else {
-//                $response = array(
-//                    'success' => false,
-//                    'message' => 'invalid data'
-//                );
-//            }
-//
-//        } else {
-//            if ($social) {
-//                $userManager = $this->get('fos_user.user_manager');
-//                $user = $userManager->createUser();
-//
-//                $user->setPlainPassword($password);
-//                $user->addRole("ROLE_USER_APP");
-//                $user->setUsername($email);
-//                $user->setEmail($email);
-//                $user->setEnabled(true);
-//                $user->setFirstLogin(true);
-//
-//                $userManager->updateUser($user);
-//
-//                $user->setAccessToken(md5($user->getId() . '-' . date('Y-m-d-H-i-s')));
-//
-//                $userManager->updateUser($user);
-//
-//                $pf = new ProfessionalProfile();
-//                $pf->setUser($user);
-//                $pf->setDisponibilidad("a negociar");
-//                $pf->setDescription("agrega una descripción");
-//                $pf->setInteres(0);
-//
-//                $em->persist($pf);
-//                $em->flush();
-//
-//                $response['success'] = true;
-//                $response['access_token'] = $user->getAccessToken();
-//                $response['email'] = $user->getEmail();
-//                $response['cv'] = '0';
-//                $response['image'] = false;
-//                $response['complete'] = 0;
-//
-//            } else {
-//                $response = array(
-//                    'success' => false,
-//                    'message' => 'Datos Incorrectos'
-//                );
-//            }
-//        }
-//
-//        return $response;
-//    }
+
+namespace CoolwayFestivales\ApiBundle\Controller;
+
+use CoolwayFestivales\SafetyBundle\Entity\User;
+use FOS\RestBundle\Controller\Annotations;
+use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Request;
+
+
+class ArtistController extends FOSRestController implements ClassResourceInterface
+{
+
+    /**
+     * @param Request $request
+     * @return array
+     *
+     * @ApiDoc(
+     *  section="Artist",
+     *  description="List Artist",
+     *  requirements={
+     *      {"name"="festival_id", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Festival Identifier"},
+     *   },
+     *  statusCodes={
+     *         200="Returned when successful"
+     *  },
+     *  tags={
+     *   "stable" = "#4A7023",
+     *   "v1" = "#ff0000"
+     *  }
+     * )
+     */
+    public function getAction(Request $request)
+    {
+        $response = array();
+        $em = $this->getDoctrine()->getManager();
+        $festivalId = $request->get('festival_id');
+
+        $artists = $em->getRepository("BackendBundle:Artist")->findBy("ROLE_CUSTOMER");
+
+        $response = array(
+            'success' => false,
+            'message' => 'invalid data'
+        );
+
+        return $response;
+    }
 //
 //    /**
 //     * @param Request $request
@@ -243,8 +183,8 @@
 //        return $response;
 //
 //    }
-//
-//
-//
-//
-//}
+
+
+
+
+}

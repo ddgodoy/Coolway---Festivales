@@ -1,3 +1,7 @@
 api_customer:
     type: rest
     resource: CoolwayFestivalesApiBundle:Customer
+
+api_artist:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Artist
