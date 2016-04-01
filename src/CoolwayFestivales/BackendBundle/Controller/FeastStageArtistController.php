@@ -114,18 +114,19 @@ class FeastStageArtistController extends Controller {
         try {
             $em->persist($entity);
             $em->flush();
-
             /*
-              //Integración con las ACLs
+              Integración con las ACLs
               $user = $this->get('security.context')->getToken()->getUser();
               $provider = $this->get('Apptibase.acl_manager');
               $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
-              //-----------------------------
-             */
-
+            */
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
-        } catch (\Exception $exc) {
+            //
+            $feast_id = $entity->getFeastStage()->getFeast()->getId();
+            $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($feast_id);
+        }
+        catch (\Exception $exc) {
             $result['success'] = false;
             $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
         }
@@ -238,13 +239,18 @@ class FeastStageArtistController extends Controller {
         $editForm = $this->createForm(new FeastStageArtistType($filtro, $artistas), $entity);
         $editForm->bind($request);
 
-        if ($editForm->isValid()) {
+        if ($editForm->isValid())
+        {
             try {
                 $em->persist($entity);
                 $em->flush();
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
-            } catch (\Exception $exc) {
+
+                $feast_id = $entity->getFeastStage()->getFeast()->getId();
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($feast_id);
+            }
+            catch (\Exception $exc) {
                 $result['success'] = false;
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
@@ -262,7 +268,8 @@ class FeastStageArtistController extends Controller {
      * @Route("/{id}", name="admin_feaststageartist_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, $id) {
+    public function deleteAction(Request $request, $id)
+    {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -273,11 +280,9 @@ class FeastStageArtistController extends Controller {
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find FeastStageArtist entity.');
             }
-
             $em->remove($entity);
             $em->flush();
         }
-
         return $this->redirect($this->generateUrl('admin_feaststageartist'));
     }
 
@@ -301,7 +306,8 @@ class FeastStageArtistController extends Controller {
      * @Route("/bachdelete", name="admin_feaststageartist_batchdelete")
      * @Template()
      */
-    public function batchdeleteAction() {
+    public function batchdeleteAction()
+    {
         $peticion = $this->getRequest();
         $ids = $peticion->get("ids", 0, true);
         $ids = explode(",", $ids);
@@ -314,7 +320,11 @@ class FeastStageArtistController extends Controller {
             $entity = $repo_feaststageartist->find($id);
             try {
                 $em->remove($entity);
-            } catch (\Exception $e) {
+                //
+                $feast_id = $entity->getFeastStage()->getFeast()->getId();
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($feast_id);
+            }
+            catch (\Exception $e) {
                 $response = array("success" => false, "message" => "no se puede eliminar este feaststageartisto");
                 $result = json_encode($response);
                 return new \Symfony\Component\HttpFoundation\Response($result);

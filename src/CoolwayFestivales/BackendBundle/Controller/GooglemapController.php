@@ -70,6 +70,8 @@ class GooglemapController extends Controller
             $this->getDoctrine()->getRepository('BackendBundle:Feast')->updateMapFeastValues(
                 $cFestival, $cLatitud, $cLongitud, $cImage
             );
+            //
+            $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($cFestival);
         } else {
             if ($festivales)
             {

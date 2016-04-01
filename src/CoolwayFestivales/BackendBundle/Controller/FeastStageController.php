@@ -109,6 +109,8 @@ class FeastStageController extends Controller {
 
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
+            //
+            $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($feast_id);
         } else {
             $result['success'] = false;
             $result['errores'] = array('causa' => 'e_interno', 'mensaje' => 'los valores no pueden ser nulos');
@@ -183,7 +185,6 @@ class FeastStageController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find feaststage entity.');
         }
-
         $editForm = $this->createForm(new FeastStageType($filtro, 'editar'), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -221,12 +222,13 @@ class FeastStageController extends Controller {
                 $em->flush();
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
+
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($entity->getFeast()->getId());
             } catch (\Exception $exc) {
                 $result['success'] = false;
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
         } else {
-
             $result['success'] = false;
         }
         echo json_encode($result);
@@ -239,7 +241,8 @@ class FeastStageController extends Controller {
      * @Route("/{id}", name="admin_feaststage_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, $id) {
+    public function deleteAction(Request $request, $id)
+    {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -250,11 +253,9 @@ class FeastStageController extends Controller {
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find FeastStage entity.');
             }
-
             $em->remove($entity);
             $em->flush();
         }
-
         return $this->redirect($this->generateUrl('admin_feaststage'));
     }
 
@@ -278,44 +279,39 @@ class FeastStageController extends Controller {
      * @Route("/bachdelete", name="admin_feaststage_batchdelete")
      * @Template()
      */
-    public function batchdeleteAction() {
+    public function batchdeleteAction()
+    {
         $peticion = $this->getRequest();
         $ids = $peticion->get("ids", 0, true);
         $ids = explode(",", $ids);
-
-        $em = $this->getDoctrine()->getManager();
+        $em  = $this->getDoctrine()->getManager();
 
         $repo_feaststage = $this->getDoctrine()->getRepository('BackendBundle:FeastStage');
 
-        foreach ($ids as $id) {
+        foreach ($ids as $id)
+        {
             $entity = $repo_feaststage->find($id);
+            $feastI = $entity->getFeast()->getId();
             try {
                 $em->remove($entity);
-            } catch (\Exception $e) {
+                //
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($feastI);
+            }
+            catch (\Exception $e) {
                 $response = array("success" => false, "message" => "no se puede eliminar este feaststageo");
                 $result = json_encode($response);
                 return new \Symfony\Component\HttpFoundation\Response($result);
             }
         }
-
         try {
             $em->flush();
             $response = array("success" => true, "message" => "Transacci&oacute;n realizada satisfactoriamente.");
         } catch (\Exception $e) {
             $response = array("success" => false, "message" => "No puede completar esta petición Error code: " . $e->getCode() . " Detalles:" . $e->getMessage());
         }
-
         $result = json_encode($response);
+
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
 
-    /*
-     * ==================================== Funciones específicas ==================
-     */
-
-
-
-    /*
-     * =============================================================================
-     */
-}
+} // end class

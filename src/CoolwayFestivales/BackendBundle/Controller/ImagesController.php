@@ -123,7 +123,10 @@ class ImagesController extends Controller
              */
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
-        } catch (\Exception $exc) {
+            //
+            $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($entity->getFeast()->getId());
+        }
+        catch (\Exception $exc) {
             $result['success'] = false;
             $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
         }
@@ -233,7 +236,10 @@ class ImagesController extends Controller
 
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
-            } catch (\Exception $exc) {
+                //
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($entity->getFeast()->getId());
+            }
+            catch (\Exception $exc) {
                 $result['success'] = false;
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
@@ -290,11 +296,15 @@ class ImagesController extends Controller
 
         $repo_images = $this->getDoctrine()->getRepository('BackendBundle:Images');
 
-        foreach ($ids as $id) {
+        foreach ($ids as $id)
+        {
             $entity = $repo_images->find($id);
             try {
                 $em->remove($entity);
-            } catch (\Exception $e) {
+
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($entity->getFeast()->getId());
+            }
+            catch (\Exception $e) {
                 $response = array("success" => false, "message" => "no se puede eliminar este imageso");
                 $result = json_encode($response);
                 return new \Symfony\Component\HttpFoundation\Response($result);

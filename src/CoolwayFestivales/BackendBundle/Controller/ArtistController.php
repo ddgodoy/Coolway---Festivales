@@ -111,7 +111,10 @@ class ArtistController extends Controller
 
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
-        } catch (\Exception $exc) {
+            //
+            $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateForAllFestivals();
+        }
+        catch (\Exception $exc) {
             $result['success'] = false;
             $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
         }
@@ -208,7 +211,10 @@ class ArtistController extends Controller
 
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
-            } catch (\Exception $exc) {
+                //
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateForAllFestivals();
+            }
+            catch (\Exception $exc) {
                 $result['success'] = false;
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
@@ -271,7 +277,9 @@ class ArtistController extends Controller
             $entity = $repo_artist->find($id);
             try {
                 $em->remove($entity);
-            } catch (\Exception $e) {
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateForAllFestivals();
+            }
+            catch (\Exception $e) {
                 $response = array("success" => false, "message" => "no se puede eliminar este artisto");
                 $result = json_encode($response);
                 return new \Symfony\Component\HttpFoundation\Response($result);

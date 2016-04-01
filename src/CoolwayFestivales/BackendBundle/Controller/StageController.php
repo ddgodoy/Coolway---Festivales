@@ -115,14 +115,18 @@ class StageController extends Controller {
                     $entity->getId(), $this->get('security.context')->getToken()->getUser()->getFeast()->getId()
                 );
             }
-            /* Integración con las ACLs
+            /*
+              Integración con las ACLs
               $user = $this->get('security.context')->getToken()->getUser();
               $provider = $this->get('Apptibase.acl_manager');
               $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
              */
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
-        } catch (\Exception $exc) {
+            //
+            $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateForAllFestivals();
+        }
+        catch (\Exception $exc) {
             $result['success'] = false;
             $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
         }
@@ -206,7 +210,8 @@ class StageController extends Controller {
      * @Route("/{id}", name="admin_stage_update")
      * @Method("PUT")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BackendBundle:Stage')->find($id);
@@ -224,7 +229,10 @@ class StageController extends Controller {
                 $em->flush();
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
-            } catch (\Exception $exc) {
+                //
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateForAllFestivals();
+            }
+            catch (\Exception $exc) {
                 $result['success'] = false;
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
@@ -287,7 +295,8 @@ class StageController extends Controller {
      * @Route("/bachdelete", name="admin_stage_batchdelete")
      * @Template()
      */
-    public function batchdeleteAction() {
+    public function batchdeleteAction()
+    {
         $peticion = $this->getRequest();
         $ids = $peticion->get("ids", 0, true);
         $ids = explode(",", $ids);
@@ -296,35 +305,28 @@ class StageController extends Controller {
 
         $repo_stage = $this->getDoctrine()->getRepository('BackendBundle:Stage');
 
-        foreach ($ids as $id) {
+        foreach ($ids as $id)
+        {
             $entity = $repo_stage->find($id);
             try {
                 $em->remove($entity);
-            } catch (\Exception $e) {
+                //
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateForAllFestivals();
+            }
+            catch (\Exception $e) {
                 $response = array("success" => false, "message" => "no se puede eliminar este stageo");
                 $result = json_encode($response);
                 return new \Symfony\Component\HttpFoundation\Response($result);
             }
         }
-
         try {
             $em->flush();
             $response = array("success" => true, "message" => "Transacci&oacute;n realizada satisfactoriamente.");
         } catch (\Exception $e) {
             $response = array("success" => false, "message" => "No puede completar esta petición Error code: " . $e->getCode() . " Detalles:" . $e->getMessage());
         }
-
         $result = json_encode($response);
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
 
-    /*
-     * ==================================== Funciones específicas ==================
-     */
-
-
-
-    /*
-     * =============================================================================
-     */
-}
+} // end class

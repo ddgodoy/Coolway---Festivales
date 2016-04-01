@@ -33,7 +33,7 @@
                                     <tr>
                                         <td>
                                             <i class="icon-plus" style="font-size:12px;"></i>&nbsp;
-                                            <a data-toggle="modal" data-target="#ajax1" href="{{path("admin_stage_new")}}" style="color:#666;font-size:14px;">Nuevo Escenario</a>
+                                            <a data-toggle="modal" data-target="#ajax1" href="{% if is_granted('ROLE_SUPER_ADMIN') %}{{path("admin_feaststage_new")}}{% else %}{{path("admin_stage_new")}}{% endif %}" style="color:#666;font-size:14px;">Nuevo Escenario</a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -82,7 +82,7 @@
                                 <table class="table table-striped" style="margin-bottom:0px;">
                                     <tbody>
                                     <tr>
-                                        <td><a href="{{path("admin_stage")}}" style="font-size:14px;">Escenarios</a></td>
+                                        <td><a href="{% if is_granted('ROLE_SUPER_ADMIN') %}{{path("admin_feaststage")}}{% else %}{{path("admin_stage")}}{% endif %}" style="font-size:14px;">Escenarios</a></td>
                                     </tr>
                                     <tr>
                                         <td><a href="{{path("admin_artist")}}" style="font-size:14px;">Artistas</a></td>
