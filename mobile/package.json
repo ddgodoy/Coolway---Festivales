@@ -17,7 +17,6 @@
   "cordovaPlugins": [
     "org.apache.cordova.device",
     "org.apache.cordova.console",
-    "com.ionic.keyboard",
     "org.apache.cordova.device-motion",
     "org.apache.cordova.inappbrowser",
     {
@@ -25,10 +24,13 @@
       "locator": "../../Icox/noiseMeter/"
     },
     "org.apache.cordova.network-information",
-    "de.appplant.cordova.plugin.background-mode@0.6.3"
+    "de.appplant.cordova.plugin.background-mode@0.6.3",
+    {
+      "locator": "https://github.com/driftyco/ionic-plugins-keyboard.git",
+      "id": "ionic-plugin-keyboard"
+    }
   ],
   "cordovaPlatforms": [
-    "android",
-    "ios"
+    "android"
   ]
 }

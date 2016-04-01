@@ -977,9 +977,11 @@ app.factory('serverConnection',function ($rootScope,$http,$q,$timeout,$cordovaGe
   //var host = 'http://local.coolway.192.168.1.102.xip.io';
   //var host = 'http://local.coolway/app_dev.php';
   //var host = 'http://62.75.210.58';
-  var host = 'http://mobile.letsdancecoolway.com';
+  //var host = 'http://mobile.letsdancecoolway.co';
   //var host = 'http://62.75.142.156';
-  var api = host+'/api/';
+  var host = 'http://coolway.dev/app_dev.php/';
+  //var api = host+'/api/';
+  var api = host+'/api/v1/';
   return {
 
     getHost : function () {

@@ -36,7 +36,7 @@ class User implements AdvancedUserInterface, \Serializable {
 
     /**
      * @var string $total
-     * @ORM\Column(name="total", type="float", nullable=true)
+     * @ORM\Column(name="total", type="float",nullable=true)
      */
     private $total;
 
@@ -56,14 +56,14 @@ class User implements AdvancedUserInterface, \Serializable {
     protected $username;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     protected $name;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    protected $token_phone;
+    protected $accessToken;
 
     /**
      * @Assert\Email()
@@ -294,13 +294,6 @@ class User implements AdvancedUserInterface, \Serializable {
         return $this->accountNonLocked;
     }
 
-    function getToken_phone() {
-        return $this->token_phone;
-    }
-
-    function setToken_phone($token_phone) {
-        $this->token_phone = $token_phone;
-    }
 
     /**
      * Set password
@@ -476,24 +469,24 @@ class User implements AdvancedUserInterface, \Serializable {
     }
 
     /**
-     * Set token_phone
+     * Set token
      *
-     * @param string $tokenPhone
+     * @param string $token
      * @return User
      */
-    public function setTokenPhone($tokenPhone) {
-        $this->token_phone = $tokenPhone;
+    public function setAccessToken($token) {
+        $this->accessToken = $token;
 
         return $this;
     }
 
     /**
-     * Get token_phone
+     * Get token
      *
      * @return string
      */
-    public function getTokenPhone() {
-        return $this->token_phone;
+    public function getAccessToken() {
+        return $this->accessToken;
     }
 
     /**

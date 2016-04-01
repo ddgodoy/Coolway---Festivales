@@ -12,3 +12,16 @@ backend:
     resource: "@BackendBundle/Controller/"
     type:     annotation
     prefix:   /
+
+
+
+#Api
+api:
+  type : rest
+  resource: "@CoolwayFestivalesApiBundle/Resources/config/routing.yml"
+  prefix : /api/v1
+
+#Documentation Api Rest
+NelmioApiDocBundle:
+   resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+   prefix:   /api/doc

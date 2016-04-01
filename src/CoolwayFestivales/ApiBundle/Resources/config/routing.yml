@@ -1,0 +1,3 @@
+api_customer:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Customer
