@@ -103,12 +103,15 @@ class NotificationController extends Controller
         $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
+        $em = $this->getDoctrine()->getManager();
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Notification();
-        $form = $this->createForm(new NotificationType($filtro), $entity);
-        $form->bind($request);
         $result = array();
 
-        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new NotificationType($filtro), $entity);
+        $form->bind($request);
+
+        $fechaHora = $form->get('date')->getData()->format('Y-m-d').' '.$form->get('time')->getData()->format('H:i').':00';
+
         try {
             $em->persist($entity);
             $em->flush();
@@ -120,7 +123,11 @@ class NotificationController extends Controller
              */
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
-        } catch (\Exception $exc) {
+            //
+            $entity->setDate(new \DateTime($fechaHora));
+            $em->persist($entity); $em->flush();
+        }
+        catch (\Exception $exc) {
             $result['success'] = false;
             $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
         }
@@ -225,13 +232,20 @@ class NotificationController extends Controller
         $editForm = $this->createForm(new NotificationType($filtro), $entity);
         $editForm->bind($request);
 
+        $fechaHora = $editForm->get('date')->getData()->format('Y-m-d').' '.$editForm->get('time')->getData()->format('H:i').':00';
+
         if ($editForm->isValid()) {
             try {
                 $em->persist($entity);
                 $em->flush();
+
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
-            } catch (\Exception $exc) {
+                //
+                $entity->setDate(new \DateTime($fechaHora));
+                $em->persist($entity); $em->flush();
+            }
+            catch (\Exception $exc) {
                 $result['success'] = false;
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }

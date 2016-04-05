@@ -38,15 +38,7 @@ class FeastStageArtist {
      */
     private $date;
 
-    /**
-     * @var string $time
-     * @ORM\Column(name="time", type="time")
-     */
-    private $time;
-
-    public function __construct() {
-
-    }
+    public function __construct() {}
 
     /**
      * Get id
@@ -118,27 +110,6 @@ class FeastStageArtist {
      */
     public function getDate() {
         return $this->date;
-    }
-
-    /**
-     * Set time
-     *
-     * @param \DateTime $time
-     * @return FeastStageArtist
-     */
-    public function setTime($time) {
-        $this->time = $time;
-
-        return $this;
-    }
-
-    /**
-     * Get time
-     *
-     * @return \DateTime
-     */
-    public function getTime() {
-        return $this->time;
     }
 
     /**

@@ -52,16 +52,10 @@ class Notification {
     private $send;
 
     /**
-     * @var \Date
-     * @ORM\Column(name="date_cron", type="date",  nullable=true)
+     * @var \DateTime
+     * @ORM\Column(name="date_cron", type="datetime",  nullable=true)
      */
     private $date;
-
-    /**
-     * @var string $time
-     * @ORM\Column(name="time_cron", type="time",  nullable=true)
-     */
-    private $time;
 
     public function __construct() {
         $this->send = 0;
@@ -100,7 +94,7 @@ class Notification {
     /**
      * Set date
      *
-     * @param \Date $date
+     * @param \DateTime $date
      * @return Notification
      */
     public function setDate($date) {
@@ -112,31 +106,10 @@ class Notification {
     /**
      * Get date
      *
-     * @return \Date
+     * @return \DateTime
      */
     public function getDate() {
         return $this->date;
-    }
-
-    /**
-     * Set time
-     *
-     * @param \DateTime $time
-     * @return Notification
-     */
-    public function setTime($time) {
-        $this->time = $time;
-
-        return $this;
-    }
-
-    /**
-     * Get time
-     *
-     * @return \DateTime
-     */
-    public function getTime() {
-        return $this->time;
     }
 
     /**

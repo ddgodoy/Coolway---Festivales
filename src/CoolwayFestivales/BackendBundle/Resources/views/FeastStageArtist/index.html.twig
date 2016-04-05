@@ -55,10 +55,7 @@
                                     Escenario de Festival
                                 </th>
                                 <th>
-                                    Fecha
-                                </th>
-                                <th>
-                                    Hora
+                                    Fecha / Hora
                                 </th>
                             </tr>
                         </thead>
@@ -75,10 +72,7 @@
                                         {{entity.getFeastStage}}
                                     </td>
                                     <td>
-                                        {{entity.date | date("d-m-Y")}}
-                                    </td>
-                                    <td>
-                                        {{entity.time | date('h:m')}}
+                                        {{entity.date | date("d/m/Y  |  H:i")}}
                                     </td>
                                 </tr>
                             {%endfor%}

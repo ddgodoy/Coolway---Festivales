@@ -105,30 +105,42 @@ class FeastStageArtistController extends Controller {
         $artistas = $this->getDoctrine()->getRepository('BackendBundle:Artist')->getArtistasIds(
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
+        $em = $this->getDoctrine()->getManager();
         $entity = new \CoolwayFestivales\BackendBundle\Entity\FeastStageArtist();
-        $form = $this->createForm(new FeastStageArtistType($filtro, $artistas), $entity);
-        $form->bind($request);
         $result = array();
 
-        $em = $this->getDoctrine()->getManager();
-        try {
-            $em->persist($entity);
-            $em->flush();
-            /*
-              Integración con las ACLs
-              $user = $this->get('security.context')->getToken()->getUser();
-              $provider = $this->get('Apptibase.acl_manager');
-              $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
-            */
-            $result['success'] = true;
-            $result['mensaje'] = 'Adicionado correctamente';
-            //
-            $feast_id = $entity->getFeastStage()->getFeast()->getId();
-            $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($feast_id);
-        }
-        catch (\Exception $exc) {
+        $form = $this->createForm(new FeastStageArtistType($filtro, $artistas), $entity);
+        $form->bind($request);
+
+        $errors = $this->checkDateRange($form);
+        $fechaHora = $form->get('date')->getData()->format('Y-m-d').' '.$form->get('time')->getData()->format('H:i').':00';
+
+        if ($form->isValid() && empty($errors))
+        {
+            try {
+                $em->persist($entity); $em->flush();
+                /*
+                  Integración con las ACLs
+                  $user = $this->get('security.context')->getToken()->getUser();
+                  $provider = $this->get('Apptibase.acl_manager');
+                  $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
+                */
+                $result['success'] = true;
+                $result['mensaje'] = 'Adicionado correctamente';
+                //
+                $entity->setDate(new \DateTime($fechaHora));
+                $em->persist($entity); $em->flush();
+                //
+                $feast_id = $entity->getFeastStage()->getFeast()->getId();
+                $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($feast_id);
+            }
+            catch (\Exception $exc) {
+                $result['success'] = false;
+                $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
+            }
+        } else {
             $result['success'] = false;
-            $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
+            $result['error'] = array('cause' => 'Invalid', 'errors' => $errors);
         }
         echo json_encode($result);
         die;
@@ -204,7 +216,6 @@ class FeastStageArtistController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find feaststageartist entity.');
         }
-
         $editForm = $this->createForm(new FeastStageArtistType($filtro, $artistas), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -239,14 +250,20 @@ class FeastStageArtistController extends Controller {
         $editForm = $this->createForm(new FeastStageArtistType($filtro, $artistas), $entity);
         $editForm->bind($request);
 
-        if ($editForm->isValid())
+        $errors = $this->checkDateRange($editForm);
+        $fechaHora = $editForm->get('date')->getData()->format('Y-m-d').' '.$editForm->get('time')->getData()->format('H:i').':00';
+
+        if ($editForm->isValid() && empty($errors))
         {
             try {
-                $em->persist($entity);
-                $em->flush();
+                $em->persist($entity); $em->flush();
+
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
-
+                //
+                $entity->setDate(new \DateTime($fechaHora));
+                $em->persist($entity); $em->flush();
+                //
                 $feast_id = $entity->getFeastStage()->getFeast()->getId();
                 $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($feast_id);
             }
@@ -255,8 +272,8 @@ class FeastStageArtistController extends Controller {
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
         } else {
-
             $result['success'] = false;
+            $result['error'] = array('cause' => 'Invalid', 'errors' => $errors);
         }
         echo json_encode($result);
         die;
@@ -339,6 +356,20 @@ class FeastStageArtistController extends Controller {
 
         $result = json_encode($response);
         return new \Symfony\Component\HttpFoundation\Response($result);
+    }
+    //
+    public function checkDateRange($form)
+    {
+        $errors = array();
+        $obj    = $form['feast_stage']->getData();
+        $oFrom  = $obj->getFeast()->getDateFrom();
+        $oTo    = $obj->getFeast()->getDateTo();
+        $sDate  = $form['date']->getData()->format('Y-m-d');
+
+        if (!($sDate >= $oFrom->format('Y-m-d') && $sDate <= $oTo->format('Y-m-d'))) {
+            $errors[] = array('field' => $form->getName().'_date', 'message' => 'La fecha no es correcta');
+        }
+        return $errors;
     }
 
 } // end class

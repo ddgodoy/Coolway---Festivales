@@ -38,7 +38,7 @@ class FeastStageArtistRepository extends EntityRepository
 
 		return $q->getResult();
 	}
-
+	//
 	public function findNextArtist()
 	{
 		$time_from = date('H:i:00');
@@ -51,6 +51,20 @@ class FeastStageArtistRepository extends EntityRepository
 			LEFT JOIN BackendBundle:FeastStage fs WITH fsa.feast_stage = fs.id
 			LEFT JOIN BackendBundle:Stage s WITH fs.stage = s.id
 			WHERE fsa.time = '$time_to' AND fsa.date = '$date'"
+		);
+
+		$q->setMaxResults(1);
+
+		try {
+			return $q->getSingleResult();
+		} catch (\Doctrine\ORM\NoResultException $e) {
+			return false;
+		}
+	}
+	public function addTimeToDate()
+	{
+		$q = $this->getEntityManager()->createQuery(
+			"UPDATE BackendBundle:FeastStageArtist fsa "
 		);
 
 		$q->setMaxResults(1);

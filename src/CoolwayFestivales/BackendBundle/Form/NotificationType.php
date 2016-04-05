@@ -30,17 +30,24 @@ class NotificationType extends AbstractType
                     return $repository->createQueryBuilder('f')->where($this->filtro);
                 }
             ))
-            ->add('date', null, array(
-                'label' => 'Fecha envío programado:',
+            ->add('date', 'date', array(
+                'label' => 'Fecha',
                 'widget' => 'single_text',
-                'format' => 'MM/dd/yyyy',
-                'attr' => array(
-                    'class' => 'datepicker',
-                )))
+                'format' => 'dd/MM/yyyy',
+                'label_attr' => array('class' => 'date_w_default'),
+                'attr' => [
+                    'style' => 'text-align:center;',
+                    'class' => 'form-control input-inline datepicker',
+                    'data-provide' => 'datepicker',
+                    'data-date-format' => 'dd/mm/yyyy'
+                ]
+            ))
             ->add('time', 'time', array(
-                'input' => 'datetime',
+                "mapped" => false,
                 'widget' => 'choice',
-                "label" => "Hora:"
+                'label'  => "Hora",
+                'attr'   => array('class' => 'time_w_default'),
+                'label_attr' => array('class' => 'date_w_default')
             ))
         ;
     }

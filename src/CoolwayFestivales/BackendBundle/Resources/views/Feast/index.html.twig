@@ -82,22 +82,17 @@
                                         {{entity.longitude}}
                                     </td>
                                     <td>
-                                        {{entity.date_from | date("d-m-Y")}}
+                                        {{entity.dateFrom | date("d/m/Y")}}
                                     </td>
                                     <td>
-                                        {{entity.date_to | date("d-m-Y")}}
+                                        {{entity.dateTo | date("d/m/Y")}}
                                     </td>
-
                                 </tr>
-
                             {%endfor%}
-
-
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
     <div class="modal fade" id="ajax" role="basic" aria-hidden="true">

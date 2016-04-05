@@ -4,6 +4,7 @@ namespace CoolwayFestivales\BackendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -88,33 +89,38 @@ class FeastController extends Controller {
      * @Route("/create", name="admin_feast_create")
      * @Method("post")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Feast();
-        $form = $this->createForm(new FeastType(), $entity);
-        $form->bind($request);
         $result = array();
 
+        $form = $this->createForm(new FeastType(), $entity);
+        $form->bind($request);
 
-        $em = $this->getDoctrine()->getManager();
-        try {
-            $em->persist($entity);
-            $em->flush();
+        $errors = $this->checkDateRange($form);
 
-            /*
-              //Integración con las ACLs
-              $user = $this->get('security.context')->getToken()->getUser();
-              $provider = $this->get('Apptibase.acl_manager');
-              $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
-              //-----------------------------
-             */
-
-            $result['success'] = true;
-            $result['mensaje'] = 'Adicionado correctamente';
-        } catch (\Exception $exc) {
+        if ($form->isValid() && empty($errors))
+        {
+            try {
+                $em->persist($entity);
+                $em->flush();
+                /*
+                  Integración con las ACLs
+                  $user = $this->get('security.context')->getToken()->getUser();
+                  $provider = $this->get('Apptibase.acl_manager');
+                  $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
+                */
+                $result['success'] = true;
+                $result['mensaje'] = 'Adicionado correctamente';
+            } catch (\Exception $exc) {
+                $result['success'] = false;
+                $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
+            }
+        } else {
             $result['success'] = false;
-            $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
+            $result['error'] = array('cause' => 'Invalid', 'errors' => $errors);
         }
-
         echo json_encode($result);
         die;
     }
@@ -192,9 +198,9 @@ class FeastController extends Controller {
      * @Route("/{id}", name="admin_feast_update")
      * @Method("PUT")
      */
-    public function updateAction(Request $request, $id) {
+    public function updateAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('BackendBundle:Feast')->find($id);
         $result = array();
 
@@ -204,7 +210,10 @@ class FeastController extends Controller {
         $editForm = $this->createForm(new FeastType(), $entity);
         $editForm->bind($request);
 
-        if ($editForm->isValid()) {
+        $errors = $this->checkDateRange($editForm);
+
+        if ($editForm->isValid() && empty($errors))
+        {
             try {
                 $em->persist($entity);
                 $em->flush();
@@ -215,8 +224,8 @@ class FeastController extends Controller {
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
         } else {
-
             $result['success'] = false;
+            $result['error'] = array('cause' => 'Invalid', 'errors' => $errors);
         }
         echo json_encode($result);
         die;
@@ -297,14 +306,21 @@ class FeastController extends Controller {
         $result = json_encode($response);
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
+    //
+    public function checkDateRange($form)
+    {
+        $errors    = array();
+        $date_now  = date('Y-m-d');
+        $date_from = $form['date_from']->getData()->format('Y-m-d');
+        $date_to   = $form['date_to']->getData()->format('Y-m-d');
 
-    /*
-     * ==================================== Funciones específicas ==================
-     */
+        if ($date_from < $date_now) {
+            $errors[] = array('field' => $form->getName().'_date_from', 'message' => 'La fecha no es correcta');
+        }
+        if ($date_to <= $date_from) {
+            $errors[] = array('field' => $form->getName().'_date_to', 'message' => 'La fecha no es correcta');
+        }
+        return $errors;
+    }
 
-
-
-    /*
-     * =============================================================================
-     */
-}
+} // end class

@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Table(name="feast")
  * @ORM\Entity(repositoryClass="CoolwayFestivales\BackendBundle\Repository\FeastRepository")
  */
-class Feast {
-
+class Feast
+{
     /**
      * @var bigint $id
      *
@@ -43,14 +43,14 @@ class Feast {
     private $longitude;
 
     /**
-     * @var \DateTime
-     * @ORM\Column(name="date_from", type="datetime",  nullable=false)
+     * @var \Date
+     * @ORM\Column(name="date_from", type="date",  nullable=false)
      */
     private $date_from;
 
     /**
-     * @var \DateTime
-     * @ORM\Column(name="date_to", type="datetime",  nullable=true)
+     * @var \Date
+     * @ORM\Column(name="date_to", type="date",  nullable=true)
      */
     private $date_to;
 	
@@ -112,14 +112,6 @@ class Feast {
         return $this->latitude;
     }
 
-    function getDate_from() {
-        return $this->date_from;
-    }
-
-    function getDate_to() {
-        return $this->date_to;
-    }
-
     function setLatitude($latitude) {
         $this->latitude = $latitude;
     }
@@ -132,22 +124,14 @@ class Feast {
         $this->longitude = $longitude;
     }
 
-    function setDate_from(\DateTime $date_from) {
-        $this->date_from = $date_from;
-    }
-
-    function setDate_to(\DateTime $date_to) {
-        $this->date_to = $date_to;
-    }
-
     /**
      * Set date_from
      *
-     * @param \DateTime $dateFrom
+     * @param \Date $date_from
      * @return Feast
      */
-    public function setDateFrom($dateFrom) {
-        $this->date_from = $dateFrom;
+    public function setDateFrom($date_from) {
+        $this->date_from = $date_from;
 
         return $this;
     }
@@ -155,7 +139,7 @@ class Feast {
     /**
      * Get date_from
      *
-     * @return \DateTime
+     * @return \Date
      */
     public function getDateFrom() {
         return $this->date_from;
@@ -164,11 +148,11 @@ class Feast {
     /**
      * Set date_to
      *
-     * @param \DateTime $dateTo
+     * @param \Date $date_to
      * @return Feast
      */
-    public function setDateTo($dateTo) {
-        $this->date_to = $dateTo;
+    public function setDateTo($date_to) {
+        $this->date_to = $date_to;
 
         return $this;
     }
@@ -176,7 +160,7 @@ class Feast {
     /**
      * Get date_to
      *
-     * @return \DateTime
+     * @return \Date
      */
     public function getDateTo() {
         return $this->date_to;
