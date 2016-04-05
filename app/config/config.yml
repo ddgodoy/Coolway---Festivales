@@ -72,37 +72,34 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
+
 fos_rest:
     disable_csrf_role: ROLE_API
     param_fetcher_listener: true
-    routing_loader:
-       default_format: json
+    body_listener: true
+    allowed_methods_listener: true
+    unauthorized_challenge: "Basic realm=\"Restricted Area\""
+    access_denied_listener:
+        json: true
+        xml: true
+        html: true
     view:
-        mime_types:
-            json: ['application/json', 'application/json;version=1.0', 'application/json;version=1.1', 'application/json;version=1.2']
         view_response_listener: true
+        force_redirects:
+          html: true
         formats:
-            xml:  true
             json: true
-        templating_formats:
-            html: true
+            xml: true
+        exception_wrapper_handler:  null
     format_listener:
         rules:
             - { path: ^/api, priorities: [ json, xml ], fallback_format: json, prefer_extension: true }
             - { path: ^/admin, priorities: [ html ], fallback_format: ~, prefer_extension: true }
-        media_type:
-            version_regex: '/(v|version)=(?P<version>[0-9\.]+)/'
+    body_converter:
+        enabled: true
+        validate: true
     exception:
-        codes:
-            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
-            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
-        messages:
-            'Symfony\Component\Routing\Exception\ResourceNotFoundException': true
-    allowed_methods_listener: true
-    access_denied_listener:
-        json: true
-    body_listener: true
-
+        enabled: true
 
 nelmio_api_doc:
     name: Coolway API

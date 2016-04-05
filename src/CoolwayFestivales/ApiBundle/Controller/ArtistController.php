@@ -2,12 +2,14 @@
 
 namespace CoolwayFestivales\ApiBundle\Controller;
 
+use CoolwayFestivales\BackendBundle\Entity\Feast;
 use CoolwayFestivales\SafetyBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class ArtistController extends FOSRestController implements ClassResourceInterface
@@ -15,14 +17,12 @@ class ArtistController extends FOSRestController implements ClassResourceInterfa
 
     /**
      * @param Request $request
+     * @param Feast $feast
      * @return array
      *
      * @ApiDoc(
      *  section="Artist",
      *  description="List Artist",
-     *  requirements={
-     *      {"name"="festival_id", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Festival Identifier"},
-     *   },
      *  statusCodes={
      *         200="Returned when successful"
      *  },
@@ -32,18 +32,28 @@ class ArtistController extends FOSRestController implements ClassResourceInterfa
      *  }
      * )
      */
-    public function getAction(Request $request)
+    public function getAction(Request $request, Feast $feast)
     {
-        $response = array();
-        $em = $this->getDoctrine()->getManager();
-        $festivalId = $request->get('festival_id');
+        $response = new Response();
 
-        $artists = $em->getRepository("BackendBundle:Artist")->findBy("ROLE_CUSTOMER");
+        if(is_object($feast))
+        {
+            $em = $this->getDoctrine()->getManager();
+            $artists = $em->getRepository("BackendBundle:FeastStageArtist")->getArtistByFeast($feast->getId());
 
-        $response = array(
-            'success' => false,
-            'message' => 'invalid data'
-        );
+            $response->setContent(json_encode(array(
+                'success' => true,
+                'data' => $artists,
+            )));
+        }else{
+            $response->setContent(json_encode(array(
+                'success' => false,
+                'message' => 'invalid feast'
+            )));
+        }
+
+
+
 
         return $response;
     }
