@@ -52,5 +52,39 @@ class ArtistRepository extends EntityRepository
 
         return $aFlags;
     }
+    //
+    public function cleanSocialNetworksValues($entity)
+    {
+        $spotity   = $this->wipeOutSocialString($entity->getIdSpotify());
+        $twitter   = $this->wipeOutSocialString($entity->getTwitter());
+        $facebook  = $this->wipeOutSocialString($entity->getFacebook());
+        $instagram = $this->wipeOutSocialString($entity->getInstagram());
+
+        $entity->setIdSpotify($spotity);
+        $entity->setTwitter  ($twitter);
+        $entity->setFacebook ($facebook);
+        $entity->setInstagram($instagram);
+
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush();
+    }
+    //
+    public function wipeOutSocialString($social)
+    {
+        $clean = '';
+
+        if (!empty($social))
+        {
+            $slash = substr($social, -1);
+
+            if ($slash == '/') {
+                $social = substr($social, 0, -1);
+            }
+            $chunks = explode('/', $social);
+            $i_cant = count($chunks);
+            $clean  = $chunks[$i_cant-1];
+        }
+        return $clean;
+    }
 
 } // end class

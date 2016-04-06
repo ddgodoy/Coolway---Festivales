@@ -44,10 +44,10 @@ class FeastStageArtistType extends AbstractType
                 }
             ))
             ->add('date', 'date', array(
-                'label' => 'Fecha',
+                'label' => 'Fecha [dd/mm/yyyy]',
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy',
-                'label_attr' => array('class' => 'date_w_default'),
+                'label_attr' => array('class' => 'date_lw_default'),
                 'attr' => [
                     'style' => 'text-align:center;',
                     'class' => 'form-control input-inline datepicker',
@@ -58,9 +58,9 @@ class FeastStageArtistType extends AbstractType
             ->add('time', 'time', array(
                 "mapped" => false,
                 'widget' => 'choice',
-                'label'  => "Hora",
-                'attr'   => array('class' => 'time_w_default'),
-                'label_attr' => array('class' => 'date_w_default')
+                'label'  => "Horario [hr/minutos]",
+                'attr'   => array('class' => 'time_lw_default'),
+                'label_attr' => array('class' => 'date_lw_default')
             ))
         ;
     }

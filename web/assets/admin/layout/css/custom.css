@@ -12,11 +12,23 @@
     width: 60px;
     padding-top: 20px;
 }
+.date_lw_default {
+    width: 150px;
+    padding-top: 20px;
+}
 .time_w_default {
     width: 60px;
     display: inline;
 }
+.time_lw_default {
+    width: 150px;
+    display: inline;
+}
 .time_w_default select {
+    width: 80px;
+    display: inline;
+}
+.time_lw_default select {
     width: 80px;
     display: inline;
 }

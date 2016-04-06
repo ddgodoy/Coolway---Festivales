@@ -10,22 +10,23 @@ use Symfony\Component\Validator\Constraints\Callback;
 
 class FeastType extends AbstractType
 {
-    /*public function __construct()
-    {
-        $this->test = new DateRange();
-    }*/
-    //
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', null, array('label' => 'Nombre'))
-            ->add('latitude', null, array('label' => 'Latitud'))
-            ->add('longitude', null, array('label' => 'Longitud'))
+            ->add('latitude', null, array(
+                'label' => 'Latitud',
+                'attr' => array('placeholder' => 'grados decimales, ej: 40.7127837')
+            ))
+            ->add('longitude', null, array(
+                'label' => 'Longitud',
+                'attr' => array('placeholder' => 'grados decimales, ej: -74.0059731')
+            ))
             ->add('date_from', 'date', array(
-                'label' => 'Desde',
+                'label' => 'Desde [dd/mm/yyyy]',
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy',
-                'label_attr' => array('class' => 'date_w_default'),
+                'label_attr' => array('class' => 'date_lw_default'),
                 'attr' => [
                     'style' => 'text-align:center;',
                     'class' => 'form-control input-inline datepicker',
@@ -34,10 +35,10 @@ class FeastType extends AbstractType
                 ]
             ))
             ->add('date_to', 'date', array(
-                'label' => 'Hasta',
+                'label' => 'Hasta [dd/mm/yyyy]',
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy',
-                'label_attr' => array('class' => 'date_w_default'),
+                'label_attr' => array('class' => 'date_lw_default'),
                 'attr' => [
                     'style' => 'text-align:center;',
                     'class' => 'form-control input-inline datepicker',

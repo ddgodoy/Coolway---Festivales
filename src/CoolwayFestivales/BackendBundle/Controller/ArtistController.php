@@ -113,6 +113,8 @@ class ArtistController extends Controller
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
             //
+            $this->getDoctrine()->getRepository('BackendBundle:Artist')->cleanSocialNetworksValues($entity);
+            //
             $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateForAllFestivals();
         }
         catch (\Exception $exc) {
@@ -215,6 +217,8 @@ class ArtistController extends Controller
 
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
+                //
+                $this->getDoctrine()->getRepository('BackendBundle:Artist')->cleanSocialNetworksValues($entity);
                 //
                 $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateForAllFestivals();
             }
