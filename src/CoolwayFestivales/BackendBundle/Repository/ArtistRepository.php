@@ -42,5 +42,15 @@ class ArtistRepository extends EntityRepository
         }
         return $a;
     }
+    //
+    public function setRequiredImages($entity)
+    {
+        $aFlags = array('foto' => false, 'portada' => false);
+
+        if (empty($entity->getPath()))  { $aFlags['foto'] = true; }
+        if (empty($entity->getCover())) { $aFlags['portada'] = true; }
+
+        return $aFlags;
+    }
 
 } // end class

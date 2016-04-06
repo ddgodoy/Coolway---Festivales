@@ -97,8 +97,9 @@ class ArtistController extends Controller
      */
     public function createAction(Request $request)
     {
+        $aFlags = array('foto' => true, 'portada' => true);
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Artist();
-        $form = $this->createForm(new ArtistType(), $entity);
+        $form = $this->createForm(new ArtistType($aFlags), $entity);
         $form->bind($request);
         $result = array();
 
@@ -106,7 +107,7 @@ class ArtistController extends Controller
         try {
             $em->persist($entity); $em->flush();
 
-            // upload images if any
+            // upload images
             $this->handleImage($form->get('foto')->getData(), $form->get('portada')->getData(), $entity->getId());
 
             $result['success'] = true;
@@ -129,8 +130,9 @@ class ArtistController extends Controller
      */
     public function newAction()
     {
+        $aFlags = array('foto' => true, 'portada' => true);
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Artist();
-        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\ArtistType(), $entity);
+        $form = $this->createForm(new ArtistType($aFlags), $entity);
 
         return array('entity' => $entity, 'form' => $form->createView());
     }
@@ -173,7 +175,8 @@ class ArtistController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find artist entity.');
         }
-        $editForm = $this->createForm(new ArtistType(), $entity);
+        $aFlags     = $em->getRepository('BackendBundle:Artist')->setRequiredImages($entity);
+        $editForm   = $this->createForm(new ArtistType($aFlags), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -198,7 +201,8 @@ class ArtistController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Artist entity.');
         }
-        $editForm = $this->createForm(new ArtistType(), $entity);
+        $aFlags   = $em->getRepository('BackendBundle:Artist')->setRequiredImages($entity);
+        $editForm = $this->createForm(new ArtistType($aFlags), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid())
@@ -206,7 +210,7 @@ class ArtistController extends Controller
             try {
                 $em->persist($entity); $em->flush();
 
-                // upload images if any
+                // upload images
                 $this->handleImage($editForm->get('foto')->getData(), $editForm->get('portada')->getData(), $entity->getId());
 
                 $result['success'] = true;
