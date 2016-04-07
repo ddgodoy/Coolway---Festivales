@@ -183,7 +183,6 @@ class FeastController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find feast entity.');
         }
-
         $editForm = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\FeastType(), $entity);
 
         return array(

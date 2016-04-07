@@ -123,7 +123,6 @@
     </div>
 {%endblock%}
 
-
 {%block base_script%}
     {{parent()}}
 {%endblock%}
@@ -155,7 +154,6 @@
         }
         var initTable1 = function () {
             var table = $('#sample_1');
-
 
             $.extend(true, $.fn.DataTable.TableTools.classes, {
                 "container": "btn-group tabletools-dropdown-on-portlet",
@@ -204,14 +202,11 @@
                 "language": {
                     "url": "{{asset('assets/js/i18n/Spanish.json')}}"
                 }
-
             });
-
             var tableWrapper = $('#sample_1_wrapper'); // datatable creates the table wrapper by adding with id {your_table_jd}_wrapper
 
             tableWrapper.find('.dataTables_length select').select2(); // initialize select2 dropdown
         }
-
         initTable1();
 
         $("#modalDetail").on("show.bs.modal", function (e) {
@@ -236,7 +231,6 @@
                 }
                 else
                     toastr.error(data.message);
-
             });
         })
     </script>

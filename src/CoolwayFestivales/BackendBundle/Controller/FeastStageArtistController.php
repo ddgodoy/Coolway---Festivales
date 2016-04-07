@@ -106,10 +106,11 @@ class FeastStageArtistController extends Controller {
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
         $em = $this->getDoctrine()->getManager();
+        $dfHora = new \DateTime('00:00');
         $entity = new \CoolwayFestivales\BackendBundle\Entity\FeastStageArtist();
         $result = array();
 
-        $form = $this->createForm(new FeastStageArtistType($filtro, $artistas), $entity);
+        $form = $this->createForm(new FeastStageArtistType($filtro, 'crear', $artistas, $dfHora), $entity);
         $form->bind($request);
 
         $errors = $this->checkDateRange($form);
@@ -161,8 +162,9 @@ class FeastStageArtistController extends Controller {
         $artistas = $this->getDoctrine()->getRepository('BackendBundle:Artist')->getArtistasIds(
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
+        $dfHora = new \DateTime('00:00');
         $entity = new \CoolwayFestivales\BackendBundle\Entity\FeastStageArtist();
-        $form = $this->createForm(new FeastStageArtistType($filtro, $artistas), $entity);
+        $form = $this->createForm(new FeastStageArtistType($filtro, 'crear', $artistas, $dfHora), $entity);
 
         return array(
             'entity' => $entity,
@@ -216,7 +218,7 @@ class FeastStageArtistController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find feaststageartist entity.');
         }
-        $editForm = $this->createForm(new FeastStageArtistType($filtro, $artistas), $entity);
+        $editForm = $this->createForm(new FeastStageArtistType($filtro, 'editar', $artistas, $entity->getDate()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -247,7 +249,7 @@ class FeastStageArtistController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find FeastStageArtist entity.');
         }
-        $editForm = $this->createForm(new FeastStageArtistType($filtro, $artistas), $entity);
+        $editForm = $this->createForm(new FeastStageArtistType($filtro, 'editar', $artistas, $entity->getDate()), $entity);
         $editForm->bind($request);
 
         $errors = $this->checkDateRange($editForm);

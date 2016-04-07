@@ -9,10 +9,14 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class NotificationType extends AbstractType
 {
     private $filtro;
+    private $accion;
+    private $default_hora;
 
-    public function __construct($filtro)
+    public function __construct($filtro, $accion, $default_hora)
     {
         $this->filtro = $filtro;
+        $this->accion = $accion;
+        $this->default_hora = $default_hora;
     }
     /**
      * @param FormBuilderInterface $builder
@@ -42,20 +46,47 @@ class NotificationType extends AbstractType
                     'data-date-format' => 'dd/mm/yyyy'
                 ]
             ))
+        ;
+        if ($this->accion == 'editar')
+        {
+            $builder
+                ->add('date', 'date', array(
+                    'label' => 'Fecha [dd/mm/yyyy]',
+                    'widget' => 'choice',
+                    'attr'   => array('class' => 'time_lw_default'),
+                    'label_attr' => array('class' => 'date_lw_default')
+                ));
+        } else {
+            $builder
+                ->add('date', 'date', array(
+                    'label' => 'Fecha [dd/mm/yyyy]',
+                    'widget' => 'single_text',
+                    'format' => 'dd/MM/yyyy',
+                    'label_attr' => array('class' => 'date_lw_default'),
+                    'attr' => [
+                        'style' => 'text-align:center;',
+                        'class' => 'form-control input-inline datepicker',
+                        'data-provide' => 'datepicker',
+                        'data-date-format' => 'dd/mm/yyyy'
+                    ]
+                ));
+        }
+        $builder
             ->add('time', 'time', array(
                 "mapped" => false,
                 'widget' => 'choice',
                 'label'  => "Horario [hr/minutos]",
                 'attr'   => array('class' => 'time_lw_default'),
-                'label_attr' => array('class' => 'date_lw_default')
-            ))
-        ;
+                'label_attr' => array('class' => 'date_lw_default'),
+                'data' => $this->default_hora
+            ));
     }
 
     /**
      * @param OptionsResolverInterface $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => 'CoolwayFestivales\BackendBundle\Entity\Notification'
         ));
@@ -64,7 +95,8 @@ class NotificationType extends AbstractType
     /**
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return 'coolwayfestivales_backendbundle_notification';
     }
 

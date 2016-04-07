@@ -104,10 +104,11 @@ class NotificationController extends Controller
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
         $em = $this->getDoctrine()->getManager();
+        $dfHora = new \DateTime('00:00');
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Notification();
         $result = array();
 
-        $form = $this->createForm(new NotificationType($filtro), $entity);
+        $form = $this->createForm(new NotificationType($filtro, 'crear', $dfHora), $entity);
         $form->bind($request);
 
         $fechaHora = $form->get('date')->getData()->format('Y-m-d').' '.$form->get('time')->getData()->format('H:i').':00';
@@ -147,8 +148,9 @@ class NotificationController extends Controller
         $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
+        $dfHora = new \DateTime('00:00');
         $entity = new \CoolwayFestivales\BackendBundle\Entity\Notification();
-        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\NotificationType($filtro), $entity);
+        $form = $this->createForm(new \CoolwayFestivales\BackendBundle\Form\NotificationType($filtro, 'crear', $dfHora), $entity);
 
         return array(
             'entity' => $entity,
@@ -201,7 +203,7 @@ class NotificationController extends Controller
             throw $this->createNotFoundException('Unable to find stage entity.');
         }
 
-        $editForm = $this->createForm(new NotificationType($filtro), $entity);
+        $editForm = $this->createForm(new NotificationType($filtro, 'editar', $entity->getDate()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -229,7 +231,7 @@ class NotificationController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Stage entity.');
         }
-        $editForm = $this->createForm(new NotificationType($filtro), $entity);
+        $editForm = $this->createForm(new NotificationType($filtro, 'editar', $entity->getDate()), $entity);
         $editForm->bind($request);
 
         $fechaHora = $editForm->get('date')->getData()->format('Y-m-d').' '.$editForm->get('time')->getData()->format('H:i').':00';
