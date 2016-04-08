@@ -113,7 +113,7 @@ class FeastStageArtistController extends Controller {
         $form = $this->createForm(new FeastStageArtistType($filtro, 'crear', $artistas, $dfHora), $entity);
         $form->bind($request);
 
-        $errors = $this->checkDateRange($form);
+        $errors = $this->checkDateRangeAndDuplicated($form, 0);
         $fechaHora = $form->get('date')->getData()->format('Y-m-d').' '.$form->get('time')->getData()->format('H:i').':00';
 
         if ($form->isValid() && empty($errors))
@@ -252,7 +252,7 @@ class FeastStageArtistController extends Controller {
         $editForm = $this->createForm(new FeastStageArtistType($filtro, 'editar', $artistas, $entity->getDate()), $entity);
         $editForm->bind($request);
 
-        $errors = $this->checkDateRange($editForm);
+        $errors = $this->checkDateRangeAndDuplicated($editForm, $id);
         $fechaHora = $editForm->get('date')->getData()->format('Y-m-d').' '.$editForm->get('time')->getData()->format('H:i').':00';
 
         if ($editForm->isValid() && empty($errors))
@@ -360,7 +360,7 @@ class FeastStageArtistController extends Controller {
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
     //
-    public function checkDateRange($form)
+    public function checkDateRangeAndDuplicated($form, $id)
     {
         $errors = array();
         $obj    = $form['feast_stage']->getData();
@@ -370,6 +370,19 @@ class FeastStageArtistController extends Controller {
 
         if (!($sDate >= $oFrom->format('Y-m-d') && $sDate <= $oTo->format('Y-m-d'))) {
             $errors[] = array('field' => $form->getName().'_date', 'message' => 'La fecha no es correcta');
+        } else {
+            $artista  = $form['artist']->getData()->getId();
+            $festival = $obj->getFeast()->getId();
+            $stFiltro = $id > 0 ? 'AND fsa.id <> '.$id : '';
+
+            $q = $this->getDoctrine()->getManager()->createQuery(
+                "SELECT fsa FROM BackendBundle:FeastStageArtist fsa LEFT JOIN fsa.feast_stage fs WHERE fs.feast = $festival AND fsa.artist = $artista $stFiltro"
+            );
+            $q->setMaxResults(1); $r = $q->getOneOrNullResult();
+
+            if ($r) {
+                $errors[] = array('field' => $form->getName().'_feast_stage', 'message' => 'El artista ya tiene un horario registrado');
+            }
         }
         return $errors;
     }
