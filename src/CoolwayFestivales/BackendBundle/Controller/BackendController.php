@@ -6,12 +6,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use CoolwayFestivales\BackendBundle\Entity\Weather;
 
 /**
  * @Route("/admin")
  */
-class BackendController extends Controller {
-
+class BackendController extends Controller
+{
     /**
      * @Route("/dashboard", name="admin_dashboard")
      * @Template()
