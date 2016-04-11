@@ -8,48 +8,49 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use CoolwayFestivales\BackendBundle\Form\ImagesType;
+use Symfony\Component\Security\Core\Role\Role;
 use CoolwayFestivales\BackendBundle\Util\ResizeImage;
+use CoolwayFestivales\BackendBundle\Form\FoodiesType;
 
 /**
- * Images controller.
+ * Foodies controller.
  *
- * @Route("/admin/images")
+ * @Route("/admin/foodies")
  */
-class ImagesController extends Controller
+class FoodiesController extends Controller
 {
     /**
-     * Lists all Images entities.
+     * Lists all Foodies entities.
      *
-     * @Route("/", name="admin_images")
+     * @Route("/", name="admin_foodies")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
 
         if ($auth_checker->isGranted('ROLE_SUPER_ADMIN'))
         {
-            $entities = $this->getDoctrine()->getRepository('BackendBundle:Images')->findAll();
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Foodies')->findAll();
         } else {
             $token = $this->get('security.token_storage')->getToken();
             $user = $token->getUser();
 
-            $entities = $this->getDoctrine()->getRepository('BackendBundle:Images')->findInFestival($user->getFeast()->getId());
+            $entities = $this->getDoctrine()->getRepository('BackendBundle:Foodies')->findInFestival($user->getFeast()->getId());
         }
-        return $this->render('BackendBundle:Images:index.html.twig', array("entities" => $entities));
+        return $this->render('BackendBundle:Foodies:index.html.twig', array("entities" => $entities));
     }
     /**
-     * Lists all Images entities.
+     * Lists all Foodies entities.
      *
-     * @Route("/list", name="admin_images_list")
+     * @Route("/list", name="admin_foodies_list")
      * @Template()
      */
     public function listAction()
     {
         $this->_datatable();
-        return $this->render('BackendBundle:Images:list.html.twig');
+        return $this->render('BackendBundle:Foodies:list.html.twig');
     }
     /**
      * set datatable configs
@@ -58,42 +59,40 @@ class ImagesController extends Controller
     private function _datatable()
     {
         $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
-        $qb->from("BackendBundle:Images", "entity")
-                ->orderBy("entity.id", "desc");
+        $qb->from("BackendBundle:Foodies", "entity")
+            ->orderBy("entity.id", "desc");
         $datatable = $this->get('datatable')
-                ->setFields(
-                        array(
-                            'Nombre' => 'entity.name',
-                            "_identifier_" => 'entity.id')
-                )
-                ->setHasAction(false)
+            ->setFields(
+                array(
+                    'Nombre' => 'entity.name',
+                    "_identifier_" => 'entity.id')
+            )
+            ->setHasAction(false)
 //                ->setAcl(array("OWNER")) //OWNER,OPERATOR,VIEW
-                ->setSearch(TRUE);
+            ->setSearch(TRUE);
 
         $datatable->getQueryBuilder()->setDoctrineQueryBuilder($qb);
         return $datatable;
     }
     /**
-     * @Route("/admin_images_grid", name="admin_images_grid")
+     * @Route("/admin_foodies_grid", name="admin_foodies_grid")
      * @Template()
      */
-    public function gridAction()
-    {
-        return $this->_datatable()->execute();
-    }
+    public function gridAction() { return $this->_datatable()->execute(); }
+
     /**
-     * @Route("/datatable", name="datatable_images")
+     * @Route("/datatable", name="datatable_foodies")
      * @Template()
      */
     public function datatableAction()
     {
         $this->_datatable();
-        return $this->render('BackendBundle:Images:index.html.twig');
+        return $this->render('BackendBundle:Foodies:index.html.twig');
     }
     /**
-     * Crea una nueva images
+     * Crea una nuevo foodies
      *
-     * @Route("/create", name="admin_images_create")
+     * @Route("/create", name="admin_foodies_create")
      * @Method("post")
      */
     public function createAction(Request $request)
@@ -101,28 +100,23 @@ class ImagesController extends Controller
         $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
-        $entity = new \CoolwayFestivales\BackendBundle\Entity\Images();
-        $form = $this->createForm(new ImagesType($filtro), $entity);
+        $aFlags = array('foto' => true, 'portada' => true);
+        $entity = new \CoolwayFestivales\BackendBundle\Entity\Foodies();
+        $form = $this->createForm(new FoodiesType($aFlags, $filtro), $entity);
         $form->bind($request);
-
         $result = array();
+
         $em = $this->getDoctrine()->getManager();
-
         try {
-            $em->persist($entity);
-            $em->flush();
+            $em->persist($entity); $em->flush();
 
-            // upload images if any
-            $this->handleImage($form->get('cartel')->getData(), $entity->getId(), $entity->getFeast()->getId());
-            /*
-              //Integración con las ACLs
-              $user = $this->get('security.context')->getToken()->getUser();
-              $provider = $this->get('Apptibase.acl_manager');
-              $provider->addPermission($entity, $user, MaskBuilder::MASK_OWNER, "object");
-              //-----------------------------
-             */
+            // upload images
+            $this->handleImage($form->get('foto')->getData(), $form->get('portada')->getData(), $entity->getId());
+
             $result['success'] = true;
             $result['mensaje'] = 'Adicionado correctamente';
+            //
+            $this->getDoctrine()->getRepository('BackendBundle:Foodies')->cleanSocialNetworksValues($entity);
             //
             $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($entity->getFeast()->getId());
         }
@@ -133,9 +127,9 @@ class ImagesController extends Controller
         echo json_encode($result); die;
     }
     /**
-     * Displays a form to create a new Images entity.
+     * Displays a form to create a new foodies entity.
      *
-     * @Route("/new", name="admin_images_new")
+     * @Route("/new", name="admin_foodies_new")
      * @Method("GET")
      * @Template()
      */
@@ -144,18 +138,16 @@ class ImagesController extends Controller
         $filtro = $this->getDoctrine()->getRepository('BackendBundle:Step')->setFiltroByUser(
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
-        $entity = new \CoolwayFestivales\BackendBundle\Entity\Images();
-        $form = $this->createForm(new ImagesType($filtro), $entity);
+        $aFlags = array('foto' => true, 'portada' => true);
+        $entity = new \CoolwayFestivales\BackendBundle\Entity\Foodies();
+        $form = $this->createForm(new FoodiesType($aFlags, $filtro), $entity);
 
-        return array(
-            'entity' => $entity,
-            'form' => $form->createView(),
-        );
+        return array('entity' => $entity, 'form' => $form->createView());
     }
     /**
-     * Finds and displays a images entity.
+     * Finds and displays a foodies entity.
      *
-     * @Route("/show", name="admin_images_show")
+     * @Route("/show", name="admin_foodies_show")
      * @Method("GET")
      * @Template()
      */
@@ -164,22 +156,19 @@ class ImagesController extends Controller
         $id = $this->getRequest()->get("id");
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('BackendBundle:Images')->find($id);
+        $entity = $em->getRepository('BackendBundle:Foodies')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Images entity.');
+            throw $this->createNotFoundException('Unable to find entity.');
         }
         $deleteForm = $this->createDeleteForm($id);
 
-        return array(
-            'entity' => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
+        return array('entity' => $entity, 'delete_form' => $deleteForm->createView());
     }
     /**
-     * Displays a form to edit an existing images entity.
+     * Displays a form to edit an existing entity.
      *
-     * @Route("/edit", name="admin_images_edit")
+     * @Route("/edit", name="admin_foodies_edit")
      * @Method("GET")
      * @Template()
      */
@@ -191,12 +180,13 @@ class ImagesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $id = $this->getRequest()->get("id");
 
-        $entity = $em->getRepository('BackendBundle:Images')->find($id);
+        $entity = $em->getRepository('BackendBundle:Foodies')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find images entity.');
+            throw $this->createNotFoundException('Unable to find entity.');
         }
-        $editForm = $this->createForm(new ImagesType($filtro), $entity);
+        $aFlags     = $em->getRepository('BackendBundle:Foodies')->setRequiredImages($entity);
+        $editForm   = $this->createForm(new FoodiesType($aFlags, $filtro), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -206,9 +196,9 @@ class ImagesController extends Controller
         );
     }
     /**
-     * Edits an existing User entity.
+     * Edits an existing entity.
      *
-     * @Route("/{id}", name="admin_images_update")
+     * @Route("/{id}", name="admin_foodies_update")
      * @Method("PUT")
      */
     public function updateAction(Request $request, $id)
@@ -217,25 +207,28 @@ class ImagesController extends Controller
             $this->get('security.authorization_checker'), $this->get('security.token_storage')
         );
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('BackendBundle:Images')->find($id);
+        $entity = $em->getRepository('BackendBundle:Foodies')->find($id);
         $result = array();
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Images entity.');
+            throw $this->createNotFoundException('Unable to find entity.');
         }
-        $editForm = $this->createForm(new ImagesType($filtro), $entity);
+        $aFlags   = $em->getRepository('BackendBundle:Foodies')->setRequiredImages($entity);
+        $editForm = $this->createForm(new FoodiesType($aFlags, $filtro), $entity);
         $editForm->bind($request);
 
-        if ($editForm->isValid()) {
+        if ($editForm->isValid())
+        {
             try {
-                $em->persist($entity);
-                $em->flush();
+                $em->persist($entity); $em->flush();
 
-                // upload images if any
-                $this->handleImage($editForm->get('cartel')->getData(), $entity->getId(), $entity->getFeast()->getId());
+                // upload images
+                $this->handleImage($editForm->get('foto')->getData(), $editForm->get('portada')->getData(), $entity->getId());
 
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
+                //
+                $this->getDoctrine()->getRepository('BackendBundle:Foodies')->cleanSocialNetworksValues($entity);
                 //
                 $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($entity->getFeast()->getId());
             }
@@ -249,9 +242,9 @@ class ImagesController extends Controller
         echo json_encode($result); die;
     }
     /**
-     * Deletes a Images entity.
+     * Deletes an entity.
      *
-     * @Route("/{id}", name="admin_images_delete")
+     * @Route("/{id}", name="admin_foodies_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -261,18 +254,18 @@ class ImagesController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('BackendBundle:Images')->find($id);
+            $entity = $em->getRepository('BackendBundle:Foodies')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Images entity.');
+                throw $this->createNotFoundException('Unable to find entity.');
             }
             $em->remove($entity);
             $em->flush();
         }
-        return $this->redirect($this->generateUrl('admin_images'));
+        return $this->redirect($this->generateUrl('admin_foodies'));
     }
     /**
-     * Creates a form to delete a Images entity by id.
+     * Creates a form to delete an entity by id.
      *
      * @param mixed $id The entity id
      * @return Symfony\Component\Form\Form The form
@@ -282,9 +275,9 @@ class ImagesController extends Controller
         return $this->createFormBuilder(array('id' => $id))->add('id', 'hidden')->getForm();
     }
     /**
-     * Elimina a petición images entities.
+     * Elimina a petición entities.
      * dado un array de ids
-     * @Route("/bachdelete", name="admin_images_batchdelete")
+     * @Route("/bachdelete", name="admin_foodies_batchdelete")
      * @Template()
      */
     public function batchdeleteAction()
@@ -292,16 +285,15 @@ class ImagesController extends Controller
         $peticion = $this->getRequest();
         $ids = $peticion->get("ids", 0, true);
         $ids = explode(",", $ids);
-        $em  = $this->getDoctrine()->getManager();
 
-        $repo_images = $this->getDoctrine()->getRepository('BackendBundle:Images');
+        $em = $this->getDoctrine()->getManager();
 
-        foreach ($ids as $id)
-        {
-            $entity = $repo_images->find($id);
+        $repo_artist = $this->getDoctrine()->getRepository('BackendBundle:Foodies');
+
+        foreach ($ids as $id) {
+            $entity = $repo_artist->find($id);
             try {
                 $em->remove($entity);
-
                 $this->getDoctrine()->getRepository('BackendBundle:VersionControl')->updateVersionNumber($entity->getFeast()->getId());
             }
             catch (\Exception $e) {
@@ -320,31 +312,46 @@ class ImagesController extends Controller
         return new \Symfony\Component\HttpFoundation\Response($result);
     }
     //
-    public function handleImage($cartel, $id, $feast_id)
+    public function handleImage($foto, $portada, $id)
     {
-        if ($cartel)
+        if ($foto || $portada)
         {
             $oR = new ResizeImage();
             $em = $this->getDoctrine()->getManager();
-            $oCartel = $this->getDoctrine()->getRepository('BackendBundle:Images')->find($id);
+            $oArtist = $this->getDoctrine()->getRepository('BackendBundle:Foodies')->find($id);
 
-            if ($oCartel)
+            if ($oArtist)
             {
-                $dFestival = $this->get('kernel')->getRootDir().'/../web/uploads/festivals/';
-                if (!is_dir($dFestival)) { mkdir($dFestival, 0777); chmod($dFestival, 0777); }
+                $dArtist = $this->get('kernel')->getRootDir().'/../web/uploads/foodies/';
+                if (!is_dir($dArtist)) { mkdir($dArtist, 0777); chmod($dArtist, 0777); }
 
-                $dId = $dFestival.$feast_id.'/';
+                $dId = $dArtist.$id.'/';
                 if (!is_dir($dId)) { mkdir($dId, 0777); chmod($dId, 0777); }
-                if (!is_dir($dId.'cartel/')) { mkdir($dId.'cartel/', 0777); chmod($dId.'cartel/', 0777);}
+
+                if (!is_dir($dId.'80/'))  { mkdir($dId.'80/' , 0777); chmod($dId.'80/' , 0777);}
+                if (!is_dir($dId.'100/')) { mkdir($dId.'100/', 0777); chmod($dId.'100/', 0777);}
+                if (!is_dir($dId.'200/')) { mkdir($dId.'200/', 0777); chmod($dId.'200/', 0777);}
+                if (!is_dir($dId.'400/')) { mkdir($dId.'400/', 0777); chmod($dId.'400/', 0777);}
+                if (!is_dir($dId.'cover/')) { mkdir($dId.'cover/', 0777); chmod($dId.'cover/', 0777);}
                 //
-                $nm = $cartel->getClientOriginalName(); $oCartel->setPath($nm);
+                if ($foto)
+                {
+                    $nm = $foto->getClientOriginalName(); $oArtist->setPath($nm);
 
-                $cartel->move($dId.'cartel', $nm);
-                $oR->setSimple($nm, $nm, $dId.'cartel/', 1422, 2211, 0, 0, '', array('metodo' => 'full'));
-                $oR->setSimple($nm, 'thumb1_'.$nm, $dId.'cartel/', 300, 300, 0, 0, '', array('metodo' => 'full'));
-                $oR->setSimple($nm, 'thumb2_'.$nm, $dId.'cartel/', 100, 100, 0, 0, '', array('metodo' => 'full'));
+                    $foto->move($dId, $nm);
+                    $oR->setSimple($nm, $nm, $dId, 400, 400, 0, 0, '', array('destino' => $dId.'400/', 'metodo' => 'full'));
+                    $oR->setSimple($nm, $nm, $dId.'400/', 200, 200, 0, 0, '', array('destino' => $dId.'200/', 'metodo' => 'full'));
+                    $oR->setSimple($nm, $nm, $dId.'200/', 100, 100, 0, 0, '', array('destino' => $dId.'100/', 'metodo' => 'full'));
+                    $oR->setSimple($nm, $nm, $dId.'100/',  80,  80, 0, 0, '', array('destino' => $dId.'80/' , 'metodo' => 'full'));
+                }
+                if ($portada)
+                {
+                    $nc = $portada->getClientOriginalName(); $oArtist->setCover($nc);
 
-                $em->persist($oCartel); $em->flush();
+                    $portada->move($dId.'cover', $nc);
+                    $oR->setSimple($nc, $nc, $dId.'cover/', 600, 450, 0, 0, '', array('metodo' => 'full'));
+                }
+                $em->persist($oArtist); $em->flush();
             }
         }
     }

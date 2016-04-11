@@ -9,8 +9,10 @@ class WeatherRepository extends EntityRepository
 {
     public function setForecastInfo($feast, $lat, $long)
     {
+        //$json_string = file_get_contents("http://api.wunderground.com/api/$client_key/forecast10day/lang:SP/q/$lat,$long.json");
+
         $client_key  = 'ffbe1396bbafa620';
-        $json_string = file_get_contents("http://api.wunderground.com/api/$client_key/forecast10day/lang:SP/q/$lat,$long.json");
+        $json_string = file_get_contents("http://api.wunderground.com/api/$client_key/forecast10day/q/$lat,$long.json");
         $parsed_json = json_decode($json_string);
         $em =  $this->getEntityManager();
 
@@ -23,6 +25,43 @@ class WeatherRepository extends EntityRepository
 
             foreach ($_10Dias as $dia)
             {
+                switch ($dia->{'icon'})
+                {
+                    case 'sunny':
+                    case 'clear':
+                    case 'mostlysunny':
+                    case 'partlysunny':
+                        $condicion = 'Soleado';
+                        $url_icono = 'http://icons.wxug.com/i/c/k/clear.gif';
+                        break;
+                    case 'cloudy':
+                    case 'partlycloudy':
+                    case 'mostlycloudy':
+                    case 'chancerain':
+                        $condicion = 'Nublado';
+                        $url_icono = 'http://icons.wxug.com/i/c/k/cloudy.gif';
+                        break;
+                    case 'rain':
+                    case 'fog':
+                    case 'hazy':
+                    case 'sleet':
+                    case 'chancesleet':
+                        $condicion = 'Lluvia';
+                        $url_icono = 'http://icons.wxug.com/i/c/k/sleet.gif';
+                        break;
+                    case 'tstorms':
+                    case 'snow':
+                    case 'chanceflurries':
+                    case 'flurries':
+                    case 'chancetstorms':
+                    case 'chancesnow':
+                        $condicion = 'Tormenta';
+                        $url_icono = 'http://icons.wxug.com/i/c/k/tstorms.gif';
+                        break;
+                    default:
+                        $condicion = 'Soleado';
+                        $url_icono = 'http://icons.wxug.com/i/c/k/clear.gif';
+                }
                 $sFecha = $dia->{'date'}->{'year'}.'-'.$dia->{'date'}->{'month'}.'-'.$dia->{'date'}->{'day'};
                 $oFecha = new \DateTime($sFecha);
                 //
@@ -33,8 +72,8 @@ class WeatherRepository extends EntityRepository
                 $obj->setWeekday      ($dia->{'date'}->{'weekday'});
                 $obj->setMinTemp      ($dia->{'low'}->{'celsius'});
                 $obj->setMaxTemp      ($dia->{'high'}->{'celsius'});
-                $obj->setConditionDay ($dia->{'conditions'});
-                $obj->setConditionIcon($dia->{'icon_url'});
+                $obj->setConditionDay ($condicion);
+                $obj->setConditionIcon($url_icono);
                 $obj->setHumidity     ($dia->{'avehumidity'});
                 $obj->setLoadDate     ($oNow);
 
