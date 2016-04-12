@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class ArtistController extends FOSRestController implements ClassResourceInterface
+class PosterController extends FOSRestController implements ClassResourceInterface
 {
 
     /**
@@ -21,8 +21,8 @@ class ArtistController extends FOSRestController implements ClassResourceInterfa
      * @return array
      *
      * @ApiDoc(
-     *  section="Artist",
-     *  description="List Artist",
+     *  section="Poster",
+     *  description="Festival Poster",
      *  statusCodes={
      *         200="Returned when successful"
      *  },
@@ -39,11 +39,11 @@ class ArtistController extends FOSRestController implements ClassResourceInterfa
         if(is_object($feast))
         {
             $em = $this->getDoctrine()->getManager();
-            $artists = $em->getRepository("BackendBundle:FeastStageArtist")->getArtistByFeast($feast->getId());
+            $poster = $em->getRepository("BackendBundle:FeastStageArtist")->getArtistByFeast($feast->getId());
 
             $response->setContent(json_encode(array(
                 'success' => true,
-                'data' => $artists,
+                'data' => $poster,
             )));
         }else{
             $response->setContent(json_encode(array(
