@@ -177,6 +177,7 @@ class CustomerController extends FOSRestController implements ClassResourceInter
      *
      * @param Request $request
      * @ApiDoc(
+     *   section="Customer",
      *   resource = true,
      *   description = "Reenvia Contraseña",
      *   requirements={

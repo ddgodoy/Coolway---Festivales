@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class PosterController extends FOSRestController implements ClassResourceInterface
+class MapController extends FOSRestController implements ClassResourceInterface
 {
 
     /**
@@ -21,8 +21,8 @@ class PosterController extends FOSRestController implements ClassResourceInterfa
      * @return array
      *
      * @ApiDoc(
-     *  section="Poster",
-     *  description="Festival Poster",
+     *  section="Map",
+     *  description="Precinct Map",
      *  statusCodes={
      *         200="Returned when successful"
      *  },
@@ -39,14 +39,35 @@ class PosterController extends FOSRestController implements ClassResourceInterfa
         if(is_object($feast))
         {
             $em = $this->getDoctrine()->getManager();
-            $poster = $em->getRepository("BackendBundle:Images")->findOneBy(
-                array('feast'=> $feast->getId(), 'enabled'=> true), array('id' => 'DESC'));
+            $precinct = $em->getRepository("BackendBundle:Feast")->findOneBy(
+                array('id'=> $feast->getId()), array('id' => 'DESC'));
+            $maps = $em->getRepository("BackendBundle:Googlemap")->findBy(
+                array('feast'=> $feast->getId()));
 
             $data = array();
-            if(count($poster) > 0)
+
+            if(count($maps) > 0)
             {
-                $data['id'] = $poster->getId();
-                $data['image'] = $poster->getPath();
+                $data['name'] = $precinct->getName();
+                $data['image'] = $precinct->getPath();
+                $data['latitude'] = $precinct->getLatitude();
+                $data['longitude'] = $precinct->getLongitude();
+            }
+
+
+            if(count($maps) > 0)
+            {
+                $cont = 0;
+                foreach($maps as $map)
+                {
+                    $data['locations'][$cont]['name'] = $map->getName();
+                    $data['locations'][$cont]['detail'] = $map->getDetail();
+                    $data['locations'][$cont]['image'] = $map->getPath();
+                    $data['locations'][$cont]['latitude'] = $map->getLatitude();
+                    $data['locations'][$cont]['longitude'] = $map->getLongitude();
+                    $cont++;
+                }
+
             }
 
             $response->setContent(json_encode(array(

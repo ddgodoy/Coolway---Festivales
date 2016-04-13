@@ -5,3 +5,11 @@ api_customer:
 api_artist:
     type: rest
     resource: CoolwayFestivalesApiBundle:Artist
+
+api_poster:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Poster
+
+api_map:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Map
