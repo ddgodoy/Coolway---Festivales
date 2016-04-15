@@ -1,6 +1,10 @@
-api_customer:
+api_user:
     type: rest
-    resource: CoolwayFestivalesApiBundle:Customer
+    resource: CoolwayFestivalesApiBundle:User
+
+api_authentication:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Authentication
 
 api_artist:
     type: rest
