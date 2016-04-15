@@ -73,6 +73,7 @@ swiftmailer:
     spool:     { type: memory }
 
 
+
 fos_rest:
     disable_csrf_role: ROLE_API
     param_fetcher_listener: true
@@ -89,7 +90,6 @@ fos_rest:
           html: true
         formats:
             json: true
-            xml: true
         exception_wrapper_handler:  null
     format_listener:
         rules:

@@ -2,15 +2,18 @@
 
 namespace CoolwayFestivales\ApiBundle\Controller;
 
+use CoolwayFestivales\SafetyBundle\Entity\Role;
 use CoolwayFestivales\SafetyBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Response;
 
 
-class CustomerController extends FOSRestController implements ClassResourceInterface
+class UserController extends FOSRestController implements ClassResourceInterface
 {
 
     /**
@@ -18,104 +21,10 @@ class CustomerController extends FOSRestController implements ClassResourceInter
      * @return array
      *
      * @ApiDoc(
-     *  section="Customer",
-     *  description="Login customer",
-     *  requirements={
-     *      {"name"="email", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Email Address"},
-     *      {"name"="password", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Password"},
-     *   },
-     *  statusCodes={
-     *         200="Returned when successful"
-     *  },
-     *  tags={
-     *   "stable" = "#4A7023",
-     *   "v1" = "#ff0000"
-     *  }
-     * )
-     */
-    public function getAction(Request $request)
-    {
-        $email = $request->get('email');
-        $password = $request->get('password');
-        $social = $request->get('social', false);
-        $em = $this->getDoctrine()->getManager();
-
-        $user = $em->getRepository('SafetyBundle:User')
-            ->findOneBy(array('email' => $email));
-
-        if ($user) {
-            $encoder = $this->get('security.encoder_factory')->getEncoder($user);
-            $passwordEncoded = $encoder->encodePassword($password, $user->getSalt());
-
-            if ($passwordEncoded === $user->getPassword() || $social) {
-                $user->setAccessToken(md5($user->getId() . '-' . date('Y-m-d-H-i-s')));
-                $em->persist($user);
-                $em->flush();
-
-                $response = array(
-                    'success' => true,
-                    'access_token' => $user->getAccessToken(),
-                    'email' => $user->getEmail());
-            } else {
-                $response = array(
-                    'success' => false,
-                    'message' => 'invalid data'
-                );
-            }
-
-        } else {
-            if ($social) {
-                $userManager = $this->get('fos_user.user_manager');
-                $user = $userManager->createUser();
-
-                $user->setPlainPassword($password);
-                $user->addRole("ROLE_USER_APP");
-                $user->setUsername($email);
-                $user->setEmail($email);
-                $user->setEnabled(true);
-                $user->setFirstLogin(true);
-
-                $userManager->updateUser($user);
-
-                $user->setAccessToken(md5($user->getId() . '-' . date('Y-m-d-H-i-s')));
-
-                $userManager->updateUser($user);
-
-                $pf = new ProfessionalProfile();
-                $pf->setUser($user);
-                $pf->setDisponibilidad("a negociar");
-                $pf->setDescription("agrega una descripción");
-                $pf->setInteres(0);
-
-                $em->persist($pf);
-                $em->flush();
-
-                $response['success'] = true;
-                $response['access_token'] = $user->getAccessToken();
-                $response['email'] = $user->getEmail();
-                $response['cv'] = '0';
-                $response['image'] = false;
-                $response['complete'] = 0;
-
-            } else {
-                $response = array(
-                    'success' => false,
-                    'message' => 'Datos Incorrectos'
-                );
-            }
-        }
-
-        return $response;
-    }
-
-    /**
-     * @param Request $request
-     * @return array
-     *
-     * @ApiDoc(
-     *  section="Customer",
-     *  description="Create a customer",
+     *  section="User",
+     *  description="Create a user",
      *   requirements={
+     *      {"name"="name", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Full Name"},
      *      {"name"="email", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Email Address"},
      *      {"name"="password", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Password"},
      *   },
@@ -130,21 +39,38 @@ class CustomerController extends FOSRestController implements ClassResourceInter
      */
     public function postAction(Request $request)
     {
+        $response = new Response();
+        $name = $request->get('name');
         $email = $request->get('email');
         $password = $request->get('password');
+
+        if(!isset($name))
+            throw new HttpException(400, "El campo nombre es obligatorio");
+        if(!isset($email))
+            throw new HttpException(400, "El campo email es obligatorio");
+        if(!isset($password))
+            throw new HttpException(400, "El campo contraseña es obligatorio");
+
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('SafetyBundle:User')
             ->findOneBy(array('email' => $email));
 
         if ($user) {
-            $response['success'] = false;
-            $response['message'] = 'El email ya existe';
+            throw new HttpException(400, "El email ya se encuentra registrado");
         } else {
 
             $user = new User();
             $user->setPassword($password);
             $role = $em->getRepository("SafetyBundle:Role")->findOneByName("ROLE_CUSTOMER");
+            if(count($role) < 1)
+            {
+                $role =  new Role();
+                $role->setName('ROLE_CUSTOMER');
+                $role->setDescription('ROLE_CUSTOMER');
+                $em->persist($role);
+            }
+            $user->setName($name);
             $user->addRole($role);
             $user->setUsername($email);
             $user->setEmail($email);
@@ -164,22 +90,22 @@ class CustomerController extends FOSRestController implements ClassResourceInter
                 );
 
             $this->get('mailer')->send($message);
-
-            $response['success'] = true;
-            $response['access_token'] = $user->getAccessToken();
-            $response['email'] = $user->getEmail();
+            $response->setContent(json_encode(array(
+                'access_token' => $user->getAccessToken(),
+                'name' => $user->getName(),
+                'email' => $user->getEmail()
+            )));
+            return $response;
         }
-
-        return $response;
     }
 
     /**
      *
      * @param Request $request
      * @ApiDoc(
-     *   section="Customer",
+     *   section="User",
      *   resource = true,
-     *   description = "Reenvia Contraseña",
+     *   description = "Reenviar Contraseña",
      *   requirements={
      *      {"name"="email", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Email Address"},
      *   },
