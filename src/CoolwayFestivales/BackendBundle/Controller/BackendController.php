@@ -19,12 +19,14 @@ class BackendController extends Controller
      */
     public function dashboardAction(Request $request)
     {
+        $fs_image = '';
         $feast_id = null;
         $user = $this->get('security.context')->getToken()->getUser();
 
         if ($user->getFeast())
         {
             $feast_id = $user->getFeast()->getId();
+            $fs_image = $user->getFeast()->getImage();
         } else {
             $oFeast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->findCurrent();
 
@@ -36,6 +38,7 @@ class BackendController extends Controller
         }
         $session = $request->getSession();
         $session->set('user_feast_id', $feast_id);
+        $session->set('user_feast_logo', $fs_image);
         //
         $auth_checker = $this->get('security.authorization_checker');
 

@@ -11,20 +11,14 @@
                 <i class="fa fa-home"></i>
                 <a href="{{path("admin_dashboard")}}">Inicio</a>
                 <i class="fa fa-angle-right"></i>
-
             </li>
             <li>
                 <a href="{{path("admin_user")}}">Gestionar Cuentas de Usuario</a>
             </li>
-
         </ul>
-
     </div>
-
     <div class="row">
-
         <div class="col-md-12">
-
             <div class="portlet box blue-madison">
                 <div class="portlet-title">
                     <div class="caption">
@@ -35,7 +29,6 @@
                     <div class="table-toolbar">
                         <div class="row">
                             <div class="col-md-9">
-
                                 <a data-toggle="modal" data-target="#ajax" href="{{path("admin_user_new")}}" class=" btn green">
                                     Nuevo <i class="fa fa-plus"></i></a>
                                 <a data-toggle="modal" data-target="#modalEdit" href="javascript:void(0)" id="btnedit" class="btn blue" disabled="disabled">
@@ -60,9 +53,6 @@
                                 <th>
                                     Email
                                 </th>
-                                <th>
-                                    Tel&eacute;fono
-                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,15 +67,8 @@
                                     <td>
                                         {{entity.email}}
                                     </td>
-                                    <td>
-                                        {{entity.token_phone}}
-                                    </td>
-
                                 </tr>
-
                             {%endfor%}
-
-
                         </tbody>
                     </table>
                 </div>
