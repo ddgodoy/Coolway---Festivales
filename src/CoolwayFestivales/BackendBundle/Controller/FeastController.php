@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use CoolwayFestivales\BackendBundle\Form\FeastType;
+use CoolwayFestivales\BackendBundle\Util\ResizeImage;
 
 /**
  * Feast controller.
@@ -105,6 +106,9 @@ class FeastController extends Controller {
             try {
                 $em->persist($entity);
                 $em->flush();
+
+                // upload images if any
+                $this->handleImage($form->get('image')->getData(), $entity->getId());
                 /*
                   Integración con las ACLs
                   $user = $this->get('security.context')->getToken()->getUser();
@@ -216,9 +220,14 @@ class FeastController extends Controller {
             try {
                 $em->persist($entity);
                 $em->flush();
+
                 $result['success'] = true;
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
-            } catch (\Exception $exc) {
+
+                // upload images if any
+                $this->handleImage($editForm->get('image')->getData(), $entity->getId());
+            }
+            catch (\Exception $exc) {
                 $result['success'] = false;
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
@@ -320,6 +329,33 @@ class FeastController extends Controller {
             $errors[] = array('field' => $form->getName().'_date_to', 'message' => 'La fecha no es correcta');
         }
         return $errors;
+    }
+    //
+    public function handleImage($image, $id)
+    {
+        if ($image)
+        {
+            $oR = new ResizeImage();
+            $em = $this->getDoctrine()->getManager();
+            $oB = $this->getDoctrine()->getRepository('BackendBundle:Feast')->find($id);
+
+            if ($oB)
+            {
+                $dFestival = $this->get('kernel')->getRootDir().'/../web/uploads/festivals/';
+                if (!is_dir($dFestival)) { mkdir($dFestival, 0777); chmod($dFestival, 0777); }
+
+                $dId = $dFestival.$id.'/';
+                if (!is_dir($dId)) { mkdir($dId, 0777); chmod($dId, 0777); }
+                if (!is_dir($dId.'header/')) { mkdir($dId.'header/', 0777); chmod($dId.'header/', 0777);}
+                //
+                $nm = $image->getClientOriginalName(); $oB->setImage($nm);
+
+                $image->move($dId.'header', $nm);
+                $oR->setSimple($nm, $nm, $dId.'header/', 200, 45, 0, 0, '', array('metodo' => 'full'));
+
+                $em->persist($oB); $em->flush();
+            }
+        }
     }
 
 } // end class

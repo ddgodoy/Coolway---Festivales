@@ -61,6 +61,12 @@ class Feast
     private $path;
 
     /**
+     * @var string $image
+     * @ORM\Column(name="image", type="string", length=250, nullable=true)
+     */
+    private $image;
+
+    /**
      * @OneToMany(targetEntity="FeastStage", mappedBy="feast", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
      */
     public $feast_stages;
@@ -70,9 +76,7 @@ class Feast
      */
     public $feast_userdfeastdata;
 
-    public function __construct() {
-
-    }
+    public function __construct() {}
 
     public function __toString() {
         return $this->name;
@@ -164,6 +168,27 @@ class Feast
      */
     public function getDateTo() {
         return $this->date_to;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     * @return Feast
+     */
+    public function setImage($image) {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage() {
+        return $this->image;
     }
 
     /**

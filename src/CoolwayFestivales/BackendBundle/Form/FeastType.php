@@ -14,6 +14,7 @@ class FeastType extends AbstractType
     {
         $builder
             ->add('name', null, array('label' => 'Nombre'))
+            ->add('image', 'file', array('label' => 'Imagen', 'mapped' => false, 'required' => false))
             ->add('latitude', null, array(
                 'label' => 'Latitud',
                 'attr' => array('placeholder' => 'grados decimales, ej: 40.7127837')

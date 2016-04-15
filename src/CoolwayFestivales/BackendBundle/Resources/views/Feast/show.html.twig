@@ -1,5 +1,3 @@
-
-
 <table class="table table-striped">
     <tbody>
         <tr>
@@ -20,12 +18,18 @@
         </tr>
         <tr>
             <th>Desde</th>
-            <td>{{ entity.date_from | date("d-m-Y") }}</td>
+            <td>{{ entity.dateFrom | date("d-m-Y") }}</td>
         </tr>
         <tr>
             <th>Hasta</th>
-            <td>{{ entity.date_to | date("d-m-Y") }}</td>
+            <td>{{ entity.dateTo | date("d-m-Y") }}</td>
         </tr>
-
+        {% if entity.image %}
+            <tr>
+                <td colspan="2" style="text-align:center;">
+                    <img src="{{asset('uploads/festivals/')}}{{ entity.id }}/header/{{ entity.image }}" alt="{{entity.image}}" title="{{entity.image}}"/>
+                </td>
+            </tr>
+        {% endif %}
     </tbody>
 </table>
