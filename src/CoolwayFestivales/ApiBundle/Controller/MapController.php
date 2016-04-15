@@ -46,7 +46,7 @@ class MapController extends FOSRestController implements ClassResourceInterface
 
             $data = array();
 
-            if(count($maps) > 0)
+            if(count($precinct) > 0)
             {
                 $data['name'] = $precinct->getName();
                 $data['image'] = $precinct->getPath();

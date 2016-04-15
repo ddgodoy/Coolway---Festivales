@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bad2f218-dd8d-4c13-900d-3c7d32f131a9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/AuthenticationController.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/CustomerController.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/UserController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/config.yml" afterPath="$PROJECT_DIR$/app/config/config.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/MapController.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/MapController.php" />
     </list>
     <ignored path="Coolway.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,7 +28,7 @@
       <file leaf-file-name="UserController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/UserController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.965517">
+            <state vertical-scroll-proportion="0.0">
               <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
               <folding>
                 <element signature="e#58#105#0#PHP" expanded="true" />
@@ -40,14 +37,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AuthenticationController.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AuthenticationController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/AuthenticationController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.46702704">
+            <state vertical-scroll-proportion="-16.0">
               <caret line="24" column="31" selection-start-line="24" selection-start-column="31" selection-end-line="24" selection-end-column="31" />
               <folding>
                 <element signature="e#58#105#0#PHP" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MapController.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/MapController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.48432434">
+              <caret line="54" column="13" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="13" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -57,9 +64,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-              <folding>
-                <marker date="1460662594236" expanded="true" signature="0:71" placeholder="api_user:" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -67,7 +72,7 @@
       <file leaf-file-name="ArtistController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ArtistController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="3.7407408">
+            <state vertical-scroll-proportion="0.0">
               <caret line="11" column="46" selection-start-line="11" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding>
                 <element signature="e#58#107#0#PHP" expanded="true" />
@@ -79,7 +84,7 @@
       <file leaf-file-name="User.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/SafetyBundle/Entity/User.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-126.666664">
+            <state vertical-scroll-proportion="0.0">
               <caret line="211" column="27" selection-start-line="211" selection-start-column="20" selection-end-line="211" selection-end-column="27" />
               <folding />
             </state>
@@ -107,13 +112,13 @@
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ArtistController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/SafetyBundle/Entity/User.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/CustomerController.php" />
-        <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/MapController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/PosterController.php" />
         <option value="$PROJECT_DIR$/app/config/config.yml" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/UserController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/LoginController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/AuthenticationController.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/MapController.php" />
       </list>
     </option>
   </component>
@@ -125,9 +130,9 @@
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
     <option name="x" value="65" />
-    <option name="y" value="24" />
+    <option name="y" value="-4" />
     <option name="width" value="1855" />
-    <option name="height" value="1056" />
+    <option name="height" value="1084" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -154,6 +159,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -311,7 +317,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -366,7 +371,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
+    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25067386" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -700,15 +705,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="48" column="28" selection-start-line="48" selection-start-column="28" selection-end-line="48" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/MapController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="53" column="21" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -716,7 +712,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -724,7 +719,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="8.22479">
           <caret line="435" column="71" selection-start-line="435" selection-start-column="65" selection-end-line="435" selection-end-column="71" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -732,13 +726,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.48949578">
           <caret line="92" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/SafetyBundle/Entity/User.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-126.666664">
+        <state vertical-scroll-proportion="0.0">
           <caret line="211" column="27" selection-start-line="211" selection-start-column="20" selection-end-line="211" selection-end-column="27" />
           <folding />
         </state>
@@ -746,7 +739,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ArtistController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.7407408">
+        <state vertical-scroll-proportion="0.0">
           <caret line="11" column="46" selection-start-line="11" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding>
             <element signature="e#58#107#0#PHP" expanded="true" />
@@ -756,7 +749,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/UserController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.965517">
+        <state vertical-scroll-proportion="0.0">
           <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
           <folding>
             <element signature="e#58#105#0#PHP" expanded="true" />
@@ -768,19 +761,25 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-          <folding>
-            <marker date="1460662594236" expanded="true" signature="0:71" placeholder="api_user:" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/AuthenticationController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46702704">
+        <state vertical-scroll-proportion="-16.0">
           <caret line="24" column="31" selection-start-line="24" selection-start-column="31" selection-end-line="24" selection-end-column="31" />
           <folding>
             <element signature="e#58#105#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/MapController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.48432434">
+          <caret line="54" column="13" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
