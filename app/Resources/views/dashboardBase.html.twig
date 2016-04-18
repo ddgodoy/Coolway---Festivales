@@ -53,12 +53,12 @@
                 <div class="page-logo1" style="float: left;">
                     <a href="{{path("admin_dashboard")}}">
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
-                            <img src="{{asset('assets/admin/layout/img/logo_small.png')}}" alt="logo" class="logo-default img-responsive"/>
+                            <img src="{{asset('assets/admin/layout/img/logo_small3.png')}}" alt="logo" class="logo-default img-responsive"/>
                         {% else %}
                             {% if app.session.get('user_feast_logo') %}
                                 <img src="{{asset('uploads/festivals/')}}{{ app.session.get('user_feast_id') }}/header/{{ app.session.get('user_feast_logo') }}" alt="logo" class="logo-default img-responsive"/>
                             {% else %}
-                                <img src="{{asset('assets/admin/layout/img/logo_small.png')}}" alt="logo" class="logo-default img-responsive"/>
+                                <img src="{{asset('assets/admin/layout/img/logo_small3.png')}}" alt="logo" class="logo-default img-responsive"/>
                             {% endif %}
                         {% endif %}
                     </a>
