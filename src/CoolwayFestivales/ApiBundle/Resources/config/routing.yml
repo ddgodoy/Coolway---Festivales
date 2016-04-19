@@ -17,3 +17,19 @@ api_poster:
 api_map:
     type: rest
     resource: CoolwayFestivalesApiBundle:Map
+
+api_favorite:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Favorite
+
+api_notification:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Notification
+
+api_weather:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Weather
+
+api_version:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Version
