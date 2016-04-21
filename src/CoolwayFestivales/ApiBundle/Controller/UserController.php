@@ -140,6 +140,7 @@ class UserController extends FOSRestController implements ClassResourceInterface
                 $em->flush();
 
                 $response->setContent(json_encode(array(
+                    'id' => $user->getId(),
                     'access_token' => $user->getAccessToken(),
                     'name' => $user->getName(),
                     'email' => $user->getEmail()
