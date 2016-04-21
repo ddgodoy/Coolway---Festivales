@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class WeatherController extends FOSRestController implements ClassResourceInterface
+class CoolwayController extends FOSRestController implements ClassResourceInterface
 {
 
     /**
@@ -21,8 +21,8 @@ class WeatherController extends FOSRestController implements ClassResourceInterf
      * @return array
      *
      * @ApiDoc(
-     *  section="Weather",
-     *  description="Weather",
+     *  section="Coolway",
+     *  description="Coolway",
      *  statusCodes={
      *         200="Returned when successful"
      *  },
@@ -39,21 +39,19 @@ class WeatherController extends FOSRestController implements ClassResourceInterf
         if(is_object($feast))
         {
             $em = $this->getDoctrine()->getManager();
-            $weathers = $em->getRepository("BackendBundle:Weather")->findBy(
+            $coolway = $em->getRepository("BackendBundle:Contest")->findBy(
                 array('feast'=> $feast->getId()), array('id' => 'ASC'));
 
 
             $data = array();
-            if(count($weathers) > 0)
+            if(count($coolway) > 0)
             {
                 $cont = 0;
-                foreach($weathers as $weather)
+                foreach($coolway as $item)
                 {
-                    $data[$cont]['forecast_date'] = $weather->getForecastDate();
-                    $data[$cont]['min_temp'] = $weather->getMinTemp();
-                    $data[$cont]['max_temp'] = $weather->getMaxTemp();
-                    $data[$cont]['condition_day'] = $weather->getConditionDay();
-                    $data[$cont]['condition_icon'] = $weather->getConditionIcon();
+                    $data[$cont]['image'] = $item->getName();
+                    $data[$cont]['winner'] = $item->getWinner();
+                    $data[$cont]['date'] = $item->getLoadDate();
                     $cont++;
                 }
 

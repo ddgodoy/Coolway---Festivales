@@ -33,3 +33,7 @@ api_weather:
 api_version:
     type: rest
     resource: CoolwayFestivalesApiBundle:Version
+
+api_coolway:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Coolway
