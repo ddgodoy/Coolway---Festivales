@@ -80,16 +80,16 @@ class UserController extends FOSRestController implements ClassResourceInterface
             $em->persist($user);
             $em->flush();
 
-            $message = \Swift_Message::newInstance()
-                ->setSubject('Nueva Cuenta')
-                ->setFrom('info@coolway.com')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    $this->get('templating')->render('CoolwayFestivalesApiBundle:Email:welcome.html.twig'),
-                    'text/html'
-                );
-
-            $this->get('mailer')->send($message);
+//            $message = \Swift_Message::newInstance()
+//                ->setSubject('Nueva Cuenta')
+//                ->setFrom('info@coolway.com')
+//                ->setTo($user->getEmail())
+//                ->setBody(
+//                    $this->get('templating')->render('CoolwayFestivalesApiBundle:Email:welcome.html.twig'),
+//                    'text/html'
+//                );
+//
+//            $this->get('mailer')->send($message);
             $response->setContent(json_encode(array(
                 'id' => $user->getId(),
                 'access_token' => $user->getAccessToken(),
