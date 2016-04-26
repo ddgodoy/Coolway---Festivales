@@ -114,5 +114,67 @@ class AuthenticationController extends FOSRestController implements ClassResourc
 
 
 
+    /**
+     *
+     * @param Request $request
+     * @ApiDoc(
+     *   section="Authentication",
+     *   resource = true,
+     *   description = "Resend password",
+     *   requirements={
+     *      {"name"="email", "dataType"="string", "requirement"="/^[A-Za-z0-9 _.-]+$/", "description"="Email address"},
+     *   },
+     *   statusCodes = {
+     *      200="Returned when successful"
+     *   }
+     * )
+     *
+     * @return array
+     */
+    public function putAction(Request $request)
+    {
+        $response = new Response();
+        $email = $request->get('email');
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $em->getRepository('SafetyBundle:User')
+            ->findOneBy(array('email' => $email));
+
+        if ($user) {
+            $password = $this->generateRandomString(8);
+            $user->setPassword($password);
+            $em->persist($user);
+            $em->flush();
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Nueva contraseña Festival de les arts')
+                ->setFrom('info@festivaldelesarts.com')
+                ->setTo($user->getEmail())
+                ->setBody("Su nueva contraseña es $password ");
+
+            $this->get('mailer')->send($message);
+
+            $response->setContent(json_encode(array(
+                'success' => true
+            )));
+        }else
+            throw new HttpException(400, "Datos invalidos");
+
+        return $response;
+    }
+
+
+    private function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+
+
 
 }
