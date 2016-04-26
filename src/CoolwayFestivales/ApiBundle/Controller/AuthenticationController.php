@@ -60,6 +60,35 @@ class AuthenticationController extends FOSRestController implements ClassResourc
                 'email' => $user->getEmail()
             )));
 
+        }else if($social) {
+            $user = new User();
+            $name = $request->get('name');
+            $password = '12345678';
+            $user->setPassword($password);
+            $role = $em->getRepository("SafetyBundle:Role")->findOneByName("ROLE_CUSTOMER");
+            if(count($role) < 1)
+            {
+                $role =  new Role();
+                $role->setName('ROLE_CUSTOMER');
+                $role->setDescription('App Customer');
+                $em->persist($role);
+            }
+            $user->setName($name);
+            $user->addRole($role);
+            $user->setUsername($email);
+            $user->setEmail($email);
+            $user->setEnabled(true);
+            $user->setAccessToken(md5($user->getId() . '-' . date('Y-m-d-H-i-s')));
+
+            $em->persist($user);
+            $em->flush();
+
+            $response->setContent(json_encode(array(
+                'id' => $user->getId(),
+                'access_token' => $user->getAccessToken(),
+                'name' => $user->getName(),
+                'email' => $user->getEmail()
+            )));
         }else if($user) {
             $encoder = $this->get('security.encoder_factory')->getEncoder($user);
             $passwordEncoded = $encoder->encodePassword($password, $user->getSalt());
