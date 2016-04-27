@@ -148,7 +148,7 @@ class AuthenticationController extends FOSRestController implements ClassResourc
 
             $message = \Swift_Message::newInstance()
                 ->setSubject('Nueva contraseña Festival de les arts')
-                ->setFrom('info@festivaldelesarts.com')
+                ->setFrom('not-reply@gravedadprod.mobi')
                 ->setTo($user->getEmail())
                 ->setBody("Su nueva contraseña es $password ");
 
