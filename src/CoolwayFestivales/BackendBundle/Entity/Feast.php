@@ -76,6 +76,12 @@ class Feast
      */
     public $feast_userdfeastdata;
 
+
+    /**
+     * @ORM\Column(name="schedule_active", type="boolean", nullable=true)
+     */
+    protected $schedule_active;
+
     public function __construct() {}
 
     public function __toString() {
@@ -272,4 +278,14 @@ class Feast
         return $this->path;
     }
 
-} // end class
+
+    public function getScheduleActive(){
+        return $this->schedule_active;
+    }
+
+
+    public function setScheduleActive($schedule_active){
+        $this->schedule_active = $schedule_active;
+    }
+
+}

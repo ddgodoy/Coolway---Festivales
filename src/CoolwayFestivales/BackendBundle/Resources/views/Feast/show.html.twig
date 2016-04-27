@@ -24,6 +24,10 @@
             <th>Hasta</th>
             <td>{{ entity.dateTo | date("d-m-Y") }}</td>
         </tr>
+        <tr>
+            <th>Horarios activos</th>
+            <td>{{ entity.scheduleActive }}</td>
+        </tr>
         {% if entity.image %}
             <tr>
                 <td colspan="2" style="text-align:center;">

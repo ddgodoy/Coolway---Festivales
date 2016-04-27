@@ -63,6 +63,9 @@
                                 <th>
                                     Hasta
                                 </th>
+                                <th>
+                                    Horarios activos
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,6 +89,10 @@
                                     </td>
                                     <td>
                                         {{entity.dateTo | date("d/m/Y")}}
+                                    </td>
+                                    <td>
+                                            <i class="glyphicon glyphicon-{% if entity.scheduleActive %}check{% else %}unchecked{% endif %}"></i>
+                                            {% if entity.scheduleActive %}Activo{% else %}Inactivo{% endif %}
                                     </td>
                                 </tr>
                             {%endfor%}

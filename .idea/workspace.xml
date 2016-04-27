@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bad2f218-dd8d-4c13-900d-3c7d32f131a9" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ScheduleController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/AuthenticationController.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/AuthenticationController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Feast.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Feast.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Form/FeastType.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Form/FeastType.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/index.html.twig" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/index.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/show.html.twig" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/show.html.twig" />
     </list>
     <ignored path="Coolway.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,31 +30,45 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="VersionController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/VersionController.php">
+      <file leaf-file-name="ScheduleController.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ScheduleController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-17.11111">
-              <caret line="42" column="28" selection-start-line="42" selection-start-column="28" selection-end-line="42" selection-end-column="28" />
+            <state vertical-scroll-proportion="0.88324326">
+              <caret line="57" column="1" selection-start-line="57" selection-start-column="1" selection-end-line="57" selection-end-column="1" />
+              <folding>
+                <element signature="e#58#107#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ArtistController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ArtistController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-20.925926">
+              <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="51" selection-end-column="16" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AuthenticationController.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/AuthenticationController.php">
+      <file leaf-file-name="routing.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8054054">
-              <caret line="162" column="25" selection-start-line="162" selection-start-column="25" selection-end-line="162" selection-end-column="25" />
-              <folding />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="42" column="49" selection-start-line="42" selection-start-column="49" selection-end-line="42" selection-end-column="49" />
+              <folding>
+                <marker date="1461769489068" expanded="true" signature="710:787" placeholder="api_coolway:" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/UserController.php">
+      <file leaf-file-name="MapController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/MapController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-16.925926">
-              <caret line="138" column="47" selection-start-line="138" selection-start-column="35" selection-end-line="138" selection-end-column="47" />
+            <state vertical-scroll-proportion="-14.0">
+              <caret line="41" column="21" selection-start-line="41" selection-start-column="12" selection-end-line="41" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -69,7 +88,6 @@
         <option value="$PROJECT_DIR$/composer.json" />
         <option value="$PROJECT_DIR$/app/AppKernel.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/views/Email/welcome.html.twig" />
-        <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ScheduleController.php" />
         <option value="$PROJECT_DIR$/mobile/www/js/app.js" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/FeastStageArtist.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php" />
@@ -85,9 +103,15 @@
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/FavoriteController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/WeatherController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/CoolwayController.php" />
-        <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/UserController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/AuthenticationController.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Contest.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Feast.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Form/FeastType.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/show.html.twig" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/index.html.twig" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ScheduleController.php" />
       </list>
     </option>
   </component>
@@ -128,8 +152,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -198,7 +220,111 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="BackendBundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Coolway" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Coolway" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoolwayFestivales" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BackendBundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Entity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Coolway" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Coolway" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoolwayFestivales" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="ApiBundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Coolway" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Coolway" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoolwayFestivales" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ApiBundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Coolway" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Coolway" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoolwayFestivales" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ApiBundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -230,11 +356,14 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js-jscs-nodeInterpreter" value="/usr/bin/node" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Festivales" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
@@ -326,69 +455,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/BackendController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Resources/views/baseLogin.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.8172973">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/SafetyBundle/Resources/views/Secured/login.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/SafetyBundle/Resources/config/services.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/SafetyBundle/Controller/SafetyController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46702704">
-          <caret line="27" column="42" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/SafetyBundle/Controller/SecuredController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23351352">
-          <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/friendsofsymfony/rest-bundle/FOS/RestBundle/Controller/FOSRestController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1409396">
-          <caret line="14" column="45" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/views/Email/welcome.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="19" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/AppBundle/Controller/DefaultController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.2767568">
-          <caret line="122" column="12" selection-start-line="122" selection-start-column="12" selection-end-line="122" selection-end-column="87" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mobile/www/js/sha1.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -550,13 +616,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ArtistController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23351352">
-          <caret line="19" column="26" selection-start-line="0" selection-start-column="0" selection-end-line="62" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Notification.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5059459">
@@ -568,13 +627,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-14.925926">
           <caret line="51" column="65" selection-start-line="51" selection-start-column="65" selection-end-line="51" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/MapController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-23.333334">
-          <caret line="42" column="45" selection-start-line="0" selection-start-column="0" selection-end-line="88" selection-end-column="1" />
         </state>
       </provider>
     </entry>
@@ -620,27 +672,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Feast.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.23351352">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Contest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6806723">
-          <caret line="36" column="11" selection-start-line="36" selection-start-column="11" selection-end-line="36" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/CoolwayController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -664,7 +695,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/VersionController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-17.11111">
+        <state vertical-scroll-proportion="0.0">
           <caret line="42" column="28" selection-start-line="42" selection-start-column="28" selection-end-line="42" selection-end-column="28" />
           <folding />
         </state>
@@ -672,7 +703,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/UserController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.925926">
+        <state vertical-scroll-proportion="2.5297298">
           <caret line="138" column="47" selection-start-line="138" selection-start-column="35" selection-end-line="138" selection-end-column="47" />
           <folding />
         </state>
@@ -680,9 +711,125 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/AuthenticationController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8054054">
-          <caret line="162" column="25" selection-start-line="162" selection-start-column="25" selection-end-line="162" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.5718919">
+          <caret line="150" column="36" selection-start-line="150" selection-start-column="36" selection-end-line="150" selection-end-column="36" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Award.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Contest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.66162163">
+          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="40" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Form/FeastType.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-30.0">
+          <caret line="49" column="79" selection-start-line="49" selection-start-column="79" selection-end-line="49" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/select.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/list.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/edit.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Contest/index.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6594595">
+          <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="74" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/show.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5254054">
+          <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Feast/index.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.008948546">
+          <caret line="60" column="4" selection-start-line="60" selection-start-column="4" selection-end-line="63" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Feast.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.67785233">
+          <caret line="281" column="37" selection-start-line="281" selection-start-column="20" selection-end-line="281" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="49" selection-start-line="42" selection-start-column="49" selection-end-line="42" selection-end-column="49" />
+          <folding>
+            <marker date="1461769489068" expanded="true" signature="710:787" placeholder="api_coolway:" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ArtistController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-20.925926">
+          <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="51" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/MapController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.0">
+          <caret line="41" column="21" selection-start-line="41" selection-start-column="12" selection-end-line="41" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ScheduleController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.88324326">
+          <caret line="57" column="1" selection-start-line="57" selection-start-column="1" selection-end-line="57" selection-end-column="1" />
+          <folding>
+            <element signature="e#58#107#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

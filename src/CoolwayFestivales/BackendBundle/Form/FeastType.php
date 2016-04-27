@@ -47,6 +47,7 @@ class FeastType extends AbstractType
                     'data-date-format' => 'dd/mm/yyyy'
                 ]
             ))
+            ->add('schedule_active', null, array('label' => 'Horarios activados'))
         ;
     }
     //
