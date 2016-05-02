@@ -341,7 +341,7 @@ class NotificationController extends Controller
      */
     public function notificationToSendAction(Request $request)
     {
-        $id = $this->getRequest()->get("id");
+        $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('BackendBundle:Notification')->find($id);
 
@@ -357,7 +357,7 @@ class NotificationController extends Controller
      */
     public function notificationRunSendAction(Request $request)
     {
-        $id = $request->request->get('id', '');
+        $id = $request->get('id', '');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('BackendBundle:Notification')->find($id);
 

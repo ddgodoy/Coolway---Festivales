@@ -130,10 +130,23 @@ class User implements AdvancedUserInterface, \Serializable {
      */
     public $user_artistfavorites;
 
+    /**
+     * @var $devices
+     *
+     * @ORM\OneToMany(targetEntity="\CoolwayFestivales\SafetyBundle\Entity\Device", mappedBy="user", cascade={"all"})
+     */
+    private $devices;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $notificationActive;
+
     public function __construct() {
         $this->user_roles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->user_artistfavorites = new \Doctrine\Common\Collections\ArrayCollection();
         $this->user_userdfeastdata = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->devices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enabled = true;
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->accountNonExpired = true;
@@ -705,5 +718,29 @@ class User implements AdvancedUserInterface, \Serializable {
     public function getFeast()
     {
         return $this->feast;
+    }
+
+    public function getDevices()
+    {
+        return $this->devices;
+    }
+
+
+    /**
+     * Set notificationActive
+     *
+     * @param string $notificationActive
+     */
+    public function setNotificationActive($notificationActive) {
+        $this->notificationActive = $notificationActive;
+    }
+
+    /**
+     * Get notificationActive
+     *
+     * @return string
+     */
+    public function getNotificationActive() {
+        return $this->notificationActive;
     }
 }

@@ -41,3 +41,7 @@ api_coolway:
 api_schedule:
     type: rest
     resource: CoolwayFestivalesApiBundle:Schedule
+
+api_device:
+    type: rest
+    resource: CoolwayFestivalesApiBundle:Device

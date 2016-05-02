@@ -21,13 +21,14 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "gregwar/image-bundle": "dev-master",
-        "doctrine/doctrine-fixtures-bundle": "~2.2",
         "symfony/dom-crawler": "~2.6",
         "doctrine/doctrine-fixtures-bundle": "2.2.*",
         "friendsofsymfony/rest-bundle": "^1.7",
         "jms/serializer-bundle": "^1.1",
         "nelmio/api-doc-bundle": "^2.11",
-        "nelmio/cors-bundle": "^1.4"
+        "nelmio/cors-bundle": "^1.4",
+        "zendframework/zendservice-google-gcm": "^1.0",
+        "zendframework/zendservice-apple-apns": "^1.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

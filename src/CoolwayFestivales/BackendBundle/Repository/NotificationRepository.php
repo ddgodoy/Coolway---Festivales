@@ -35,76 +35,45 @@ class NotificationRepository extends EntityRepository
         return $q->getResult();
     }
     //
-    public function sendToMobile($id, $entity, $kernel_dir)
+    public function sendToMobile($id, $entity)
     {
         $em  = $this->getEntityManager();
-        $ids = array(
-            'Android'=> array(),
-            'IOS'    => array()
-        );
-        $notif = $em->getRepository('BackendBundle:Notification')->find($id);
-        $users = $em->getRepository('SafetyBundle:User')->findUsersInFestival($entity->getFeast()->getId());
+        $notification = $em->getRepository('BackendBundle:Notification')->findOneBy(array('id' => $id));
+        $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast_id' => $entity->getFeast()->getId()) );
+        $androidTokens = array();
+        $iosTokens = array();
 
-        foreach($users as $u) {
-            $ids[$u->getOs()][] = $u->getNotificationId();
+        foreach($devices as $device) {
+            if($device->getOs() == 1)
+                $iosTokens[] = $device->getToken();
+            else
+                $androidTokens[] = $device->getToken();
         }
-        if (count($ids['Android']) || count($ids['IOS']))
+        if ($notification)
         {
-            if ($notif)
-            {
-                $title   = $notif->getName();
-                $message = $notif->getText();
-                $url     = 'https://android.googleapis.com/gcm/send';
-                $fields  = array(
-                    "data" => array(
-                        'title'   => $title,
-                        'message' => $message,
-                    ),
-                    "registration_ids" => $ids['Android']
-                );
-                $headers = array(
-                    'Authorization: key=AIzaSyCFpBmNym9kaRPoUA-ZKogSk-QZzvLhlfc',
-                    'Content-Type: application/json'
-                );
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-                curl_exec  ($ch);
-                curl_close ($ch);
-
-                $fields = array(
-                    'aps' => array(
-                        'alert' => $message,
-                        'title' => $title,
-                        'sound' => 'bingbong.aiff'
-                    )
-                );
-                $payload = json_encode($fields);
-                $passphrase = 'iY88bR62';
-
-                foreach ($ids['IOS'] as $deviceToken)
-                {
-                    $ctx = stream_context_create();
-                    stream_context_set_option($ctx, 'ssl', 'local_cert', $kernel_dir.'/../mobile/certs/aps_production.pem');
-                    stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
-                    $fp = stream_socket_client(
-                        'ssl://gateway.push.apple.com:2195', $err,
-                        $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx
-                    );
-                    $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
-
-                    fwrite($fp, $msg, strlen($msg));
-                    fclose($fp);
-                }
-                $notif->setSend(1);
-                $em->persist($notif);
-                $em->flush();
+            if (count($androidTokens) > 0) {
+                $gcm = $this->get('coolway_app.gcm');
+                $gcm->sendNotification($androidTokens,
+                    $notification->getName(),
+                    $notification->getText(),
+                    'admin-notification',
+                    'com.gravedad.lesarts',
+                    false,
+                    600,
+                    false);
             }
+
+            if (count($iosTokens) > 0) {
+                $apn = $this->get('coolway_app.apn');
+                $apn->sendNotification($iosTokens,
+                    $notification->getText(),
+                    5,
+                    'com.gravedad.lesarts',
+                    'bingbong.aiff');
+            }
+            $notification->setSend(true);
+            $em->persist($notification);
+            $em->flush();
         }
     }
-
-} // end class
+}
