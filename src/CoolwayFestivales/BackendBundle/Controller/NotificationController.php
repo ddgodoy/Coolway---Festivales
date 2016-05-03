@@ -362,9 +362,8 @@ class NotificationController extends Controller
         $entity = $em->getRepository('BackendBundle:Notification')->find($id);
 
         if ($entity)
-        {
-            $em->getRepository('BackendBundle:Notification')->sendToMobile($id, $entity, $this->container->getParameter('kernel.root_dir'));
-        }
+            $em->getRepository('BackendBundle:Notification')->sendToMobile($entity);
+
         return new Response('ok');
     }
 

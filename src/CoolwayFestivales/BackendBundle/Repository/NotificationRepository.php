@@ -2,6 +2,7 @@
 
 namespace CoolwayFestivales\BackendBundle\Repository;
 
+use CoolwayFestivales\BackendBundle\Entity\NotificationStats;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -35,11 +36,11 @@ class NotificationRepository extends EntityRepository
         return $q->getResult();
     }
     //
-    public function sendToMobile($id, $entity)
+    public function sendToMobile($entity)
     {
         $em  = $this->getEntityManager();
-        $notification = $em->getRepository('BackendBundle:Notification')->findOneBy(array('id' => $id));
-        $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast_id' => $entity->getFeast()->getId()) );
+        $notification = $em->getRepository('BackendBundle:Notification')->findOneBy(array('id' => $entity->getId()));
+        $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast_id' => $entity->getFeast()->getId()));
         $androidTokens = array();
         $iosTokens = array();
 
@@ -51,9 +52,12 @@ class NotificationRepository extends EntityRepository
         }
         if ($notification)
         {
+            $gcmStats = array();
+            $apnStats = array();
+
             if (count($androidTokens) > 0) {
                 $gcm = $this->get('coolway_app.gcm');
-                $gcm->sendNotification($androidTokens,
+                $gcmStats = $gcm->sendNotification($androidTokens,
                     $notification->getName(),
                     $notification->getText(),
                     'admin-notification',
@@ -65,12 +69,30 @@ class NotificationRepository extends EntityRepository
 
             if (count($iosTokens) > 0) {
                 $apn = $this->get('coolway_app.apn');
-                $apn->sendNotification($iosTokens,
+                $apnStats = $apn->sendNotification($iosTokens,
                     $notification->getText(),
                     5,
                     'com.gravedad.lesarts',
                     'bingbong.aiff');
             }
+
+            if(count($apnStats) > 0 || count($gcmStats) > 0 )
+            {
+                $stats = new NotificationStats();
+                $stats->setNotification($notification);
+                $stats->setTotalDevices($gcmStats["total"] + $apnStats["total"]);
+                $stats->setTotalAndroid($gcmStats["total"]);
+                $stats->setSuccessfulAndroid($gcmStats["successful"]);
+                $stats->setFailedAndroid($gcmStats["failed"]);
+                $stats->setTotalIOS($apnStats["total"]);
+                $stats->setSuccessfulIOS($apnStats["successful"]);
+                $stats->setFailedIOS($apnStats["failed"]);
+                $stats->setSent(new \DateTime("now"));
+                $em = $this->getDoctrine()->getEntityManager();
+                $em->persist($stats);
+            }
+
+
             $notification->setSend(true);
             $em->persist($notification);
             $em->flush();

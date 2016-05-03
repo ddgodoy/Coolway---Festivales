@@ -28,14 +28,9 @@ class notificationCommand extends ContainerAwareCommand
 
         $notifications = $doctrine->getRepository('BackendBundle:Notification')->findForBatch();
 
-        foreach ($notifications as $noti)
+        foreach ($notifications as $notification)
         {
-            $em->getRepository('BackendBundle:Notification')->sendToMobile
-            (
-                $noti->getId(),
-                $noti,
-                $this->getContainer()->getParameter('kernel.root_dir')
-            );
+            $em->getRepository('BackendBundle:Notification')->sendToMobile($notification);
         }
     }
 

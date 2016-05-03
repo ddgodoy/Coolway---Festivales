@@ -40,5 +40,7 @@ class APN
                 $stats["failed"] += $response->getFailureCount();
             }
         }
+
+        return $stats;
     }
 }
