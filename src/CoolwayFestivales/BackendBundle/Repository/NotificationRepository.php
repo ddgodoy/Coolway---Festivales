@@ -39,8 +39,8 @@ class NotificationRepository extends EntityRepository
     public function sendToMobile($entity)
     {
         $em  = $this->getEntityManager();
-        $notification = $em->getRepository('BackendBundle:Notification')->findOneBy(array('id' => $entity->getId()));
-        $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast_id' => $entity->getFeast()->getId()));
+        $notification = $em->getRepository('BackendBundle:Notification')->findById($entity->getId());
+        $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast' => $entity->getFeast()->getId()));
         $androidTokens = array();
         $iosTokens = array();
 
@@ -50,12 +50,14 @@ class NotificationRepository extends EntityRepository
             else
                 $androidTokens[] = $device->getToken();
         }
+
         if ($notification)
         {
             $gcmStats = array();
             $apnStats = array();
 
-            if (count($androidTokens) > 0) {
+            if (sizeof($androidTokens) > 0) {
+                print_r($this);
                 $gcm = $this->get('coolway_app.gcm');
                 $gcmStats = $gcm->sendNotification($androidTokens,
                     $notification->getName(),
@@ -67,7 +69,7 @@ class NotificationRepository extends EntityRepository
                     false);
             }
 
-            if (count($iosTokens) > 0) {
+            if (sizeof($iosTokens) > 0) {
                 $apn = $this->get('coolway_app.apn');
                 $apnStats = $apn->sendNotification($iosTokens,
                     $notification->getText(),
@@ -94,10 +96,12 @@ class NotificationRepository extends EntityRepository
             }else
                 $notification->setDelivery(false);
 
-
+            $notification->setText($notification->getText().' | entregado');
             $notification->setSend(true);
             $em->persist($notification);
             $em->flush();
+        }else{
+
         }
     }
 }

@@ -126,7 +126,10 @@ class NotificationController extends Controller
             $result['mensaje'] = 'Adicionado correctamente';
             //
             $entity->setDate(new \DateTime($fechaHora));
-            $em->persist($entity); $em->flush();
+            $em->persist($entity);
+            $em->flush();
+
+           // $em->getRepository('BackendBundle:Notification')->sendToMobile($entity);
         }
         catch (\Exception $exc) {
             $result['success'] = false;
