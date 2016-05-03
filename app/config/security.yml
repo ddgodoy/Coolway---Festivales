@@ -41,3 +41,5 @@ security:
                 lifetime:   86400
     access_control:
         - { path: ^/admin, roles: [ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_COOLWAY]}
+        - { path: ^/admin/notification/send/all, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/weather/update, role: IS_AUTHENTICATED_ANONYMOUSLY }
