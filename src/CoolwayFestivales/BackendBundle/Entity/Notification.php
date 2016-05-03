@@ -54,7 +54,7 @@ class Notification {
     /**
      * @var send
      *
-     * @ORM\Column(name="delivery", type="boolean")
+     * @ORM\Column(name="delivery", type="boolean",  nullable=true)
      */
     private $delivery;
 
