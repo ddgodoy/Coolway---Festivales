@@ -9,9 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use CoolwayFestivales\BackendBundle\Form\NotificationType;
-use CoolwayFestivales\SafetyBundle\Entity\User;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * Notification controller.

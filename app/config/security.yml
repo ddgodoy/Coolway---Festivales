@@ -17,6 +17,16 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        weather_crone:
+            pattern:      ^/admin/weather/update
+            stateless:    true
+            anonymous:    true
+
+        notification_crone:
+            pattern:      ^/admin/notification/send/all
+            stateless:    true
+            anonymous:    true
+
         login:
             pattern:  ^/admin/login$
             security: false
@@ -39,7 +49,9 @@ security:
             remember_me:
                 key:        admin
                 lifetime:   86400
-    access_control:
-        - { path: ^/admin, roles: [ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_COOLWAY]}
-        - { path: ^/admin/notification/send/all, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/weather/update, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+
+#    access_control:
+#        - { path: ^/admin, roles: [ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_COOLWAY]}
+#        - { path: ^/admin/notification/send/all, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/admin/weather/update, role: IS_AUTHENTICATED_ANONYMOUSLY }
