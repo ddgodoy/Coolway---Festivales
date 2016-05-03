@@ -24,13 +24,15 @@ class notificationCommand extends ContainerAwareCommand
     //
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+
         $doctrine = $this->getContainer()->get('doctrine');
         $em = $doctrine->getManager();
         $notifications = $doctrine->getRepository('BackendBundle:Notification')->findForBatch();
-
+        //print_r(count($notifications));
+        //die('quit');
         foreach ($notifications as $entity)
         {
-            $notification = $em->getRepository('BackendBundle:Notification')->findById($entity->getId());
+            $notification = $em->getRepository('BackendBundle:Notification')->findOneById($entity->getId());
             $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast' => $entity->getFeast()->getId()));
             $androidTokens = array();
             $iosTokens = array();
@@ -45,6 +47,12 @@ class notificationCommand extends ContainerAwareCommand
             if ($notification) {
                 $gcmStats = array();
                 $apnStats = array();
+                $gcmStats["total"] = 0;
+                $gcmStats["successful"] = 0;
+                $gcmStats["failed"] = 0;
+                $apnStats["total"] = 0;
+                $apnStats["successful"] = 0;
+                $apnStats["failed"] = 0;
 
                 if (sizeof($androidTokens) > 0) {
                     $gcm = $this->getContainer()->get('coolway_app.gcm');
@@ -59,7 +67,7 @@ class notificationCommand extends ContainerAwareCommand
                 }
 
                 if (sizeof($iosTokens) > 0) {
-                    $apn = $this->get('coolway_app.apn');
+                    $apn = $this->getContainer()->get('coolway_app.apn');
                     $apnStats = $apn->sendNotification($iosTokens,
                         $notification->getText(),
                         5,
@@ -78,7 +86,6 @@ class notificationCommand extends ContainerAwareCommand
                     $stats->setSuccessfulIOS($apnStats["successful"]);
                     $stats->setFailedIOS($apnStats["failed"]);
                     $stats->setSent(new \DateTime("now"));
-                    $em = $this->getDoctrine()->getEntityManager();
                     $em->persist($stats);
                     $notification->setDelivery(true);
                 } else

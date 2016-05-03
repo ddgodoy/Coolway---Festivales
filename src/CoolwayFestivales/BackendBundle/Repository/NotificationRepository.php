@@ -25,13 +25,13 @@ class NotificationRepository extends EntityRepository
     //
     public function findForBatch()
     {
-        $dNow = date('Y-m-d H:i:00');
+        $date = date('Y-m-d H:i:00');
 
         $q = $this->getEntityManager()->createQuery
         (
-            "SELECT n FROM BackendBundle:Notification n
-			WHERE n.send = 0 AND n.date IS NOT NULL AND n.date = '$dNow'
-			ORDER BY n.id ASC"
+            "SELECT n FROM BackendBundle:Notification n "
+//			WHERE n.send = 0 AND n.date IS NOT NULL AND n.date = '$date'
+//			ORDER BY n.id ASC"
         );
         return $q->getResult();
     }
