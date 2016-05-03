@@ -2,6 +2,7 @@
 
 namespace CoolwayFestivales\BackendBundle\Controller;
 
+use CoolwayFestivales\BackendBundle\Entity\NotificationStats;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -362,11 +363,72 @@ class NotificationController extends Controller
     {
         $id = $request->get('id', '');
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('BackendBundle:Notification')->find($id);
+        $notification = $em->getRepository('BackendBundle:Notification')->findOneById($id);
 
-        if ($entity)
-            $em->getRepository('BackendBundle:Notification')->sendToMobile($entity);
 
+        if ($notification) {
+
+            $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast' => $notification->getFeast()->getId()));
+            $androidTokens = array();
+            $iosTokens = array();
+
+            foreach($devices as $device) {
+                if($device->getOs() == 1)
+                    $iosTokens[] = $device->getToken();
+                else
+                    $androidTokens[] = $device->getToken();
+            }
+
+            $gcmStats = array();
+            $apnStats = array();
+            $gcmStats["total"] = 0;
+            $gcmStats["successful"] = 0;
+            $gcmStats["failed"] = 0;
+            $apnStats["total"] = 0;
+            $apnStats["successful"] = 0;
+            $apnStats["failed"] = 0;
+
+            if (sizeof($androidTokens) > 0) {
+                $gcm = $this->get('coolway_app.gcm');
+                $gcmStats = $gcm->sendNotification($androidTokens,
+                    $notification->getName(),
+                    $notification->getText(),
+                    'admin-notification',
+                    'com.gravedad.lesarts',
+                    false,
+                    600,
+                    false);
+            }
+
+            if (sizeof($iosTokens) > 0) {
+                $apn = $this->get('coolway_app.apn');
+                $apnStats = $apn->sendNotification($iosTokens,
+                    $notification->getText(),
+                    5,
+                    'com.gravedad.lesarts',
+                    'bingbong.aiff');
+            }
+
+            if (count($apnStats) > 0 || count($gcmStats) > 0) {
+                $stats = new NotificationStats();
+                $stats->setNotification($notification);
+                $stats->setTotalDevices($gcmStats["total"] + $apnStats["total"]);
+                $stats->setTotalAndroid($gcmStats["total"]);
+                $stats->setSuccessfulAndroid($gcmStats["successful"]);
+                $stats->setFailedAndroid($gcmStats["failed"]);
+                $stats->setTotalIOS($apnStats["total"]);
+                $stats->setSuccessfulIOS($apnStats["successful"]);
+                $stats->setFailedIOS($apnStats["failed"]);
+                $stats->setSent(new \DateTime("now"));
+                $em->persist($stats);
+                $notification->setDelivery(true);
+            } else
+                $notification->setDelivery(false);
+
+            $notification->setSend(true);
+            $em->persist($notification);
+            $em->flush();
+        }
         return new Response('ok');
     }
 

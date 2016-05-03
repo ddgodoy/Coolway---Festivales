@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bad2f218-dd8d-4c13-900d-3c7d32f131a9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/NotificationRepository.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/NotificationRepository.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
     </list>
     <ignored path="Coolway.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="notificationCommand.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="notificationCommand.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Command/notificationCommand.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.5302013">
-              <caret line="30" column="10" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
+            <state vertical-scroll-proportion="-3.724138">
+              <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="95" selection-end-column="29" />
               <folding>
                 <element signature="e#6#70#0#PHP" expanded="true" />
                 <element signature="e#123#184#0#PHP" expanded="true" />
@@ -72,16 +72,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Notification/index.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="42.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ApiController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/ApiController.php">
           <provider selected="true" editor-type-id="text-editor">
@@ -92,22 +82,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NotificationController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="NotificationController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.620689">
-              <caret line="129" column="25" selection-start-line="129" selection-start-column="25" selection-end-line="129" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/config/config.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+            <state vertical-scroll-proportion="0.4966443">
+              <caret line="412" column="49" selection-start-line="412" selection-start-column="49" selection-end-line="412" selection-end-column="49" />
+              <folding>
+                <element signature="e#62#123#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -118,18 +100,6 @@
             <state vertical-scroll-proportion="25.25926">
               <caret line="56" column="66" selection-start-line="56" selection-start-column="66" selection-end-line="56" selection-end-column="66" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GCM.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/GCM.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-17.962963">
-              <caret line="27" column="44" selection-start-line="27" selection-start-column="44" selection-end-line="27" selection-end-column="44" />
-              <folding>
-                <element signature="e#60#94#0#PHP" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -180,9 +150,9 @@
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Notification.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/GCM.php" />
-        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Command/notificationCommand.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/NotificationRepository.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
       </list>
     </option>
   </component>
@@ -385,6 +355,32 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Coolway" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Coolway" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoolwayFestivales" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BackendBundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Controller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -493,20 +489,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Award.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Contest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.66162163">
-          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="40" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Form/FeastType.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-30.0">
@@ -828,26 +810,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/ApiController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.518518">
-          <caret line="971" column="48" selection-start-line="971" selection-start-column="20" selection-end-line="971" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.620689">
-          <caret line="129" column="25" selection-start-line="129" selection-start-column="25" selection-end-line="129" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Notification/new.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Notification/index.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5404959">
+          <caret line="260" column="57" selection-start-line="260" selection-start-column="31" selection-end-line="260" selection-end-column="57" />
           <folding />
         </state>
       </provider>
@@ -860,10 +834,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Notification/index.html.twig">
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Notification/show.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="42.0">
+        <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Notification/notificationToSend.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Command/notificationCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.724138">
+          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="95" selection-end-column="29" />
+          <folding>
+            <element signature="e#6#70#0#PHP" expanded="true" />
+            <element signature="e#123#184#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/ApiController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.518518">
+          <caret line="971" column="48" selection-start-line="971" selection-start-column="20" selection-end-line="971" selection-end-column="48" />
           <folding />
         </state>
       </provider>
@@ -881,13 +882,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Command/notificationCommand.php">
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.5302013">
-          <caret line="30" column="10" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
+        <state vertical-scroll-proportion="0.4966443">
+          <caret line="412" column="49" selection-start-line="412" selection-start-column="49" selection-end-line="412" selection-end-column="49" />
           <folding>
-            <element signature="e#6#70#0#PHP" expanded="true" />
-            <element signature="e#123#184#0#PHP" expanded="true" />
+            <element signature="e#62#123#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
