@@ -52,6 +52,13 @@ class Notification {
     private $send;
 
     /**
+     * @var send
+     *
+     * @ORM\Column(name="delivery", type="boolean")
+     */
+    private $delivery;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="date_cron", type="datetime",  nullable=true)
      */
@@ -173,6 +180,28 @@ class Notification {
      */
     public function getSend() {
         return $this->send;
+    }
+
+
+    /**
+     * Set delivery
+     *
+     * @param boolean $delivery
+     * @return Notification
+     */
+    public function setDelivery($delivery) {
+        $this->delivery = $delivery;
+
+        return $this;
+    }
+
+    /**
+     * Get delivery
+     *
+     * @return boolean
+     */
+    public function getDelivery() {
+        return $this->delivery;
     }
 
 } // end class

@@ -90,7 +90,9 @@ class NotificationRepository extends EntityRepository
                 $stats->setSent(new \DateTime("now"));
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($stats);
-            }
+                $notification->setDelivery(true);
+            }else
+                $notification->setDelivery(false);
 
 
             $notification->setSend(true);
