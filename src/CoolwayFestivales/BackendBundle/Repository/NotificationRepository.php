@@ -33,6 +33,8 @@ class NotificationRepository extends EntityRepository
         );
         return $q->getResult();
     }
+
+
     //
     public function sendToMobile($entity)
     {

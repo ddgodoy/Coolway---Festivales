@@ -94,7 +94,8 @@ class UserController extends FOSRestController implements ClassResourceInterface
                 'id' => $user->getId(),
                 'access_token' => $user->getAccessToken(),
                 'name' => $user->getName(),
-                'email' => $user->getEmail()
+                'email' => $user->getEmail(),
+                'notification' => $user->getNotificationActive()
             )));
             return $response;
         }
@@ -144,7 +145,8 @@ class UserController extends FOSRestController implements ClassResourceInterface
                     'id' => $user->getId(),
                     'access_token' => $user->getAccessToken(),
                     'name' => $user->getName(),
-                    'email' => $user->getEmail()
+                    'email' => $user->getEmail(),
+                    'notification' => $user->getNotificationActive()
                 )));
                 return $response;
             }

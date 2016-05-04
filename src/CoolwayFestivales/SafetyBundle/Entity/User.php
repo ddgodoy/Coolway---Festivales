@@ -40,15 +40,6 @@ class User implements AdvancedUserInterface, \Serializable {
      */
     private $total;
 
-    /**
-     * @ORM\Column(type="text", length=255, nullable=true)
-     */
-    protected $notificationId;
-
-    /**
-     * @ORM\Column(type="text", length=255, nullable=true)
-     */
-    protected $os;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -152,6 +143,7 @@ class User implements AdvancedUserInterface, \Serializable {
         $this->accountNonExpired = true;
         $this->accountNonLocked = true;
         $this->credentialsNonExpired = true;
+        $this->notificationActive = true;
     }
 
     /**

@@ -87,7 +87,8 @@ class AuthenticationController extends FOSRestController implements ClassResourc
                 'id' => $user->getId(),
                 'access_token' => $user->getAccessToken(),
                 'name' => $user->getName(),
-                'email' => $user->getEmail()
+                'email' => $user->getEmail(),
+                'notification' => $user->getNotificationActive()
             )));
         }else if($user) {
             $encoder = $this->get('security.encoder_factory')->getEncoder($user);
@@ -102,7 +103,8 @@ class AuthenticationController extends FOSRestController implements ClassResourc
                     'id' => $user->getId(),
                     'access_token' => $user->getAccessToken(),
                     'name' => $user->getName(),
-                    'email' => $user->getEmail()
+                    'email' => $user->getEmail(),
+                    'notification' => $user->getNotificationActive()
                 )));
             }else
                 throw new HttpException(400, "Datos invalidos");

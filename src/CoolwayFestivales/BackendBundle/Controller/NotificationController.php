@@ -513,5 +513,72 @@ class NotificationController extends Controller
     }
 
 
+    /**
+     * @Route("/send/artist-favorite/", name="notification_send_artist_favorite")
+     * @Method("GET")
+     */
+    public function notificationSendArtistFavoriteAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $upcomingArtists = $em->getRepository('BackendBundle:FeastStageArtist')->getUpcomingArtists();
+
+        print_r(count($upcomingArtists));
+
+        foreach ($upcomingArtists as $upcoming)
+        {
+            if ($upcoming) {
+
+                $devices = $em->getRepository('BackendBundle:ArtistFavorites')->getDeviceByArtistFavorite($upcoming->getArtist()->getId(), $upcoming->getFeastStage()->getFeast()->getId());
+                $androidTokens = array();
+                $iosTokens = array();
+
+                foreach($devices as $device) {
+                    if($device->getOs() == 1)
+                        $iosTokens[] = $device->getToken();
+                    else
+                        $androidTokens[] = $device->getToken();
+                }
+
+                $gcmStats = array();
+                $apnStats = array();
+                $gcmStats["total"] = 0;
+                $gcmStats["successful"] = 0;
+                $gcmStats["failed"] = 0;
+                $apnStats["total"] = 0;
+                $apnStats["successful"] = 0;
+                $apnStats["failed"] = 0;
+
+                $title = 'Va ha empezar el concierto!!!';
+                $description = 'El concierto de '.$upcoming->getArtist()->getName().' esta apunto de comenzar!!!';
+
+                if (sizeof($androidTokens) > 0) {
+                    $gcm = $this->get('coolway_app.gcm');
+                    $gcm->sendNotification($androidTokens,
+                        $title,
+                        $description,
+                        'admin-notification',
+                        'com.gravedad.lesarts',
+                        false,
+                        600,
+                        false);
+                }
+
+                if (sizeof($iosTokens) > 0) {
+                    $apn = $this->get('coolway_app.apn');
+                    $apn->sendNotification($iosTokens,
+                        $description,
+                        5,
+                        'com.gravedad.lesarts',
+                        'bingbong.aiff');
+                }
+
+            }
+        }
+
+
+        return new Response('true');
+    }
+
+
 
 } // end class

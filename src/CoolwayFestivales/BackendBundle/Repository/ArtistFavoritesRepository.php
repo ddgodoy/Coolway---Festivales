@@ -22,4 +22,17 @@ class ArtistFavoritesRepository extends EntityRepository {
 		return $q->getResult();
 	}
 
+
+	public function getDeviceByArtistFavorite($artistId, $feastId)
+	{
+		$q = $this->getEntityManager()->createQuery(
+			"SELECT d
+			FROM BackendBundle:ArtistFavorites af
+			LEFT JOIN SafetyBundle:Device d WITH af.user = d.user
+			WHERE af.artist = $artistId AND d.feast = $feastId "
+		);
+
+		return $q->getResult();
+	}
+
 } // end class

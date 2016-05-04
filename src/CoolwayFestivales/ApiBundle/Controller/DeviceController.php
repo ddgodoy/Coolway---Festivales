@@ -48,6 +48,10 @@ class DeviceController extends FOSRestController implements ClassResourceInterfa
         $user = $em->getRepository('SafetyBundle:User')->findOneBy(array('accessToken' => $accessToken));
 
         if ($user) {
+
+            $user->setNotificationActive(true);
+            $em->persist($user);
+
             $device = new Device();
             $device->setOs(intval($os));
             $device->setToken($deviceToken);
@@ -94,25 +98,21 @@ class DeviceController extends FOSRestController implements ClassResourceInterfa
         $deviceToken = $request->get('device_token');
 
         $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('SafetyBundle:User')->findOneBy(array('accessToken' => $accessToken));
 
-        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
-        $devices = $qb->select('d')
-            ->from('SafetyBundle:Device', 'd')
-            ->join('d.user', 'u')
-            ->join('d.feast', 'f')
-            ->where('d.token = :deviceToken')
-            ->andWhere('u.accessToken = :accessToken')
-            ->andWhere('f.id = :feastId')
-            ->setParameter('deviceToken', $deviceToken)
-            ->setParameter('accessToken', $accessToken)
-            ->setParameter('feastId', $feast->getId())
-            ->getQuery()
-            ->getResult();
+        if ($user) {
 
-        if ($devices) {
-            foreach ($devices as $device) {
-                $em->remove($device);
+            $user->setNotificationActive(false);
+            $em->persist($user);
+
+            $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('user' => $user->getId(), 'token' => $deviceToken));
+
+            if($devices)
+            {
+                foreach ($devices as $device)
+                    $em->remove($device);
             }
+
             $em->flush();
             $response->setContent(json_encode(array(
                 'status' => true
