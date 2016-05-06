@@ -20,6 +20,6 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
     gcm_token: AIzaSyCWsS_MqoEGtuI993F7O0ghAeN1jWWFfIM
     apn_app_id: asdasd
-    apn_pem_path: app/config/push-certificate.pem
+    apn_pem_path: app/config/cer_festivales_push_dev.pem
     apn_sandbox: 1
     apn_pass_phrase: coolway
