@@ -373,9 +373,9 @@ class NotificationController extends Controller
             $iosTokens = array();
 
             foreach($devices as $device) {
-//                if($device->getOs() == 1)
-//                    $iosTokens[] = $device->getToken();
-//                else
+                if($device->getOs() == 1)
+                    $iosTokens[] = $device->getToken();
+                else
                     $androidTokens[] = $device->getToken();
             }
 
