@@ -32,7 +32,6 @@ class APN
             $message->setAlert($text);
 
             $response = $this->client->send($message);
-            $this->client->close();
 
             if ($response->getCode() == Response::RESULT_OK) {
                 $stats["successful"] += 1;
@@ -40,6 +39,8 @@ class APN
                 $stats["failed"] += 1;
             }
         }
+
+        $this->client->close();
 
         return $stats;
     }
