@@ -35,9 +35,9 @@ class APN
             $this->client->close();
 
             if ($response->getCode() == Response::RESULT_OK) {
-                $stats["successful"] += $response->getSuccessCount();
+                $stats["successful"] += 1;
             } else {
-                $stats["failed"] += $response->getFailureCount();
+                $stats["failed"] += 1;
             }
         }
 
