@@ -280,6 +280,14 @@ class NotificationController extends Controller
                 throw $this->createNotFoundException('Unable to find Stage entity.');
             }
 
+            $noticationStats = $em->getRepository('BackendBundle:NotificationStats')->findBy(array('notification'=> $id));
+            if(count($noticationStats) > 0)
+            {
+                foreach($noticationStats as $stat){
+                    $em->remove($stat);
+                }
+            }
+
             $em->remove($entity);
             $em->flush();
         }
@@ -302,7 +310,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Elimina a petición stage entities.
+     * Elimina Notification entities.
      * dado un array de ids
      * @Route("/bachdelete", name="admin_notification_batchdelete")
      * @Template()
@@ -318,10 +326,17 @@ class NotificationController extends Controller
 
         foreach ($ids as $id) {
             $entity = $repo_notification->find($id);
+            $noticationStats = $em->getRepository('BackendBundle:NotificationStats')->findBy(array('notification'=> $id));
+            if(count($noticationStats) > 0)
+            {
+                foreach($noticationStats as $stat){
+                    $em->remove($stat);
+                }
+            }
             try {
                 $em->remove($entity);
             } catch (\Exception $e) {
-                $response = array("success" => false, "message" => "no se puede eliminar este stageo");
+                $response = array("success" => false, "message" => "no se puede eliminar esta notificación");
                 $result = json_encode($response);
                 return new \Symfony\Component\HttpFoundation\Response($result);
             }
