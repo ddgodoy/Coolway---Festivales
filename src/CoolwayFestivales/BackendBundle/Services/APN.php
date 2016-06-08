@@ -23,17 +23,25 @@ class APN
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
 
         foreach ($tokens as $token) {
-            $message = new Message();
-            $message->setId($this->appId);
-            $message->setToken($token);
-            $message->setBadge($badge);
-            $message->setSound($sound);
+            $response = $this->send($token, $text);
+//            $message = new Message();
+//            $message->setId($this->appId);
+//            $message->setToken($token);
+//            $message->setBadge($badge);
+//            $message->setSound($sound);
+//
+//            $message->setAlert($text);
+//
+//            $response = $this->client->send($message);
+//
+//            if ($response->getCode() == Response::RESULT_OK) {
+//                $stats["successful"] += 1;
+//            } else {
+//                $stats["failed"] += 1;
+//            }
 
-            $message->setAlert($text);
 
-            $response = $this->client->send($message);
-
-            if ($response->getCode() == Response::RESULT_OK) {
+            if ($response) {
                 $stats["successful"] += 1;
             } else {
                 $stats["failed"] += 1;
@@ -43,5 +51,54 @@ class APN
         $this->client->close();
 
         return $stats;
+    }
+
+
+    public function send($deviceToken, $message){
+
+        // El password del fichero .pem
+        $passphrase = 'Gravedad147';
+
+        $ctx = stream_context_create();
+        //Especificamos la ruta al certificado .pem que hemos creado
+        stream_context_set_option($ctx, 'ssl', 'local_cert', '../app/config/FestNotPushDevCK.pem');
+        stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+
+        // Abrimos conexión con APNS
+        $fp = stream_socket_client(
+            'ssl://gateway.sandbox.push.apple.com:2195', $err,
+            $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+
+        if (!$fp) {
+            exit("Error de conexión: $err $errstr" . PHP_EOL);
+        }
+
+        echo 'Conectado al APNS' . PHP_EOL;
+
+        // Creamos el payload
+        $body['aps'] = array(
+            'alert' =>$message,
+            'sound' => 'bingbong.aiff',
+            'badge' => 35
+        );
+
+        // Lo codificamos a json
+        $payload = json_encode($body);
+
+        // Construimos el mensaje binario
+        $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+
+        // Lo enviamos
+        $result = fwrite($fp, $msg, strlen($msg));
+
+        // cerramos la conexión
+        fclose($fp);
+        
+        if (!$result) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
 }
