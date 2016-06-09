@@ -73,7 +73,7 @@ class FeastStageArtistRepository extends EntityRepository
 			LEFT JOIN BackendBundle:Feast f WITH fs.feast = f.id
 			LEFT JOIN BackendBundle:Artist a WITH fsa.artist = a.id
 			LEFT JOIN BackendBundle:Stage s WITH fs.stage = s.id
-			WHERE f.id <= '$feastId'
+			WHERE f.id = '$feastId'
 			ORDER BY fsa.date ASC"
         );
 

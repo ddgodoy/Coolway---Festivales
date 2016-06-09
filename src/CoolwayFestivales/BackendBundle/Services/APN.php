@@ -93,7 +93,7 @@ class APN
 
         // cerramos la conexión
         fclose($fp);
-        
+
         if (!$result) {
             return false;
         } else {
