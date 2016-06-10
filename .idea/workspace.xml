@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bad2f218-dd8d-4c13-900d-3c7d32f131a9" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/DeviceController.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/DeviceController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" />
     </list>
     <ignored path="Coolway.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,21 +45,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="APN.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="APN.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.666667">
-              <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.40864864">
+              <caret line="26" column="42" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GCM.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GCM.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/GCM.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.42594594">
-              <caret line="26" column="49" selection-start-line="26" selection-start-column="49" selection-end-line="26" selection-end-column="49" />
+            <state vertical-scroll-proportion="-15.259259">
+              <caret line="27" column="44" selection-start-line="27" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -128,9 +128,9 @@
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/config/routing.yml" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/UserController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/SafetyBundle/Entity/User.php" />
-        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/DeviceController.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" />
       </list>
     </option>
   </component>
@@ -694,7 +694,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="399" column="34" selection-start-line="399" selection-start-column="34" selection-end-line="399" selection-end-column="34" />
           <folding>
-            <element signature="e#57#111#0#PHP" expanded="true" />
+            <element signature="e#57#111#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -757,14 +757,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/DeviceController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-20.0">
-          <caret line="62" column="38" selection-start-line="62" selection-start-column="38" selection-end-line="62" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.4137931">
@@ -773,18 +765,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php">
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/DeviceController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.666667">
-          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+        <state vertical-scroll-proportion="-20.0">
+          <caret line="62" column="38" selection-start-line="62" selection-start-column="38" selection-end-line="62" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/GCM.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.42594594">
-          <caret line="26" column="49" selection-start-line="26" selection-start-column="49" selection-end-line="26" selection-end-column="49" />
+        <state vertical-scroll-proportion="-15.259259">
+          <caret line="27" column="44" selection-start-line="27" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40864864">
+          <caret line="26" column="42" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
           <folding />
         </state>
       </provider>

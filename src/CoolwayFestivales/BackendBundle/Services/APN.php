@@ -21,9 +21,10 @@ class APN
     public function sendNotification($tokens, $text, $badge, $sound)
     {
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
+        $chunks = array_chunk($tokens, 100);
 
-        foreach ($tokens as $token) {
-            $response = $this->send($token, $text);
+        foreach ($chunks as $chunk) {
+            $response = $this->send($chunk, $text);
 //            $message = new Message();
 //            $message->setId($this->appId);
 //            $message->setToken($token);
