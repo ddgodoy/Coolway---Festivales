@@ -47,18 +47,23 @@ class DeviceController extends FOSRestController implements ClassResourceInterfa
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('SafetyBundle:User')->findOneBy(array('accessToken' => $accessToken));
 
+
         if ($user) {
 
             $user->setNotificationActive(true);
             $em->persist($user);
 
-            $device = new Device();
+            $device = $em->getRepository('SafetyBundle:Device')->findOneBy(array('token' => $deviceToken, 'user' => $user->getId()));
+            if(!$device)
+                $device = new Device();
+
             $device->setOs(intval($os));
             $device->setToken($deviceToken);
             $device->setUser($user);
             $device->setFeast($feast);
             $em->persist($device);
             $em->flush();
+
 
             $response->setContent(json_encode(array(
                 'status' => true,
