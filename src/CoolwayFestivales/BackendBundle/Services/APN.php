@@ -23,8 +23,8 @@ class APN
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
         $chunks = array_chunk($tokens, 100);
 
-        foreach ($chunks as $chunk) {
-            $response = $this->send($chunk, $text);
+        foreach ($chunks as $token) {
+            $response = $this->send($token, $text);
 //            $message = new Message();
 //            $message->setId($this->appId);
 //            $message->setToken($token);
@@ -67,15 +67,13 @@ class APN
 
         // Abrimos conexión con APNS
         $fp = stream_socket_client(
-            'ssl://gateway.sandbox.push.apple.com:2195', $err,
+            'ssl://gateway.push.apple.com:2195', $err,
             $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
 
         if (!$fp) {
-            exit("Error de conexión: $err $errstr" . PHP_EOL);
+            return false;
         }
-
-        echo 'Conectado al APNS' . PHP_EOL;
-
+        
         // Creamos el payload
         $body['aps'] = array(
             'alert' =>$message,
