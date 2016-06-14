@@ -64,12 +64,12 @@ class APN
 
         $ctx = stream_context_create();
         //Especificamos la ruta al certificado .pem que hemos creado
-        stream_context_set_option($ctx, 'ssl', 'local_cert', '../app/config/FestPushNotProdCK.pem');
+        stream_context_set_option($ctx, 'ssl', 'local_cert', '../app/config/FestNotPushDevCK.pem');
         stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
 
         // Abrimos conexión con APNS
         $fp = stream_socket_client(
-            'ssl://gateway.push.apple.com:2195', $err,
+            'ssl://gateway.sandbox.push.apple.com:2195', $err,
             $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
 
         if (!$fp) {
