@@ -409,7 +409,7 @@ class NotificationController extends Controller
                     $notification->getName(),
                     $notification->getText(),
                     'admin-notification',
-                    'com.gravedad.lesarts',
+                    'com.gravedad.cabodeplata',
                     false,
                     600,
                     false);
@@ -420,7 +420,7 @@ class NotificationController extends Controller
                 $apnStats = $apn->sendNotification($iosTokens,
                     $notification->getText(),
                     5,
-                    'com.gravedad.lesarts',
+                    'com.gravedad.cabodeplata',
                     'bingbong.aiff');
             }
 
@@ -486,7 +486,7 @@ class NotificationController extends Controller
                         $notification->getName(),
                         $notification->getText(),
                         'admin-notification',
-                        'com.gravedad.lesarts',
+                        'com.gravedad.cabodeplata',
                         false,
                         600,
                         false);
@@ -497,7 +497,7 @@ class NotificationController extends Controller
                     $apnStats = $apn->sendNotification($iosTokens,
                         $notification->getText(),
                         5,
-                        'com.gravedad.lesarts',
+                        'com.gravedad.cabodeplata',
                         'bingbong.aiff');
                 }
 
@@ -572,7 +572,7 @@ class NotificationController extends Controller
                         $title,
                         $description,
                         'admin-notification',
-                        'com.gravedad.lesarts',
+                        'com.gravedad.cabodeplata',
                         false,
                         600,
                         false);
@@ -583,7 +583,7 @@ class NotificationController extends Controller
                     $apn->sendNotification($iosTokens,
                         $description,
                         5,
-                        'com.gravedad.lesarts',
+                        'com.gravedad.cabodeplata',
                         'bingbong.aiff');
                 }
 
