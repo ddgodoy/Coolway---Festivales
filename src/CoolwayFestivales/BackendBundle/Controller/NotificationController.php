@@ -569,7 +569,7 @@ class NotificationController extends Controller
                     $gcm->sendNotification($androidTokens,
                         $title,
                         $description,
-                        'admin-notification',
+                        'artist-notification '.$upcoming->getArtist()->getName(),
                         'com.gravedad.cabodeplata',
                         false,
                         600,

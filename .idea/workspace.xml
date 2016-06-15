@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bad2f218-dd8d-4c13-900d-3c7d32f131a9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php" />
     </list>
     <ignored path="Coolway.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,27 +24,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="NotificationController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="NotificationController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-22.925926">
-              <caret line="566" column="38" selection-start-line="566" selection-start-column="38" selection-end-line="566" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.8054054">
+              <caret line="571" column="46" selection-start-line="571" selection-start-column="46" selection-end-line="571" selection-end-column="46" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FeastStageArtistRepository.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="FeastStageArtistRepository.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.75838923">
-              <caret line="89" column="95" selection-start-line="89" selection-start-column="95" selection-end-line="89" selection-end-column="95" />
+            <state vertical-scroll-proportion="-3.310345">
+              <caret line="62" column="18" selection-start-line="62" selection-start-column="18" selection-end-line="62" selection-end-column="18" />
               <folding>
-                <marker date="1466002174720" expanded="true" signature="388:561" placeholder="SELECT fsa F... BackendBundle" />
-                <marker date="1466002174720" expanded="true" signature="761:1245" placeholder="SELECT fsa.t... BackendBundle" />
-                <marker date="1466002174720" expanded="true" signature="1606:1937" placeholder="SELECT a.id BackendBundle" />
-                <marker date="1466002174720" expanded="true" signature="2255:2866" placeholder="SELECT a.id BackendBundle" />
-                <marker date="1466002174720" expanded="true" signature="3147:3308" placeholder="SELECT fsa F... BackendBundle" />
+                <marker date="1466002229864" expanded="true" signature="388:561" placeholder="SELECT fsa F... BackendBundle" />
+                <marker date="1466002229864" expanded="true" signature="761:1245" placeholder="SELECT fsa.t... BackendBundle" />
+                <marker date="1466002229864" expanded="true" signature="1606:1937" placeholder="SELECT a.id BackendBundle" />
+                <marker date="1466002229864" expanded="true" signature="2255:2866" placeholder="SELECT a.id BackendBundle" />
+                <marker date="1466002229864" expanded="true" signature="3147:3308" placeholder="SELECT fsa F... BackendBundle" />
               </folding>
             </state>
           </provider>
@@ -116,8 +114,8 @@
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/DeviceController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" />
         <option value="$PROJECT_DIR$/app/config/parameters.yml" />
-        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
       </list>
     </option>
   </component>
@@ -889,11 +887,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-22.925926">
-          <caret line="566" column="38" selection-start-line="566" selection-start-column="38" selection-end-line="566" selection-end-column="38" />
-          <folding />
+        <state vertical-scroll-proportion="-3.310345">
+          <caret line="62" column="18" selection-start-line="62" selection-start-column="18" selection-end-line="62" selection-end-column="18" />
+          <folding>
+            <marker date="1466002229864" expanded="true" signature="388:561" placeholder="SELECT fsa F... BackendBundle" />
+            <marker date="1466002229864" expanded="true" signature="761:1245" placeholder="SELECT fsa.t... BackendBundle" />
+            <marker date="1466002229864" expanded="true" signature="1606:1937" placeholder="SELECT a.id BackendBundle" />
+            <marker date="1466002229864" expanded="true" signature="2255:2866" placeholder="SELECT a.id BackendBundle" />
+            <marker date="1466002229864" expanded="true" signature="3147:3308" placeholder="SELECT fsa F... BackendBundle" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -905,17 +909,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php">
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.75838923">
-          <caret line="89" column="95" selection-start-line="89" selection-start-column="95" selection-end-line="89" selection-end-column="95" />
-          <folding>
-            <marker date="1466002174720" expanded="true" signature="388:561" placeholder="SELECT fsa F... BackendBundle" />
-            <marker date="1466002174720" expanded="true" signature="761:1245" placeholder="SELECT fsa.t... BackendBundle" />
-            <marker date="1466002174720" expanded="true" signature="1606:1937" placeholder="SELECT a.id BackendBundle" />
-            <marker date="1466002174720" expanded="true" signature="2255:2866" placeholder="SELECT a.id BackendBundle" />
-            <marker date="1466002174720" expanded="true" signature="3147:3308" placeholder="SELECT fsa F... BackendBundle" />
-          </folding>
+        <state vertical-scroll-proportion="0.8054054">
+          <caret line="571" column="46" selection-start-line="571" selection-start-column="46" selection-end-line="571" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>
