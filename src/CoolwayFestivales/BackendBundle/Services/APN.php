@@ -77,7 +77,7 @@ class APN
         $body['aps'] = array(
             'alert' =>$message,
             'sound' => 'bingbong.aiff',
-            'badge' => 35
+            'badge' => 1
         );
 
         // Lo codificamos a json
