@@ -1,6 +1,6 @@
 <?php
 // Nuestro token
-$deviceToken = 'e9ccfd51f0ed1ff028ca66a3fdab8754b4a33ab7792301e30741a156f6729c45';
+$deviceToken = 'b6fbcb21108efc12f6f919c0a9a6ec2246a85177d9b18ec84b6de77d2d534d99';
  
 // El password del fichero .pem
 $passphrase = 'Gravedad147';
