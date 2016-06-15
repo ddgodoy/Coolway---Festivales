@@ -21,33 +21,30 @@ class APN
     public function sendNotification($tokens, $text, $badge, $sound)
     {
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
-        $chunks = array_chunk($tokens, 100);
-
-        foreach ($chunks as $chunk) {
-            foreach ($chunk as $token){
-                $response = $this->send($token, $text);
-    //            $message = new Message();
-    //            $message->setId($this->appId);
-    //            $message->setToken($token);
-    //            $message->setBadge($badge);
-    //            $message->setSound($sound);
-    //
-    //            $message->setAlert($text);
-    //
-    //            $response = $this->client->send($message);
-    //
-    //            if ($response->getCode() == Response::RESULT_OK) {
-    //                $stats["successful"] += 1;
-    //            } else {
-    //                $stats["failed"] += 1;
-    //            }
+        
+        foreach ($tokens as $token) {
+            $response = $this->send($token, $text);
+//            $message = new Message();
+//            $message->setId($this->appId);
+//            $message->setToken($token);
+//            $message->setBadge($badge);
+//            $message->setSound($sound);
+//
+//            $message->setAlert($text);
+//
+//            $response = $this->client->send($message);
+//
+//            if ($response->getCode() == Response::RESULT_OK) {
+//                $stats["successful"] += 1;
+//            } else {
+//                $stats["failed"] += 1;
+//            }
 
 
-                if ($response) {
-                    $stats["successful"] += 1;
-                } else {
-                    $stats["failed"] += 1;
-                }
+            if ($response) {
+                $stats["successful"] += 1;
+            } else {
+                $stats["failed"] += 1;
             }
         }
 
@@ -64,7 +61,7 @@ class APN
 
         $ctx = stream_context_create();
         //Especificamos la ruta al certificado .pem que hemos creado
-        stream_context_set_option($ctx, 'ssl', 'local_cert', '../app/config/FestNotPushDevCK.pem');
+        stream_context_set_option($ctx, 'ssl', 'local_cert', '../app/config/CaboDePlataCK.pem');
         stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
 
         // Abrimos conexión con APNS
