@@ -82,11 +82,13 @@ class FeastStageArtistRepository extends EntityRepository
 
     public function getUpcomingArtists()
     {
-        $date = date("Y-m-d H:i:00", strtotime("+15 minutes"));
+        $start = date("Y-m-d H:i:00");
+        $finish = date("Y-m-d H:i:00", strtotime("+15 minutes"));
 
         $q = $this->getEntityManager()->createQuery
         (
-            "SELECT fsa FROM BackendBundle:FeastStageArtist fsa WHERE fsa.date IS NOT NULL AND fsa.date = '$date' ORDER BY fsa.id ASC "
+            "SELECT fsa FROM BackendBundle:FeastStageArtist fsa WHERE fsa.date IS NOT NULL AND 
+            fsa.date >= '$start' AND fsa.date <= '$finish' ORDER BY fsa.id ASC "
         );
         return $q->getResult();
     }

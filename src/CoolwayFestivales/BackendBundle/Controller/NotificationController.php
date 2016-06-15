@@ -537,8 +537,6 @@ class NotificationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $upcomingArtists = $em->getRepository('BackendBundle:FeastStageArtist')->getUpcomingArtists();
 
-        print_r(count($upcomingArtists));
-
         foreach ($upcomingArtists as $upcoming)
         {
             if ($upcoming) {
