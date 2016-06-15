@@ -10,7 +10,7 @@ $message = '¡Mi primer mensaje Push!';
  
 $ctx = stream_context_create();
 //Especificamos la ruta al certificado .pem que hemos creado
-stream_context_set_option($ctx, 'ssl', 'local_cert', '../app/config/FestNotPushDevCK.pem');
+stream_context_set_option($ctx, 'ssl', 'local_cert', '../app/config/CaboDePlataCK.pem');
 stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
  
 // Abrimos conexión con APNS
