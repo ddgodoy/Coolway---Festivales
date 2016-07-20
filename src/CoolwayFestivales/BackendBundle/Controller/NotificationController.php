@@ -537,6 +537,7 @@ class NotificationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $upcomingArtists = $em->getRepository('BackendBundle:FeastStageArtist')->getUpcomingArtists();
 
+        $cont = 0;
         foreach ($upcomingArtists as $upcoming)
         {
             if ($upcoming) {
@@ -561,15 +562,17 @@ class NotificationController extends Controller
                 $apnStats["successful"] = 0;
                 $apnStats["failed"] = 0;
 
+                $artistName = $upcoming->getArtist()->getName();
+
                 $title = 'Va ha empezar el concierto!!!';
-                $description = 'El concierto de '.$upcoming->getArtist()->getName().' esta apunto de comenzar!!!';
+                $description = 'El concierto de '.$artistName.' esta apunto de comenzar!!!';
 
                 if (sizeof($androidTokens) > 0) {
                     $gcm = $this->get('coolway_app.gcm');
                     $gcm->sendNotification($androidTokens,
                         $title,
                         $description,
-                        'artist-notification '.$upcoming->getArtist()->getName(),
+                        'artist-notification-'.$cont,
                         'com.gravedad.cabodeplata',
                         false,
                         600,
@@ -586,6 +589,8 @@ class NotificationController extends Controller
                 }
 
             }
+
+            $cont++;
         }
 
 
