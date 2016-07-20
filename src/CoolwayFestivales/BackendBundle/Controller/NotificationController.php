@@ -409,7 +409,7 @@ class NotificationController extends Controller
                     $notification->getName(),
                     $notification->getText(),
                     'admin-notification',
-                    'com.gravedad.cabodeplata',
+                    'com.gravedad.arenalsound',
                     false,
                     600,
                     false);
@@ -420,7 +420,7 @@ class NotificationController extends Controller
                 $apnStats = $apn->sendNotification($iosTokens,
                     $notification->getText(),
                     5,
-                    'com.gravedad.cabodeplata',
+                    'com.gravedad.arenalsound',
                     'bingbong.aiff');
             }
 
@@ -486,7 +486,7 @@ class NotificationController extends Controller
                         $notification->getName(),
                         $notification->getText(),
                         'admin-notification',
-                        'com.gravedad.cabodeplata',
+                        'com.gravedad.arenalsound',
                         false,
                         600,
                         false);
@@ -497,7 +497,7 @@ class NotificationController extends Controller
                     $apnStats = $apn->sendNotification($iosTokens,
                         $notification->getText(),
                         5,
-                        'com.gravedad.cabodeplata',
+                        'com.gravedad.arenalsound',
                         'bingbong.aiff');
                 }
 
@@ -573,7 +573,7 @@ class NotificationController extends Controller
                         $title,
                         $description,
                         'artist-notification-'.$cont,
-                        'com.gravedad.cabodeplata',
+                        'com.gravedad.arenalsound',
                         false,
                         600,
                         false);
@@ -584,7 +584,7 @@ class NotificationController extends Controller
                     $apn->sendNotification($iosTokens,
                         $description,
                         5,
-                        'com.gravedad.cabodeplata',
+                        'com.gravedad.arenalsound',
                         'bingbong.aiff');
                 }
 

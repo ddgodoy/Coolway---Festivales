@@ -18,8 +18,8 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
-    gcm_token: AIzaSyCWsS_MqoEGtuI993F7O0ghAeN1jWWFfIM
-    apn_app_id: asdasd
+    gcm_token: AIzaSyDqz-HKMbvgMeJxkhQzh64sK_SWF1HTy0w
+    apn_app_id: com.gravedad.arenalsound
     apn_pem_path: app/config/cer_festivales_push_dev.pem
     apn_sandbox: 1
     apn_pass_phrase: coolway
