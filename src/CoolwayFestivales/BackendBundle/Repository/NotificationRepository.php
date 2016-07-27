@@ -29,7 +29,7 @@ class NotificationRepository extends EntityRepository
 
         $q = $this->getEntityManager()->createQuery
         (
-            "SELECT n FROM BackendBundle:Notification n WHERE n.send = 0 AND n.date IS NOT NULL AND n.date = '$date' ORDER BY n.id ASC "
+            "SELECT n FROM BackendBundle:Notification n WHERE n.feast = 3 AND n.send = 0 AND n.date IS NOT NULL AND n.date = '$date' ORDER BY n.id ASC "
         );
         return $q->getResult();
     }
