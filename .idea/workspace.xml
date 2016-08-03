@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bad2f218-dd8d-4c13-900d-3c7d32f131a9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/security.yml" afterPath="$PROJECT_DIR$/app/config/security.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
     </list>
     <ignored path="Coolway.iws" />
@@ -39,8 +37,8 @@
       <file leaf-file-name="NotificationController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.75891894">
-              <caret line="569" column="49" selection-start-line="569" selection-start-column="49" selection-end-line="569" selection-end-column="49" />
+            <state vertical-scroll-proportion="0.70054054">
+              <caret line="566" column="56" selection-start-line="566" selection-start-column="56" selection-end-line="566" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -812,8 +810,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.75891894">
-          <caret line="569" column="49" selection-start-line="569" selection-start-column="49" selection-end-line="569" selection-end-column="49" />
+        <state vertical-scroll-proportion="0.70054054">
+          <caret line="566" column="56" selection-start-line="566" selection-start-column="56" selection-end-line="566" selection-end-column="56" />
           <folding />
         </state>
       </provider>

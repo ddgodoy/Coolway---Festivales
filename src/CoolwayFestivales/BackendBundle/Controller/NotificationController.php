@@ -564,7 +564,7 @@ class NotificationController extends Controller
 
                 $artistName = $upcoming->getArtist()->getName();
 
-                $title = 'Va ha empezar el concierto!!!';
+                $title = 'Va a empezar el concierto!!!';
                 $description = 'El concierto de '.$artistName.' está a punto de comenzar!!!';
 
                 if (sizeof($androidTokens) > 0) {
