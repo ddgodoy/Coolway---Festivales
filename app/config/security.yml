@@ -37,14 +37,6 @@ security:
             stateless:    true
             anonymous:    true
 
-        login:
-            pattern:  ^/admin/login$
-            security: false
-
-        login_cms:
-            pattern:  ^/login$
-            security: false
-
         backend:
             pattern: ^/admin
             form_login:
