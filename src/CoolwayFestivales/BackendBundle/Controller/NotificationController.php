@@ -565,7 +565,7 @@ class NotificationController extends Controller
                 $artistName = $upcoming->getArtist()->getName();
 
                 $title = 'Va ha empezar el concierto!!!';
-                $description = 'El concierto de '.$artistName.' esta apunto de comenzar!!!';
+                $description = 'El concierto de '.$artistName.' está a punto de comenzar!!!';
 
                 if (sizeof($androidTokens) > 0) {
                     $gcm = $this->get('coolway_app.gcm');
