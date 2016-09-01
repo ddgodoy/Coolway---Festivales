@@ -82,6 +82,31 @@ class Feast
      */
     protected $schedule_active;
 
+    /**
+     * @ORM\Column(name="gcm_token",type="string", length=255, nullable=true)
+     */
+    private $gcm_token;
+
+    /**
+     * @ORM\Column(name="apn_app_id",type="string", length=255, nullable=true)
+     */
+    private $apn_app_id;
+
+    /**
+     * @ORM\Column(name="apn_pem_file",type="string", length=255, nullable=true)
+     */
+    private $apn_pem_file;
+
+    /**
+     * @ORM\Column(name="apn_sandbox",type="boolean", nullable=true)
+     */
+    private $apn_sandbox;
+
+    /**
+     * @ORM\Column(name="apn_pass_phrase",type="string", length=255, nullable=true)
+     */
+    private $apn_pass_phrase;
+
     public function __construct() {}
 
     public function __toString() {
@@ -288,4 +313,120 @@ class Feast
         $this->schedule_active = $schedule_active;
     }
 
+    /**
+     * Set gcm_token
+     *
+     * @param string $gcmToken
+     * @return Feast
+     */
+    public function setGcmToken($gcmToken)
+    {
+        $this->gcm_token = $gcmToken;
+
+        return $this;
+    }
+
+    /**
+     * Get gcm_token
+     *
+     * @return string 
+     */
+    public function getGcmToken()
+    {
+        return $this->gcm_token;
+    }
+
+    /**
+     * Set apn_app_id
+     *
+     * @param string $apnAppId
+     * @return Feast
+     */
+    public function setApnAppId($apnAppId)
+    {
+        $this->apn_app_id = $apnAppId;
+
+        return $this;
+    }
+
+    /**
+     * Get apn_app_id
+     *
+     * @return string 
+     */
+    public function getApnAppId()
+    {
+        return $this->apn_app_id;
+    }
+
+    /**
+     * Set apn_sandbox
+     *
+     * @param boolean $apnSandbox
+     * @return Feast
+     */
+    public function setApnSandbox($apnSandbox)
+    {
+        $this->apn_sandbox = $apnSandbox;
+
+        return $this;
+    }
+
+    /**
+     * Get apn_sandbox
+     *
+     * @return boolean 
+     */
+    public function getApnSandbox()
+    {
+        return $this->apn_sandbox;
+    }
+
+    /**
+     * Set apn_pass_phrase
+     *
+     * @param string $apnPassPhrase
+     * @return Feast
+     */
+    public function setApnPassPhrase($apnPassPhrase)
+    {
+        $this->apn_pass_phrase = $apnPassPhrase;
+
+        return $this;
+    }
+
+    /**
+     * Get apn_pass_phrase
+     *
+     * @return string 
+     */
+    public function getApnPassPhrase()
+    {
+        return $this->apn_pass_phrase;
+    }
+
+
+
+    /**
+     * Set apn_pem_file
+     *
+     * @param string $apnPemFile
+     * @return Feast
+     */
+    public function setApnPemFile($apnPemFile)
+    {
+        $this->apn_pem_file = $apnPemFile;
+
+        return $this;
+    }
+
+    /**
+     * Get apn_pem_file
+     *
+     * @return string 
+     */
+    public function getApnPemFile()
+    {
+        return $this->apn_pem_file;
+    }
 }

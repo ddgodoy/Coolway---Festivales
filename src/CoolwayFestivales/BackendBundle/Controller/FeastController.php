@@ -109,6 +109,9 @@ class FeastController extends Controller {
 
                 // upload images if any
                 $this->handleImage($form->get('image')->getData(), $entity->getId());
+
+                //upload pem file
+                $this->handleFile($form->get('apn_pem')->getData(), $entity->getId());
                 /*
                   Integración con las ACLs
                   $user = $this->get('security.context')->getToken()->getUser();
@@ -226,6 +229,9 @@ class FeastController extends Controller {
 
                 // upload images if any
                 $this->handleImage($editForm->get('image')->getData(), $entity->getId());
+
+                //upload pem file
+                $this->handleFile($editForm->get('apn_pem')->getData(), $entity->getId());
             }
             catch (\Exception $exc) {
                 $result['success'] = false;
@@ -296,6 +302,9 @@ class FeastController extends Controller {
         foreach ($ids as $id) {
             $entity = $repo_feast->find($id);
             try {
+                //remove if exist
+                $this->removeFile($entity->getApnPemFile());
+
                 $em->remove($entity);
             } catch (\Exception $e) {
                 $response = array("success" => false, "message" => "no se puede eliminar este feasto");
@@ -354,6 +363,40 @@ class FeastController extends Controller {
                 $oR->setSimple($nm, $nm, $dId.'header/', 200, 45, 0, 0, '', array('metodo' => 'full'));
 
                 $em->persist($oB); $em->flush();
+            }
+        }
+    }
+
+    public function handleFile($pem, $id)
+    {
+        if ($pem) {
+            $em = $this->getDoctrine()->getManager();
+            $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->find($id);
+
+            if ($feast) {
+                $path = $this->get('kernel')->getRootDir() . '/../app/uploads/pem/';
+                if (!is_dir($path)) {
+                    mkdir($path, 0777);
+                    chmod($path, 0777);
+                }
+
+                $name = bin2hex(rand (1, 100000)) . '.pem';
+                $feast->setApnPemFile($name);
+
+                $pem->move($path, $name);
+
+                $em->persist($feast);
+                $em->flush();
+            }
+        }
+    }
+
+    public function removeFile($name)
+    {
+        if ($name) {
+            $path = $this->get('kernel')->getRootDir() . '/../app/uploads/pem/';
+            if (file_exists($path . $name)) {
+                unlink($path . $name);
             }
         }
     }
