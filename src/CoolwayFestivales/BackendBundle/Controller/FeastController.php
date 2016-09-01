@@ -377,7 +377,7 @@ class FeastController extends Controller {
             $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->find($id);
 
             if ($feast) {
-                $path = $this->get('kernel')->getRootDir() . '/../app/uploads/pem/';
+                $path = $this->get('kernel')->getRootDir() . '/../uploads/pem/';
                 if (!is_dir($path)) {
                     mkdir($path, 0777);
                     chmod($path, 0777);
@@ -397,7 +397,7 @@ class FeastController extends Controller {
     public function removeFile($name)
     {
         if ($name) {
-            $path = $this->get('kernel')->getRootDir() . '/../app/uploads/pem/';
+            $path = $this->get('kernel')->getRootDir() . '/../uploads/pem/';
             if (file_exists($path . $name)) {
                 unlink($path . $name);
             }
