@@ -231,6 +231,9 @@ class FeastController extends Controller {
                 $this->handleImage($editForm->get('image')->getData(), $entity->getId());
 
                 //upload pem file
+                if ($entity->getApnPemFile()) {
+                    $this->removeFile($entity->getApnPemFile());
+                }
                 $this->handleFile($editForm->get('apn_pem')->getData(), $entity->getId());
             }
             catch (\Exception $exc) {
