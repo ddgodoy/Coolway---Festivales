@@ -56,6 +56,9 @@ class FeastType extends AbstractType
             ->add('apn_app_id', null, array(
                 'label' => 'APN App ID'
             ))
+            ->add('gcm_app_id', null, array(
+                'label' => 'GCM App ID'
+            ))
             ->add('apn_sandbox', null, array(
                 'label' => 'APN Sandbox'
             ))

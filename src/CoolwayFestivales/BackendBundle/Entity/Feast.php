@@ -107,6 +107,11 @@ class Feast
      */
     private $apn_pass_phrase;
 
+    /**
+     * @ORM\Column(name="gcm_app_id",type="string", length=255, nullable=true)
+     */
+    private $gcm_app_id;
+
     public function __construct() {}
 
     public function __toString() {
@@ -428,5 +433,28 @@ class Feast
     public function getApnPemFile()
     {
         return $this->apn_pem_file;
+    }
+
+    /**
+     * Set gcm_app_id
+     *
+     * @param string $gcmAppId
+     * @return Feast
+     */
+    public function setGcmAppId($gcmAppId)
+    {
+        $this->gcm_app_id = $gcmAppId;
+
+        return $this;
+    }
+
+    /**
+     * Get gcm_app_id
+     *
+     * @return string 
+     */
+    public function getGcmAppId()
+    {
+        return $this->gcm_app_id;
     }
 }
