@@ -31,8 +31,7 @@ class NotificationController extends Controller
         $auth_checker = $this->get('security.authorization_checker');
         $em = $this->getDoctrine()->getManager();
 
-        if ($auth_checker->isGranted('ROLE_SUPER_ADMIN'))
-        {
+        if ($auth_checker->isGranted('ROLE_SUPER_ADMIN')) {
             $entities = $this->getDoctrine()->getRepository('BackendBundle:Notification')->findAll();
         } else {
             $token = $this->get('security.token_storage')->getToken();
@@ -49,7 +48,8 @@ class NotificationController extends Controller
      * @Route("/list", name="admin_notification_list")
      * @Template()
      */
-    public function listAction() {
+    public function listAction()
+    {
         $this->_datatable();
         return $this->render('BackendBundle:Notification:list.html.twig');
     }
@@ -58,19 +58,20 @@ class NotificationController extends Controller
      * set datatable configs
      * @return \CoolwayFestivales\DatatableBundle\Util\Datatable
      */
-    private function _datatable() {
+    private function _datatable()
+    {
         $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
         $qb->from("BackendBundle:Notification", "entity")
-                ->orderBy("entity.id", "desc");
+            ->orderBy("entity.id", "desc");
         $datatable = $this->get('datatable')
-                ->setFields(
-                        array(
-                            'Nombre' => 'entity.name',
-                            "_identifier_" => 'entity.id')
-                )
-                ->setHasAction(false)
+            ->setFields(
+                array(
+                    'Nombre' => 'entity.name',
+                    "_identifier_" => 'entity.id')
+            )
+            ->setHasAction(false)
 //                ->setAcl(array("OWNER")) //OWNER,OPERATOR,VIEW
-                ->setSearch(TRUE);
+            ->setSearch(TRUE);
 
         $datatable->getQueryBuilder()->setDoctrineQueryBuilder($qb);
         return $datatable;
@@ -80,7 +81,8 @@ class NotificationController extends Controller
      * @Route("/admin_notification_grid", name="admin_notification_grid")
      * @Template()
      */
-    public function gridAction() {
+    public function gridAction()
+    {
         return $this->_datatable()->execute();
     }
 
@@ -88,7 +90,8 @@ class NotificationController extends Controller
      * @Route("/datatable", name="datatable_notification")
      * @Template()
      */
-    public function datatableAction() {
+    public function datatableAction()
+    {
         $this->_datatable();
         return $this->render('BackendBundle:Notification:index.html.twig');
     }
@@ -112,7 +115,7 @@ class NotificationController extends Controller
         $form = $this->createForm(new NotificationType($filtro, 'crear', $dfHora), $entity);
         $form->bind($request);
 
-        $fechaHora = $form->get('date')->getData()->format('Y-m-d').' '.$form->get('time')->getData()->format('H:i').':00';
+        $fechaHora = $form->get('date')->getData()->format('Y-m-d') . ' ' . $form->get('time')->getData()->format('H:i') . ':00';
 
         try {
             $em->persist($entity);
@@ -130,9 +133,8 @@ class NotificationController extends Controller
             $em->persist($entity);
             $em->flush();
 
-           // $em->getRepository('BackendBundle:Notification')->sendToMobile($entity);
-        }
-        catch (\Exception $exc) {
+            // $em->getRepository('BackendBundle:Notification')->sendToMobile($entity);
+        } catch (\Exception $exc) {
             $result['success'] = false;
             $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
         }
@@ -169,7 +171,8 @@ class NotificationController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function showAction() {
+    public function showAction()
+    {
         $id = $this->getRequest()->get("id");
         $em = $this->getDoctrine()->getManager();
 
@@ -238,7 +241,7 @@ class NotificationController extends Controller
         $editForm = $this->createForm(new NotificationType($filtro, 'editar', $entity->getDate()), $entity);
         $editForm->bind($request);
 
-        $fechaHora = $editForm->get('date')->getData()->format('Y-m-d').' '.$editForm->get('time')->getData()->format('H:i').':00';
+        $fechaHora = $editForm->get('date')->getData()->format('Y-m-d') . ' ' . $editForm->get('time')->getData()->format('H:i') . ':00';
 
         if ($editForm->isValid()) {
             try {
@@ -249,9 +252,9 @@ class NotificationController extends Controller
                 $result['message'] = 'Transacci&oacute;n realizada exitosamente.';
                 //
                 $entity->setDate(new \DateTime($fechaHora));
-                $em->persist($entity); $em->flush();
-            }
-            catch (\Exception $exc) {
+                $em->persist($entity);
+                $em->flush();
+            } catch (\Exception $exc) {
                 $result['success'] = false;
                 $result['errores'] = array('causa' => 'e_interno', 'mensaje' => $exc->getMessage());
             }
@@ -268,7 +271,8 @@ class NotificationController extends Controller
      * @Route("/{id}", name="admin_notification_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, $id) {
+    public function deleteAction(Request $request, $id)
+    {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -280,10 +284,9 @@ class NotificationController extends Controller
                 throw $this->createNotFoundException('Unable to find Stage entity.');
             }
 
-            $noticationStats = $em->getRepository('BackendBundle:NotificationStats')->findBy(array('notification'=> $id));
-            if(count($noticationStats) > 0)
-            {
-                foreach($noticationStats as $stat){
+            $noticationStats = $em->getRepository('BackendBundle:NotificationStats')->findBy(array('notification' => $id));
+            if (count($noticationStats) > 0) {
+                foreach ($noticationStats as $stat) {
                     $em->remove($stat);
                 }
             }
@@ -302,11 +305,11 @@ class NotificationController extends Controller
      *
      * @return Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id) {
+    private function createDeleteForm($id)
+    {
         return $this->createFormBuilder(array('id' => $id))
-                        ->add('id', 'hidden')
-                        ->getForm()
-        ;
+            ->add('id', 'hidden')
+            ->getForm();
     }
 
     /**
@@ -315,7 +318,8 @@ class NotificationController extends Controller
      * @Route("/bachdelete", name="admin_notification_batchdelete")
      * @Template()
      */
-    public function batchdeleteAction() {
+    public function batchdeleteAction()
+    {
         $peticion = $this->getRequest();
         $ids = $peticion->get("ids", 0, true);
         $ids = explode(",", $ids);
@@ -326,10 +330,9 @@ class NotificationController extends Controller
 
         foreach ($ids as $id) {
             $entity = $repo_notification->find($id);
-            $noticationStats = $em->getRepository('BackendBundle:NotificationStats')->findBy(array('notification'=> $id));
-            if(count($noticationStats) > 0)
-            {
-                foreach($noticationStats as $stat){
+            $noticationStats = $em->getRepository('BackendBundle:NotificationStats')->findBy(array('notification' => $id));
+            if (count($noticationStats) > 0) {
+                foreach ($noticationStats as $stat) {
                     $em->remove($stat);
                 }
             }
@@ -376,10 +379,9 @@ class NotificationController extends Controller
      */
     public function notificationRunSendAction(Request $request)
     {
-        $id = $request->get('id', '');
+        $id = $request->get('id');
         $em = $this->getDoctrine()->getManager();
         $notification = $em->getRepository('BackendBundle:Notification')->findOneById($id);
-
 
         if ($notification) {
 
@@ -387,8 +389,8 @@ class NotificationController extends Controller
             $androidTokens = array();
             $iosTokens = array();
 
-            foreach($devices as $device) {
-                if($device->getOs() == 1)
+            foreach ($devices as $device) {
+                if ($device->getOs() == 1)
                     $iosTokens[] = $device->getToken();
                 else
                     $androidTokens[] = $device->getToken();
@@ -409,10 +411,11 @@ class NotificationController extends Controller
                     $notification->getName(),
                     $notification->getText(),
                     'admin-notification',
-                    'com.gravedad.arenalsound',
+                    $notification->getFeast()->getGcmAppId(),
                     false,
                     600,
-                    false);
+                    false,
+                    $notification->getFeast());
             }
 
             if (sizeof($iosTokens) > 0) {
@@ -420,11 +423,14 @@ class NotificationController extends Controller
                 $apnStats = $apn->sendNotification($iosTokens,
                     $notification->getText(),
                     5,
-                    'com.gravedad.arenalsound',
-                    'bingbong.aiff');
+                    $notification->getFeast()->getApnAppId(),
+                    'bingbong.aiff',
+                    $notification->getFeast());
             }
 
-            if (count($apnStats) > 0 || count($gcmStats) > 0) {
+            if (count($apnStats) > 0 ||
+                count($gcmStats) > 0
+            ) {
                 $stats = new NotificationStats();
                 $stats->setNotification($notification);
                 $stats->setTotalDevices($gcmStats["total"] + $apnStats["total"]);
@@ -456,16 +462,15 @@ class NotificationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $notifications = $em->getRepository('BackendBundle:Notification')->findForBatch();
 
-        foreach ($notifications as $notification)
-        {
+        foreach ($notifications as $notification) {
             if ($notification) {
 
                 $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast' => $notification->getFeast()->getId()));
                 $androidTokens = array();
                 $iosTokens = array();
 
-                foreach($devices as $device) {
-                    if($device->getOs() == 1)
+                foreach ($devices as $device) {
+                    if ($device->getOs() == 1)
                         $iosTokens[] = $device->getToken();
                     else
                         $androidTokens[] = $device->getToken();
@@ -486,10 +491,11 @@ class NotificationController extends Controller
                         $notification->getName(),
                         $notification->getText(),
                         'admin-notification',
-                        'com.gravedad.arenalsound',
+                        $notification->getFeast()->getGcmAppId(),
                         false,
                         600,
-                        false);
+                        false,
+                        $notification->getFeast());
                 }
 
                 if (sizeof($iosTokens) > 0) {
@@ -497,8 +503,9 @@ class NotificationController extends Controller
                     $apnStats = $apn->sendNotification($iosTokens,
                         $notification->getText(),
                         5,
-                        'com.gravedad.arenalsound',
-                        'bingbong.aiff');
+                        $notification->getFeast()->getApnAppId(),
+                        'bingbong.aiff',
+                        $notification->getFeast());
                 }
 
                 if (count($apnStats) > 0 || count($gcmStats) > 0) {
@@ -538,16 +545,15 @@ class NotificationController extends Controller
         $upcomingArtists = $em->getRepository('BackendBundle:FeastStageArtist')->getUpcomingArtists();
 
         $cont = 0;
-        foreach ($upcomingArtists as $upcoming)
-        {
+        foreach ($upcomingArtists as $upcoming) {
             if ($upcoming) {
 
                 $devices = $em->getRepository('BackendBundle:ArtistFavorites')->getDeviceByArtistFavorite($upcoming->getArtist()->getId(), $upcoming->getFeastStage()->getFeast()->getId());
                 $androidTokens = array();
                 $iosTokens = array();
 
-                foreach($devices as $device) {
-                    if($device->getOs() == 1)
+                foreach ($devices as $device) {
+                    if ($device->getOs() == 1)
                         $iosTokens[] = $device->getToken();
                     else
                         $androidTokens[] = $device->getToken();
@@ -565,18 +571,19 @@ class NotificationController extends Controller
                 $artistName = $upcoming->getArtist()->getName();
 
                 $title = 'Va a empezar el concierto!!!';
-                $description = 'El concierto de '.$artistName.' está a punto de comenzar!!!';
+                $description = 'El concierto de ' . $artistName . ' está a punto de comenzar!!!';
 
                 if (sizeof($androidTokens) > 0) {
                     $gcm = $this->get('coolway_app.gcm');
                     $gcm->sendNotification($androidTokens,
                         $title,
                         $description,
-                        'artist-notification-'.$cont,
-                        'com.gravedad.arenalsound',
+                        'artist-notification-' . $cont,
+                        $upcoming->getFeastStage()->getFeast()->getGcmAppId(),
                         false,
                         600,
-                        false);
+                        false,
+                        $upcoming->getFeastStage()->getFeast());
                 }
 
                 if (sizeof($iosTokens) > 0) {
@@ -584,8 +591,9 @@ class NotificationController extends Controller
                     $apn->sendNotification($iosTokens,
                         $description,
                         5,
-                        'com.gravedad.arenalsound',
-                        'bingbong.aiff');
+                        $upcoming->getFeastStage()->getFeast()->getApnAppId(),
+                        'bingbong.aiff',
+                        $upcoming->getFeastStage()->getFeast());
                 }
 
             }
@@ -596,7 +604,6 @@ class NotificationController extends Controller
 
         return new Response('true');
     }
-
 
 
 } // end class

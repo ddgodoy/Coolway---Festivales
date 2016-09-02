@@ -1,7 +1,5 @@
 services:
     coolway_app.gcm:
         class: CoolwayFestivales\BackendBundle\Services\GCM
-        arguments: [%gcm_token%]
     coolway_app.apn:
         class: CoolwayFestivales\BackendBundle\Services\APN
-        arguments: [%apn_app_id%, %apn_pem_path%, %apn_sandbox%, %apn_pass_phrase%]

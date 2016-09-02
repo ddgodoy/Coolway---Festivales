@@ -11,35 +11,19 @@ class APN
     private $client;
     private $appId;
 
-    public function __construct($appId, $pemPath, $sandbox = true, $passPhrase)
+    public function __construct()
     {
-        $this->appId = $appId;
         $this->client = new Client();
-        $this->client->open($sandbox, $pemPath, $passPhrase);
     }
 
-    public function sendNotification($tokens, $text, $badge, $sound)
+    public function sendNotification($tokens, $text, $badge, $sound, $feast)
     {
+        $this->appId = $feast->getApnAppId();
+        $this->client->open($feast->getApnSandbox(), '/uploads/'.$feast->getApnPemFile(), $feast->getApnPassPhrase());
+
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
-        
         foreach ($tokens as $token) {
             $response = $this->send($token, $text);
-//            $message = new Message();
-//            $message->setId($this->appId);
-//            $message->setToken($token);
-//            $message->setBadge($badge);
-//            $message->setSound($sound);
-//
-//            $message->setAlert($text);
-//
-//            $response = $this->client->send($message);
-//
-//            if ($response->getCode() == Response::RESULT_OK) {
-//                $stats["successful"] += 1;
-//            } else {
-//                $stats["failed"] += 1;
-//            }
-
 
             if ($response) {
                 $stats["successful"] += 1;
