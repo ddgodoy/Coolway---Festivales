@@ -9,7 +9,7 @@ class GCM
 {
     private $client;
 
-    public function __construct($token)
+    public function __construct()
     {
         $this->client = new Client();
         $httpClient = new \Zend\Http\Client(null, array(
