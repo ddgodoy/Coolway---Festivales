@@ -16,12 +16,11 @@ class APN
         $this->client = new Client();
     }
 
-    public function sendNotification($tokens, $text, $badge, $sound, $feast)
+    public function sendNotification($tokens, $text, $badge, $appId, $sound, $feast)
     {
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
-        if(isset($feast))
+        if(isset($appId))
         {
-            $appId = $feast->getApnAppId();
             if(isset($appId))
             {
                 $this->appId = $appId;
