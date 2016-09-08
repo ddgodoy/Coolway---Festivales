@@ -27,10 +27,12 @@ class APN
             else
                 $environment = 0;
 
-            $this->client->open($environment, '/var/www/vhosts/icox.mobi/festivales.icox.mobi/web/uploads/festivals/pem/'.$feast->getApnPemFile(), $feast->getApnPassPhrase());
+            $filePem = '/var/www/vhosts/icox.mobi/festivales.icox.mobi/web/uploads/festivals/pem/'.$feast->getApnPemFile();
+
+            $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
 
             foreach ($tokens as $token) {
-                $response = $this->send($token, $text);
+                $response = $this->send($token, $text, $filePem);
 
                 if ($response) {
                     $stats["successful"] += 1;
@@ -48,14 +50,14 @@ class APN
     }
 
 
-    public function send($deviceToken, $message){
+    public function send($deviceToken, $message, $filePem){
 
         // El password del fichero .pem
         $passphrase = 'Gravedad147';
 
         $ctx = stream_context_create();
         //Especificamos la ruta al certificado .pem que hemos creado
-        stream_context_set_option($ctx, 'ssl', 'local_cert', '../app/config/PushNotFestSACK.pem');
+        stream_context_set_option($ctx, 'ssl', 'local_cert', $filePem);
         stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
 
         // Abrimos conexión con APNS
