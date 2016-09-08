@@ -9,11 +9,9 @@ class GCM
 {
     private $client;
 
-    public function __construct($token)
+    public function __construct()
     {
         $this->client = new Client();
-        $this->client->setApiKey($token);
-
         $httpClient = new \Zend\Http\Client(null, array(
             'adapter' => 'Zend\Http\Client\Adapter\Socket',
             'sslverifypeer' => false
@@ -21,8 +19,9 @@ class GCM
         $this->client->setHttpClient($httpClient);
     }
 
-    public function sendNotification($tokens, $title, $text, $collapseKey, $packageName, $delay, $ttl, $dry)
+    public function sendNotification($tokens, $title, $text, $collapseKey, $packageName, $delay, $ttl, $dry, $feast)
     {
+        $this->client->setApiKey($feast->getGcmToken());
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
         // up to 100 registration ids can be sent to at once
         $chunks = array_chunk($tokens, 100);

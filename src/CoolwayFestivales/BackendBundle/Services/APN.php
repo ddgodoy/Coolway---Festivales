@@ -11,57 +11,53 @@ class APN
     private $client;
     private $appId;
 
-    public function __construct($appId, $pemPath, $sandbox = true, $passPhrase)
+    public function __construct()
     {
-        $this->appId = $appId;
         $this->client = new Client();
-        $this->client->open($sandbox, $pemPath, $passPhrase);
     }
 
-    public function sendNotification($tokens, $text, $badge, $sound)
+    public function sendNotification($tokens, $text, $badge, $appId, $sound, $feast)
     {
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
-        
-        foreach ($tokens as $token) {
-            $response = $this->send($token, $text);
-//            $message = new Message();
-//            $message->setId($this->appId);
-//            $message->setToken($token);
-//            $message->setBadge($badge);
-//            $message->setSound($sound);
-//
-//            $message->setAlert($text);
-//
-//            $response = $this->client->send($message);
-//
-//            if ($response->getCode() == Response::RESULT_OK) {
-//                $stats["successful"] += 1;
-//            } else {
-//                $stats["failed"] += 1;
-//            }
+        if(isset($appId))
+        {
+            $this->appId = $appId;
+            if($feast->getApnSandbox())
+                $environment = 1;
+            else
+                $environment = 0;
 
+            $filePem = '/var/www/vhosts/icox.mobi/festivales.icox.mobi/web/uploads/festivals/pem/'.$feast->getApnPemFile();
 
-            if ($response) {
-                $stats["successful"] += 1;
-            } else {
-                $stats["failed"] += 1;
+            $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
+
+            foreach ($tokens as $token) {
+                $response = $this->send($token, $text, $filePem);
+
+                if ($response) {
+                    $stats["successful"] += 1;
+                } else {
+                    $stats["failed"] += 1;
+                }
             }
+
+            $this->client->close();
+
         }
 
-        $this->client->close();
-
         return $stats;
+
     }
 
 
-    public function send($deviceToken, $message){
+    public function send($deviceToken, $message, $filePem){
 
         // El password del fichero .pem
         $passphrase = 'Gravedad147';
 
         $ctx = stream_context_create();
         //Especificamos la ruta al certificado .pem que hemos creado
-        stream_context_set_option($ctx, 'ssl', 'local_cert', '../app/config/PushNotFestSACK.pem');
+        stream_context_set_option($ctx, 'ssl', 'local_cert', $filePem);
         stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
 
         // Abrimos conexión con APNS
@@ -83,13 +79,15 @@ class APN
         $payload = json_encode($body);
 
         // Construimos el mensaje binario
-        $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+        $msg = chr(0) . pack('n', 32) . pack('H*', 'e9ccfd51f0ed1ff028ca66a3fdab8754b4a33ab7792301e30741a156f6729c45') . pack('n', strlen($payload)) . $payload;
 
         // Lo enviamos
         $result = fwrite($fp, $msg, strlen($msg));
 
         // cerramos la conexión
         fclose($fp);
+
+        exit();
 
         if (!$result) {
             return false;
