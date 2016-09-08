@@ -21,24 +21,26 @@ class APN
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
         if(isset($appId))
         {
-            if(isset($appId))
-            {
-                $this->appId = $appId;
-                $this->client->open($feast->getApnSandbox(), '/uploads/festivals/pem/'.$feast->getApnPemFile(), $feast->getApnPassPhrase());
+            $this->appId = $appId;
+            if($feast->getApnSandbox())
+                $environment = 1;
+            else
+                $environment = 0;
 
-                foreach ($tokens as $token) {
-                    $response = $this->send($token, $text);
+            $this->client->open($environment, '/uploads/festivals/pem/'.$feast->getApnPemFile(), $feast->getApnPassPhrase());
 
-                    if ($response) {
-                        $stats["successful"] += 1;
-                    } else {
-                        $stats["failed"] += 1;
-                    }
+            foreach ($tokens as $token) {
+                $response = $this->send($token, $text);
+
+                if ($response) {
+                    $stats["successful"] += 1;
+                } else {
+                    $stats["failed"] += 1;
                 }
-
-                $this->client->close();
-
             }
+
+            $this->client->close();
+
         }
 
         return $stats;
