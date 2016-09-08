@@ -10,7 +10,7 @@ $message = '¡Mi primer mensaje Push!';
  
 $ctx = stream_context_create();
 //Especificamos la ruta al certificado .pem que hemos creado
-stream_context_set_option($ctx, 'ssl', 'local_cert', ' /var/www/vhosts/icox.mobi/festivales.icox.mobi/web/uploads/festivals/pem/3735363434.pem');
+stream_context_set_option($ctx, 'ssl', 'local_cert', '/var/www/vhosts/icox.mobi/festivales.icox.mobi/web/uploads/festivals/pem/3735363434.pem');
 stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
  
 // Abrimos conexión con APNS
