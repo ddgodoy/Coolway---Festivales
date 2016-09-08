@@ -19,26 +19,29 @@ class APN
     public function sendNotification($tokens, $text, $badge, $sound, $feast)
     {
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
-
-        $appId = $feast->getApnAppId();
-        if(isset($appId))
+        if(isset($feast))
         {
-            $this->appId = $appId;
-            $this->client->open($feast->getApnSandbox(), '/uploads/festivals/pem/'.$feast->getApnPemFile(), $feast->getApnPassPhrase());
+            $appId = $feast->getApnAppId();
+            if(isset($appId))
+            {
+                $this->appId = $appId;
+                $this->client->open($feast->getApnSandbox(), '/uploads/festivals/pem/'.$feast->getApnPemFile(), $feast->getApnPassPhrase());
 
-            foreach ($tokens as $token) {
-                $response = $this->send($token, $text);
+                foreach ($tokens as $token) {
+                    $response = $this->send($token, $text);
 
-                if ($response) {
-                    $stats["successful"] += 1;
-                } else {
-                    $stats["failed"] += 1;
+                    if ($response) {
+                        $stats["successful"] += 1;
+                    } else {
+                        $stats["failed"] += 1;
+                    }
                 }
+
+                $this->client->close();
+
             }
-
-            $this->client->close();
-
         }
+
         return $stats;
 
     }

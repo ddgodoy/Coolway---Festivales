@@ -407,6 +407,10 @@ class NotificationController extends Controller
 
             $gcmAppId = $notification->getFeast()->getGcmAppId();
             $apnAppId = $notification->getFeast()->getApnAppId();
+
+            print_r($apnAppId);
+            die('listo');
+
             if (sizeof($androidTokens) > 0 && isset($gcmAppId)) {
                 $gcm = $this->get('coolway_app.gcm');
                 $gcmStats = $gcm->sendNotification($androidTokens,
