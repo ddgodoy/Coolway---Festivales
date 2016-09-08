@@ -32,7 +32,7 @@ class APN
             $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
 
             foreach ($tokens as $token) {
-                $response = $this->send($token, $text, $filePem);
+                $response = $this->send($token, $text, $filePem, $environment);
 
                 if ($response) {
                     $stats["successful"] += 1;
@@ -50,7 +50,7 @@ class APN
     }
 
 
-    public function send($deviceToken, $message, $filePem){
+    public function send($deviceToken, $message, $filePem, $environment){
 
         // El password del fichero .pem
         $passphrase = 'Gravedad147';
@@ -60,9 +60,14 @@ class APN
         stream_context_set_option($ctx, 'ssl', 'local_cert', $filePem);
         stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
 
+        if($environment)
+            $url = 'ssl://gateway.push.apple.com:2195';
+        else
+            $url = 'ssl://gateway.sandbox.push.apple.com:2195';
+
         // Abrimos conexión con APNS
         $fp = stream_socket_client(
-            'ssl://gateway.push.apple.com:2195', $err,
+            $url, $err,
             $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
 
         if (!$fp) {
