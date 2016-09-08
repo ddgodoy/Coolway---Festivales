@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bad2f218-dd8d-4c13-900d-3c7d32f131a9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Award.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Award.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Coolway.iml" afterPath="$PROJECT_DIR$/.idea/Coolway.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/FeastController.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/FeastController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Images.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Images.php" />
     </list>
     <ignored path="Coolway.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,7 +29,7 @@
       <file leaf-file-name="NotificationController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="118">
+            <state relative-caret-position="10206">
               <caret line="576" column="35" selection-start-line="576" selection-start-column="35" selection-end-line="576" selection-end-column="35" />
               <folding />
             </state>
@@ -56,7 +59,7 @@
       <file leaf-file-name="FeastStageArtistRepository.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
+            <state relative-caret-position="1098">
               <caret line="61" column="54" selection-start-line="61" selection-start-column="54" selection-end-line="61" selection-end-column="54" />
               <folding>
                 <marker date="1473342342590" expanded="true" signature="388:561" ph="SELECT fsa F... BackendBundle" />
@@ -72,18 +75,38 @@
       <file leaf-file-name="Step.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Step.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
+            <state relative-caret-position="1872">
               <caret line="108" column="0" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Award.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Award.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Award.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="203">
               <caret line="122" column="36" selection-start-line="122" selection-start-column="36" selection-end-line="122" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Images.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Images.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1229">
+              <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FeastController.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/FeastController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="477">
+              <caret line="379" column="0" selection-start-line="379" selection-start-column="0" selection-end-line="379" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -97,8 +120,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/config/routing.yml" />
-        <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Resources/views/Email/welcome.html.twig" />
         <option value="$PROJECT_DIR$/mobile/www/js/app.js" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/FeastStageArtist.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/ArtistController.php" />
@@ -148,6 +169,8 @@
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Step.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Award.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Images.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/FeastController.php" />
       </list>
     </option>
   </component>
@@ -189,8 +212,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -285,7 +308,7 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Entity" />
+              <option name="myItemId" value="Controller" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -371,12 +394,13 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1455742018201</updated>
-      <workItem from="1473350880805" duration="3447000" />
+      <workItem from="1473350880805" duration="4635000" />
+      <workItem from="1473358951697" duration="138000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3447000" />
+    <option name="totallyTimeSpent" value="4773000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
@@ -386,7 +410,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29357797" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29357797" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -428,20 +452,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Notification/show.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Notification/select.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/views/Notification/notificationToSend.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -717,7 +727,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -732,15 +741,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="24">
           <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding>
-            <element signature="e#60#94#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
+        <state relative-caret-position="10206">
           <caret line="576" column="35" selection-start-line="576" selection-start-column="35" selection-end-line="576" selection-end-column="35" />
           <folding />
         </state>
@@ -764,7 +770,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
+        <state relative-caret-position="1098">
           <caret line="61" column="54" selection-start-line="61" selection-start-column="54" selection-end-line="61" selection-end-column="54" />
           <folding>
             <marker date="1473342342590" expanded="true" signature="388:561" ph="SELECT fsa F... BackendBundle" />
@@ -778,7 +784,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Step.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
+        <state relative-caret-position="1872">
           <caret line="108" column="0" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
           <folding />
         </state>
@@ -788,6 +794,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
           <caret line="122" column="36" selection-start-line="122" selection-start-column="36" selection-end-line="122" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/Images.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1229">
+          <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/FeastController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="477">
+          <caret line="379" column="0" selection-start-line="379" selection-start-column="0" selection-end-line="379" selection-end-column="0" />
           <folding />
         </state>
       </provider>
