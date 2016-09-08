@@ -106,10 +106,9 @@ class Step {
     /**
      * Add feast_stages_artist
      *
-     * @param \CoolwayFestivales\BackendBundle\Entity\StepArtist $feastStagesArtist
      * @return Step
      */
-    public function addStepsArtist(\CoolwayFestivales\BackendBundle\Entity\StepArtist $feastStagesArtist) {
+    public function addStepsArtist( $feastStagesArtist) {
         $this->feast_stages_artist[] = $feastStagesArtist;
 
         return $this;
@@ -118,9 +117,8 @@ class Step {
     /**
      * Remove feast_stages_artist
      *
-     * @param \CoolwayFestivales\BackendBundle\Entity\StepArtist $feastStagesArtist
      */
-    public function removeStepsArtist(\CoolwayFestivales\BackendBundle\Entity\StepArtist $feastStagesArtist) {
+    public function removeStepsArtist( $feastStagesArtist) {
         $this->feast_stages_artist->removeElement($feastStagesArtist);
     }
 
