@@ -405,7 +405,9 @@ class NotificationController extends Controller
             $apnStats["successful"] = 0;
             $apnStats["failed"] = 0;
 
-            if (sizeof($androidTokens) > 0) {
+            $gcmAppId = $notification->getFeast()->getGcmAppId();
+            $apnAppId = $notification->getFeast()->getApnAppId();
+            if (sizeof($androidTokens) > 0 && isset($gcmAppId)) {
                 $gcm = $this->get('coolway_app.gcm');
                 $gcmStats = $gcm->sendNotification($androidTokens,
                     $notification->getName(),
@@ -418,7 +420,7 @@ class NotificationController extends Controller
                     $notification->getFeast());
             }
 
-            if (sizeof($iosTokens) > 0) {
+            if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
                 $apn = $this->get('coolway_app.apn');
                 $apnStats = $apn->sendNotification($iosTokens,
                     $notification->getText(),
@@ -485,7 +487,9 @@ class NotificationController extends Controller
                 $apnStats["successful"] = 0;
                 $apnStats["failed"] = 0;
 
-                if (sizeof($androidTokens) > 0) {
+                $gcmAppId = $notification->getFeast()->getGcmAppId();
+                $apnAppId = $notification->getFeast()->getApnAppId();
+                if (sizeof($androidTokens) > 0 && isset($gcmAppId)) {
                     $gcm = $this->get('coolway_app.gcm');
                     $gcmStats = $gcm->sendNotification($androidTokens,
                         $notification->getName(),
@@ -498,7 +502,7 @@ class NotificationController extends Controller
                         $notification->getFeast());
                 }
 
-                if (sizeof($iosTokens) > 0) {
+                if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
                     $apn = $this->get('coolway_app.apn');
                     $apnStats = $apn->sendNotification($iosTokens,
                         $notification->getText(),
@@ -573,7 +577,9 @@ class NotificationController extends Controller
                 $title = 'Va a empezar el concierto!!!';
                 $description = 'El concierto de ' . $artistName . ' está a punto de comenzar!!!';
 
-                if (sizeof($androidTokens) > 0) {
+                $gcmAppId = $upcoming->getFeastStage()->getFeast()->getGcmAppId();
+                $apnAppId = $upcoming->getFeastStage()->getFeast()->getApnAppId();
+                if (sizeof($androidTokens) > 0 && isset($gcmAppId)) {
                     $gcm = $this->get('coolway_app.gcm');
                     $gcm->sendNotification($androidTokens,
                         $title,
@@ -586,7 +592,7 @@ class NotificationController extends Controller
                         $upcoming->getFeastStage()->getFeast());
                 }
 
-                if (sizeof($iosTokens) > 0) {
+                if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
                     $apn = $this->get('coolway_app.apn');
                     $apn->sendNotification($iosTokens,
                         $description,
