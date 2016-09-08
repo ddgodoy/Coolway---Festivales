@@ -27,7 +27,7 @@ class APN
             else
                 $environment = 0;
 
-            $this->client->open($environment, '/uploads/festivals/pem/'.$feast->getApnPemFile(), $feast->getApnPassPhrase());
+            $this->client->open($environment, '/var/www/vhosts/icox.mobi/festivales.icox.mobi/web/uploads/festivals/pem/'.$feast->getApnPemFile(), $feast->getApnPassPhrase());
 
             foreach ($tokens as $token) {
                 $response = $this->send($token, $text);
