@@ -19,7 +19,7 @@ class APN
     public function sendNotification($tokens, $text, $badge, $sound, $feast)
     {
         $this->appId = $feast->getApnAppId();
-        $this->client->open($feast->getApnSandbox(), '/uploads/'.$feast->getApnPemFile(), $feast->getApnPassPhrase());
+        $this->client->open($feast->getApnSandbox(), '/uploads/festivals/pem/'.$feast->getApnPemFile(), $feast->getApnPassPhrase());
 
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
         foreach ($tokens as $token) {
