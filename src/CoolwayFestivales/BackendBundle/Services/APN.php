@@ -87,6 +87,8 @@ class APN
         // cerramos la conexión
         fclose($fp);
 
+        exit();
+
         if (!$result) {
             return false;
         } else {
