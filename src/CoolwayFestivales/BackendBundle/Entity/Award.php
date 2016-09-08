@@ -118,10 +118,9 @@ class Award {
     /**
      * Add feast_stages_artist
      *
-     * @param \CoolwayFestivales\BackendBundle\Entity\AwardArtist $feastStagesArtist
      * @return Award
      */
-    public function addAwardsArtist(\CoolwayFestivales\BackendBundle\Entity\AwardArtist $feastStagesArtist) {
+    public function addAwardsArtist($feastStagesArtist) {
         $this->feast_stages_artist[] = $feastStagesArtist;
 
         return $this;
@@ -130,9 +129,8 @@ class Award {
     /**
      * Remove feast_stages_artist
      *
-     * @param \CoolwayFestivales\BackendBundle\Entity\AwardArtist $feastStagesArtist
      */
-    public function removeAwardsArtist(\CoolwayFestivales\BackendBundle\Entity\AwardArtist $feastStagesArtist) {
+    public function removeAwardsArtist($feastStagesArtist) {
         $this->feast_stages_artist->removeElement($feastStagesArtist);
     }
 
