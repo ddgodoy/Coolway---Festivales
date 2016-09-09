@@ -27,7 +27,7 @@ class APN
             else
                 $environment = 0;
 
-            $filePem = '/var/www/vhosts/icox.mobi/festivales.icox.mobi/web/uploads/festivals/pem/'.$feast->getApnPemFile();
+            $filePem = 'http://gravedadprod.mobi/uploads/festivals/pem/'.$feast->getApnPemFile();
 
             $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
 
@@ -84,7 +84,7 @@ class APN
         $payload = json_encode($body);
 
         // Construimos el mensaje binario
-        $msg = chr(0) . pack('n', 32) . pack('H*', 'e9ccfd51f0ed1ff028ca66a3fdab8754b4a33ab7792301e30741a156f6729c45') . pack('n', strlen($payload)) . $payload;
+        $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
 
         // Lo enviamos
         $result = fwrite($fp, $msg, strlen($msg));
@@ -92,7 +92,6 @@ class APN
         // cerramos la conexión
         fclose($fp);
 
-        exit();
 
         if (!$result) {
             return false;
