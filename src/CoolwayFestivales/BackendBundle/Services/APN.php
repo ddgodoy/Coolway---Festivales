@@ -81,7 +81,7 @@ class APN
     }
 
 
-    public function openConnection($environment, $filePem)
+    private function openConnection($environment, $filePem)
     {
         // El password del fichero .pem
         $passphrase = 'Gravedad147';
@@ -106,7 +106,7 @@ class APN
         }
     }
 
-    public function closeConnection()
+    private function closeConnection()
     {
         fclose($this->fp);
         $this->client->close();
