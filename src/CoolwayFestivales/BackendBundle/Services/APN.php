@@ -13,6 +13,7 @@ class APN
     private $container;
     private $client;
     private $appId;
+    private $fp;
 
     public function __construct(ContainerInterface $container)
     {
@@ -41,8 +42,9 @@ class APN
 
             $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
 
+            $this->openConnection($environment, $filePem)
             foreach ($tokens as $token) {
-                $response = $this->send($token, $text, $filePem, $environment);
+                $response = $this->send($token, $text);
 
                 if ($response) {
                     $stats["successful"] += 1;
@@ -50,8 +52,7 @@ class APN
                     $stats["failed"] += 1;
                 }
             }
-
-            $this->client->close();
+            $this->closeConnection();
 
         }
 
@@ -60,8 +61,28 @@ class APN
     }
 
 
-    public function send($deviceToken, $message, $filePem, $environment){
+    public function send($deviceToken, $message){
 
+        // Creamos el payload
+        $body['aps'] = array(
+            'alert' =>$message,
+            'sound' => 'bingbong.aiff',
+        );
+
+        // Lo codificamos a json
+        $payload = json_encode($body);
+
+        // Construimos el mensaje binario
+        $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+
+        // Lo enviamos
+        fwrite($this->fp, $msg, strlen($msg));
+
+    }
+
+
+    private function openConnection($environment, $filePem)
+    {
         // El password del fichero .pem
         $passphrase = 'Gravedad147';
 
@@ -76,38 +97,18 @@ class APN
             $url = 'ssl://gateway.sandbox.push.apple.com:2195';
 
         // Abrimos conexión con APNS
-        $fp = stream_socket_client(
+        $this->fp = stream_socket_client(
             $url, $err,
             $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
 
-        if (!$fp) {
+        if (!$this->fp) {
             return false;
         }
-        
-        // Creamos el payload
-        $body['aps'] = array(
-            'alert' =>$message,
-            'sound' => 'bingbong.aiff',
-        );
+    }
 
-        // Lo codificamos a json
-        $payload = json_encode($body);
-
-        // Construimos el mensaje binario
-        $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
-
-        // Lo enviamos
-        $result = fwrite($fp, $msg, strlen($msg));
-
-        // cerramos la conexión
-        fclose($fp);
-
-
-        if (!$result) {
-            return false;
-        } else {
-            return true;
-        }
-
+    private function closeConnection()
+    {
+        fclose($this->fp);
+        $this->client->close();
     }
 }
