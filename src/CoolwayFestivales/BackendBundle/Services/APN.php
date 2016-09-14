@@ -62,7 +62,7 @@ class APN
         $message->setId($this->appId);
         $message->setToken($deviceToken);
         $message->setBadge(null);
-        $message->setSound($sound);
+        $message->setSound(null);
         $message->setAlert($text);
         $response = $this->client->send($message);
         $this->client->close();
