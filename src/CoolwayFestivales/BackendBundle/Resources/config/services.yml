@@ -1,7 +1,7 @@
 services:
     coolway_app.gcm:
         class: CoolwayFestivales\BackendBundle\Services\GCM
-        arguments:
-            "container": "@service_container"
     coolway_app.apn:
         class: CoolwayFestivales\BackendBundle\Services\APN
+        arguments:
+            "container": "@service_container"

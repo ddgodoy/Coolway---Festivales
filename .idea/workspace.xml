@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bad2f218-dd8d-4c13-900d-3c7d32f131a9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/config/services.yml" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/config/services.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" />
     </list>
     <ignored path="Coolway.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,10 +35,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="APN.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="APN.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
+            <state relative-caret-position="648">
               <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
               <folding>
                 <element signature="e#60#112#0#PHP" expanded="true" />
@@ -49,11 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="services.yml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="services.yml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/config/services.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+            <state relative-caret-position="108">
+              <caret line="6" column="45" selection-start-line="6" selection-start-column="45" selection-end-line="6" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -180,8 +178,8 @@
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/FeastController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/GCM.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
-        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/config/services.yml" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/config/services.yml" />
       </list>
     </option>
   </component>
@@ -438,12 +436,12 @@
       <workItem from="1473350880805" duration="4635000" />
       <workItem from="1473358951697" duration="6194000" />
       <workItem from="1473422465543" duration="997000" />
-      <workItem from="1473855865987" duration="279000" />
+      <workItem from="1473855865987" duration="1108000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12105000" />
+    <option name="totallyTimeSpent" value="12934000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
@@ -851,21 +849,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/config/services.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
+        <state relative-caret-position="648">
           <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
           <folding>
             <element signature="e#60#112#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/config/services.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="45" selection-start-line="6" selection-start-column="45" selection-end-line="6" selection-end-column="45" />
+          <folding />
         </state>
       </provider>
     </entry>
