@@ -42,7 +42,7 @@ class APN
 
             $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
 
-            $this->openConnection($environment, $filePem)
+            $this->openConnection($environment, $filePem);
             foreach ($tokens as $token) {
                 $response = $this->send($token, $text);
 
