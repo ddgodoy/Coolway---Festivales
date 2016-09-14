@@ -50,7 +50,7 @@ class APN
                     $stats["failed"] += 1;
                 }
             }
-            
+
         }
 
         return $stats;
@@ -61,7 +61,7 @@ class APN
         $message = new Message();
         $message->setId($this->appId);
         $message->setToken($deviceToken);
-        $message->setBadge($badge);
+        $message->setBadge(null);
         $message->setSound($sound);
         $message->setAlert($text);
         $response = $this->client->send($message);
