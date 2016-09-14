@@ -38,11 +38,10 @@ class APN
             else
                 $filePem = "/var/www/coolway-festivales/web/uploads/festivals/pem/".$feast->getApnPemFile();
 
-
-            $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
-
             foreach ($tokens as $token) {
+                $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
                 $response = $this->sendNew($token, $text, $filePem, $environment, $badge,  $sound);
+                $this->client->close();
 
                 if ($response) {
                     $stats["successful"] += 1;
@@ -50,7 +49,6 @@ class APN
                     $stats["failed"] += 1;
                 }
             }
-            $this->client->close();
 
         }
 
