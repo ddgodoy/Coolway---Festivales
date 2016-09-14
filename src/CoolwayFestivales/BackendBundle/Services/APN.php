@@ -50,6 +50,7 @@ class APN
                     $stats["failed"] += 1;
                 }
             }
+            $this->client->close();
 
         }
 
@@ -65,7 +66,6 @@ class APN
         $message->setSound(null);
         $message->setAlert($text);
         $response = $this->client->send($message);
-        $this->client->close();
         if ($response->getCode() == Response::RESULT_OK) {
             return true;
         } else {
