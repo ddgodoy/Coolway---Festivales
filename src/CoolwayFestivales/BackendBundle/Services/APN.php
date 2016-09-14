@@ -5,14 +5,18 @@ namespace CoolwayFestivales\BackendBundle\Services;
 use ZendService\Apple\Apns\Client\Message as Client;
 use ZendService\Apple\Apns\Message;
 use ZendService\Apple\Apns\Response\Message as Response;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 class APN
 {
+    private $container;
     private $client;
     private $appId;
 
-    public function __construct()
+    public function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
         $this->client = new Client();
     }
 
@@ -27,7 +31,13 @@ class APN
             else
                 $environment = 0;
 
-            $filePem = 'http://gravedadprod.mobi/uploads/festivals/pem/'.$feast->getApnPemFile();
+            $ip = $this->container->get('request')->getClientIp();
+
+            if($ip == "62.75.210.58")
+                $filePem = "/var/www/vhosts/gravedadprod.mobi/httpdocs/web/uploads/festivals/pem/".$feast->getApnPemFile();
+            else
+                $filePem = "/var/www/coolway-festivales/web/uploads/festivals/pem/".$feast->getApnPemFile();
+
 
             $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
 
