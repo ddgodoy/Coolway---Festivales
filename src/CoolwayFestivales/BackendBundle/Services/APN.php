@@ -31,24 +31,37 @@ class APN
             else
                 $environment = 0;
 
+            $filePem = null;
+            $fileOption1 = "/var/www/vhosts/gravedadprod.mobi/httpdocs/web/uploads/festivals/pem/".$feast->getApnPemFile();
+            $fileOption2 = "/var/www/coolway-festivales/web/uploads/festivals/pem/".$feast->getApnPemFile();
             $ip = $this->container->get('request')->getClientIp();
 
-            if($ip == "62.75.210.58")
-                $filePem = "/var/www/vhosts/gravedadprod.mobi/httpdocs/web/uploads/festivals/pem/".$feast->getApnPemFile();
-            else
-                $filePem = "/var/www/coolway-festivales/web/uploads/festivals/pem/".$feast->getApnPemFile();
+            echo "ip->";
+            print_r($ip);
+            echo "<br>";
 
-            foreach ($tokens as $token) {
-                $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
-                $response = $this->sendNew($token, $text, $filePem, $environment, $badge,  $sound);
-                $this->client->close();
+            if(file_exists($fileOption1))
+            {
+                $filePem = $fileOption1;
 
-                if ($response) {
-                    $stats["successful"] += 1;
-                } else {
-                    $stats["failed"] += 1;
+            }
+            elseif (file_exists($fileOption2))
+                $filePem = $fileOption2;
+
+            if($filePem)
+            {
+                foreach ($tokens as $token) {
+                    $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
+                    $response = $this->sendNew($token, $text, $filePem, $environment, $badge,  $sound);
+                    $this->client->close();
+
+                    if ($response) {
+                        $stats["successful"] += 1;
+                    } else {
+                        $stats["failed"] += 1;
+                    }
+
                 }
-
             }
 
 
