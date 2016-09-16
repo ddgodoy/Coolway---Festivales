@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bad2f218-dd8d-4c13-900d-3c7d32f131a9" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/logs/.gitkeep" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/security.yml" afterPath="$PROJECT_DIR$/app/config/security.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" afterPath="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" />
     </list>
     <ignored path="Coolway.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,8 +26,8 @@
       <file leaf-file-name="NotificationController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="616" column="16" selection-start-line="616" selection-start-column="16" selection-end-line="616" selection-end-column="24" />
+            <state relative-caret-position="429">
+              <caret line="636" column="69" selection-start-line="636" selection-start-column="69" selection-end-line="636" selection-end-column="69" />
               <folding />
             </state>
           </provider>
@@ -52,8 +48,8 @@
       <file leaf-file-name="security.yml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/config/security.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="753">
-              <caret line="57" column="47" selection-start-line="57" selection-start-column="47" selection-end-line="57" selection-end-column="47" />
+            <state relative-caret-position="843">
+              <caret line="62" column="36" selection-start-line="62" selection-start-column="36" selection-end-line="62" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -116,8 +112,8 @@
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Resources/config/services.yml" />
         <option value="$PROJECT_DIR$/app/logs/dev.log" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" />
-        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
         <option value="$PROJECT_DIR$/app/config/security.yml" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
       </list>
     </option>
   </component>
@@ -380,12 +376,12 @@
       <workItem from="1473868508329" duration="2580000" />
       <workItem from="1473887262089" duration="629000" />
       <workItem from="1473938556678" duration="2385000" />
-      <workItem from="1474028162171" duration="1271000" />
+      <workItem from="1474028162171" duration="1973000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26327000" />
+    <option name="totallyTimeSpent" value="27029000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
@@ -775,14 +771,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/config/security.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="753">
-          <caret line="57" column="47" selection-start-line="57" selection-start-column="47" selection-end-line="57" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-552">
@@ -793,10 +781,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/security.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="843">
+          <caret line="62" column="36" selection-start-line="62" selection-start-column="36" selection-end-line="62" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="616" column="16" selection-start-line="616" selection-start-column="16" selection-end-line="616" selection-end-column="24" />
+        <state relative-caret-position="429">
+          <caret line="636" column="69" selection-start-line="636" selection-start-column="69" selection-end-line="636" selection-end-column="69" />
           <folding />
         </state>
       </provider>

@@ -634,8 +634,7 @@ class NotificationController extends Controller
                 foreach ($devices as $device) {
                         $iosTokens[] = $device->getToken();
                 }
-
-
+                $apnAppId = $notification->getFeast()->getApnAppId();
                 if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
                     $apn = $this->get('coolway_app.apn');
                     $apn->sendNotification($iosTokens,
