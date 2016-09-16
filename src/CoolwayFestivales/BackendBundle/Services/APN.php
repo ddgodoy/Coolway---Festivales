@@ -39,6 +39,7 @@ class APN
             echo "ip->";
             print_r($ip);
             echo "<br>";
+            exit();
 
             if(file_exists($fileOption1))
             {
