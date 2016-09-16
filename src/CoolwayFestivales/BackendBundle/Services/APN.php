@@ -48,7 +48,9 @@ class APN
                 } else {
                     $stats["failed"] += 1;
                 }
+
             }
+
 
         }
 

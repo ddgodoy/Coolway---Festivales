@@ -613,5 +613,45 @@ class NotificationController extends Controller
         return new Response('true');
     }
 
+    /**
+     * @Route("/ios/test", name="notification_ios_test")
+     * @Method("GET")
+     */
+    public function iOSTestAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $notifications = $em->getRepository('BackendBundle:Notification')->findBy(
+                array(),
+                array('id' => 'DESC'),
+                1
+            );
+        foreach ($notifications as $notification) {
+            if ($notification) {
+
+                $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast' => $notification->getFeast()->getId(), 'os' => 1));
+                $iosTokens = array();
+
+                foreach ($devices as $device) {
+                        $iosTokens[] = $device->getToken();
+                }
+
+
+                if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
+                    $apn = $this->get('coolway_app.apn');
+                    $apn->sendNotification($iosTokens,
+                        $notification->getText(),
+                        5,
+                        $notification->getFeast()->getApnAppId(),
+                        'bingbong.aiff',
+                        $notification->getFeast());
+                }
+            }
+        }
+
+
+        return new Response('true');
+    }
+
+
 
 } // end class
