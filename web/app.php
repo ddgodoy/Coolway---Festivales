@@ -2,8 +2,6 @@
 
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
-set_time_limit (0);
-ini_set('memory_limit','2G');
 
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 

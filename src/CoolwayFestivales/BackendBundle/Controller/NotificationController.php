@@ -379,6 +379,8 @@ class NotificationController extends Controller
      */
     public function notificationRunSendAction(Request $request)
     {
+        set_time_limit (0);
+        ini_set('memory_limit','2G');
         $id = $request->get('id');
         $em = $this->getDoctrine()->getManager();
         $notification = $em->getRepository('BackendBundle:Notification')->findOneById($id);
@@ -463,6 +465,8 @@ class NotificationController extends Controller
      */
     public function notificationSendAllAction()
     {
+        set_time_limit (0);
+        ini_set('memory_limit','2G');
         $em = $this->getDoctrine()->getManager();
         $notifications = $em->getRepository('BackendBundle:Notification')->findForBatch();
 
@@ -547,6 +551,8 @@ class NotificationController extends Controller
      */
     public function notificationSendArtistFavoriteAction()
     {
+        set_time_limit (0);
+        ini_set('memory_limit','2G');
         $em = $this->getDoctrine()->getManager();
         $upcomingArtists = $em->getRepository('BackendBundle:FeastStageArtist')->getUpcomingArtists();
 
@@ -619,6 +625,8 @@ class NotificationController extends Controller
      */
     public function iOSTestAction()
     {
+        set_time_limit (0);
+        ini_set('memory_limit','2G');
         echo "<pre>";
         print_r($_SERVER);
         echo "</pre>";
