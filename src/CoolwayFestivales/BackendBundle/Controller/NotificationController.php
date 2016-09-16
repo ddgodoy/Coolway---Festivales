@@ -628,6 +628,11 @@ class NotificationController extends Controller
         set_time_limit (0);
         ini_set('memory_limit','2G');
 
+        echo "<pre>";
+        print_r($_SERVER);
+        echo "</pre>";
+        
+
         $em = $this->getDoctrine()->getManager();
         $notifications = $em->getRepository('BackendBundle:Notification')->findBy(
                 array(),
@@ -640,7 +645,7 @@ class NotificationController extends Controller
                 $devices = $em->getRepository('SafetyBundle:Device')->findBy(
                     array('feast' => $notification->getFeast()->getId(), 'os' => 1),
                     array(),
-                    50
+                    25
                 );
                 $iosTokens = array();
 
