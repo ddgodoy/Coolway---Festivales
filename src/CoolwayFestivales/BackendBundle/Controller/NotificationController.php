@@ -640,7 +640,7 @@ class NotificationController extends Controller
                 $devices = $em->getRepository('SafetyBundle:Device')->findBy(
                     array('feast' => $notification->getFeast()->getId(), 'os' => 1),
                     array(),
-                    10
+                    100
                 );
                 $iosTokens = array();
 
