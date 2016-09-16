@@ -625,11 +625,9 @@ class NotificationController extends Controller
      */
     public function iOSTestAction()
     {
+        ini_set('max_execution_time', 300);
         set_time_limit (0);
         ini_set('memory_limit','2G');
-        echo "<pre>";
-        print_r($_SERVER);
-        echo "</pre>";
 
         $em = $this->getDoctrine()->getManager();
         $notifications = $em->getRepository('BackendBundle:Notification')->findBy(
@@ -640,7 +638,11 @@ class NotificationController extends Controller
         foreach ($notifications as $notification) {
             if ($notification) {
 
-                $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast' => $notification->getFeast()->getId(), 'os' => 1));
+                $devices = $em->getRepository('SafetyBundle:Device')->findBy(
+                    array('feast' => $notification->getFeast()->getId(), 'os' => 1),
+                    array(),
+                    200
+                );
                 $iosTokens = array();
 
                 foreach ($devices as $device) {
