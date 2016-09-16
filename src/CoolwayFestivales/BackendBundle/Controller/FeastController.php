@@ -377,7 +377,7 @@ class FeastController extends Controller {
             $feast = $this->getDoctrine()->getRepository('BackendBundle:Feast')->find($id);
 
             if ($feast) {
-                $path = $this->get('kernel')->getRootDir() . '/../uploads/pem/';
+                $path = $this->get('kernel')->getRootDir().'/../web/uploads/festivals/pem/';
                 if (!is_dir($path)) {
                     mkdir($path, 0777);
                     chmod($path, 0777);

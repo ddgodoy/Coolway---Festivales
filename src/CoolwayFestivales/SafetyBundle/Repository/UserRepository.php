@@ -106,6 +106,7 @@ class UserRepository extends EntityRepository implements ContainerAwareInterface
     //
     public function getAllButAdmin()
     {
+        
         $q = $this->getEntityManager()->createQuery("SELECT u FROM SafetyBundle:User u WHERE u.username != 'admin'");
 
         return $q->getResult();

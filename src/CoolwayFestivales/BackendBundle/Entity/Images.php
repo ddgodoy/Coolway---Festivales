@@ -115,10 +115,9 @@ class Images {
     /**
      * Add feast_stages_artist
      *
-     * @param \CoolwayFestivales\BackendBundle\Entity\ImagesArtist $feastStagesArtist
      * @return Images
      */
-    public function addImagessArtist(\CoolwayFestivales\BackendBundle\Entity\ImagesArtist $feastStagesArtist) {
+    public function addImagessArtist( $feastStagesArtist) {
         $this->feast_stages_artist[] = $feastStagesArtist;
 
         return $this;
@@ -127,9 +126,8 @@ class Images {
     /**
      * Remove feast_stages_artist
      *
-     * @param \CoolwayFestivales\BackendBundle\Entity\ImagesArtist $feastStagesArtist
      */
-    public function removeImagessArtist(\CoolwayFestivales\BackendBundle\Entity\ImagesArtist $feastStagesArtist) {
+    public function removeImagessArtist($feastStagesArtist) {
         $this->feast_stages_artist->removeElement($feastStagesArtist);
     }
 

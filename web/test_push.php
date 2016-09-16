@@ -1,6 +1,6 @@
 <?php
 // Nuestro token
-$deviceToken = 'b6fbcb21108efc12f6f919c0a9a6ec2246a85177d9b18ec84b6de77d2d534d99';
+$deviceToken = 'e9ccfd51f0ed1ff028ca66a3fdab8754b4a33ab7792301e30741a156f6729c45';
  
 // El password del fichero .pem
 $passphrase = 'Gravedad147';
@@ -10,7 +10,7 @@ $message = '¡Mi primer mensaje Push!';
  
 $ctx = stream_context_create();
 //Especificamos la ruta al certificado .pem que hemos creado
-stream_context_set_option($ctx, 'ssl', 'local_cert', '../app/config/CaboDePlataProdCK.pem');
+stream_context_set_option($ctx, 'ssl', 'local_cert', '/var/www/vhosts/icox.mobi/festivales.icox.mobi/web/uploads/festivals/pem/3735363434.pem');
 stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
  
 // Abrimos conexión con APNS
