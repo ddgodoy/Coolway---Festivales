@@ -619,6 +619,10 @@ class NotificationController extends Controller
      */
     public function iOSTestAction()
     {
+        echo "<pre>";
+        print_r($_SERVER);
+        echo "</pre>";
+
         $em = $this->getDoctrine()->getManager();
         $notifications = $em->getRepository('BackendBundle:Notification')->findBy(
                 array(),

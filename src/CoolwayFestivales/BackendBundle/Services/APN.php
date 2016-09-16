@@ -35,10 +35,6 @@ class APN
             $fileOption1 = "/var/www/vhosts/gravedadprod.mobi/httpdocs/web/uploads/festivals/pem/".$feast->getApnPemFile();
             $fileOption2 = "/var/www/coolway-festivales/web/uploads/festivals/pem/".$feast->getApnPemFile();
 
-            echo "ip->";
-            print_r($_SERVER);
-            echo "<br>";
-            exit();
 
             if(file_exists($fileOption1))
             {
