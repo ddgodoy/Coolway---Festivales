@@ -3,6 +3,7 @@
 namespace CoolwayFestivales\BackendBundle\Controller;
 
 use CoolwayFestivales\BackendBundle\Entity\NotificationStats;
+use CoolwayFestivales\BackendBundle\Util\Date;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -12,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use CoolwayFestivales\BackendBundle\Form\NotificationType;
 use CoolwayFestivales\SafetyBundle\Entity\User;
+use CoolwayFestivales\BackendBundle\Entity\NotificationSchedule;
 
 /**
  * Notification controller.
@@ -425,13 +427,15 @@ class NotificationController extends Controller
             }
 
             if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
-                $apn = $this->get('coolway_app.apn');
-                $apnStats = $apn->sendNotification($iosTokens,
-                    $notification->getText(),
-                    5,
-                    $notification->getFeast()->getApnAppId(),
-                    'bingbong.aiff',
-                    $notification->getFeast());
+//                $apn = $this->get('coolway_app.apn');
+//                $apnStats = $apn->sendNotification($iosTokens,
+//                    $notification->getText(),
+//                    5,
+//                    $notification->getFeast()->getApnAppId(),
+//                    'bingbong.aiff',
+//                    $notification->getFeast());
+                $apnStats = [];
+                $this->scheduledNotifications($iosTokens, $notification->getId());
             }
 
             if (count($apnStats) > 0 ||
@@ -509,13 +513,15 @@ class NotificationController extends Controller
                 }
 
                 if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
-                    $apn = $this->get('coolway_app.apn');
-                    $apnStats = $apn->sendNotification($iosTokens,
-                        $notification->getText(),
-                        5,
-                        $notification->getFeast()->getApnAppId(),
-                        'bingbong.aiff',
-                        $notification->getFeast());
+//                    $apn = $this->get('coolway_app.apn');
+//                    $apnStats = $apn->sendNotification($iosTokens,
+//                        $notification->getText(),
+//                        5,
+//                        $notification->getFeast()->getApnAppId(),
+//                        'bingbong.aiff',
+//                        $notification->getFeast());
+                    $apnStats = [];
+                    $this->scheduledNotifications($iosTokens, $notification->getId());
                 }
 
                 if (count($apnStats) > 0 || count($gcmStats) > 0) {
@@ -601,13 +607,15 @@ class NotificationController extends Controller
                 }
 
                 if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
-                    $apn = $this->get('coolway_app.apn');
-                    $apn->sendNotification($iosTokens,
-                        $description,
-                        5,
-                        $upcoming->getFeastStage()->getFeast()->getApnAppId(),
-                        'bingbong.aiff',
-                        $upcoming->getFeastStage()->getFeast());
+//                    $apn = $this->get('coolway_app.apn');
+//                    $apn->sendNotification($iosTokens,
+//                        $description,
+//                        5,
+//                        $upcoming->getFeastStage()->getFeast()->getApnAppId(),
+//                        'bingbong.aiff',
+//                        $upcoming->getFeastStage()->getFeast());
+                    $this->scheduledNotifications($iosTokens, -1, $description);
+
                 }
 
             }
@@ -653,14 +661,16 @@ class NotificationController extends Controller
                         $iosTokens[] = $device->getToken();
                 }
                 $apnAppId = $notification->getFeast()->getApnAppId();
-                if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
-                    $apn = $this->get('coolway_app.apn');
-                    $apn->sendNotification($iosTokens,
-                        $notification->getText(),
-                        5,
-                        $notification->getFeast()->getApnAppId(),
-                        'bingbong.aiff',
-                        $notification->getFeast());
+                if (sizeof($iosTokens) > 0 /* && isset($apnAppId)*/) {
+//                    $apn = $this->get('coolway_app.apn');
+//                    $apn->sendNotification($iosTokens,
+//                        $notification->getText(),
+//                        5,
+//                        $notification->getFeast()->getApnAppId(),
+//                        'bingbong.aiff',
+//                        $notification->getFeast());
+
+                    $this->scheduledNotifications($iosTokens, $notification->getId());
                 }
             }
         }
@@ -669,6 +679,29 @@ class NotificationController extends Controller
         return new Response('true');
     }
 
+    /**
+     * @param $iosTokens
+     * @param $notificationId
+     * @param null $name
+     * @param null $text
+     * Guarda las notificaciones para IOS en la nueva tabla, si $notificationId = -1 es una notificación de artista y no trae $name y $text
+     */
+    private function scheduledNotifications($iosTokens, $notificationId, $text = null)
+    {
+        $em = $this->getDoctrine()->getManager();
 
+        foreach ($iosTokens as $token) {
+            $notificationSchedule = new NotificationSchedule();
+            $notificationSchedule->setToken($token);
+            $notificationSchedule->setNotificationId($notificationId);
+            $notificationSchedule->setSendDate(new \DateTime());
+            $notificationSchedule->setStatus(0);
+            if ($notificationId == -1) {
+                $notificationSchedule->setText($text);
+            }
+            $em->persist($notificationSchedule);
+            $em->flush();
+        }
+    }
 
 } // end class
