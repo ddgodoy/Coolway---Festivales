@@ -434,8 +434,8 @@ class NotificationController extends Controller
 //                    $notification->getFeast()->getApnAppId(),
 //                    'bingbong.aiff',
 //                    $notification->getFeast());
-                $apnStats = [];
-                $this->scheduledNotifications($iosTokens, $notification->getId());
+                //$apnStats = ["total" => count($tokens), "successful" => 0, "failed" => 0];;
+                $apnStats = $this->scheduledNotifications($iosTokens, $notification->getId());
             }
 
             if (count($apnStats) > 0 ||
@@ -520,8 +520,7 @@ class NotificationController extends Controller
 //                        $notification->getFeast()->getApnAppId(),
 //                        'bingbong.aiff',
 //                        $notification->getFeast());
-                    $apnStats = [];
-                    $this->scheduledNotifications($iosTokens, $notification->getId());
+                    $apnStats = $this->scheduledNotifications($iosTokens, $notification->getId());
                 }
 
                 if (count($apnStats) > 0 || count($gcmStats) > 0) {
@@ -689,7 +688,8 @@ class NotificationController extends Controller
     private function scheduledNotifications($iosTokens, $notificationId, $text = null)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $stats = ["total" => count($iosTokens), "successful" => 0, "failed" => 0];
+        
         foreach ($iosTokens as $token) {
             $notificationSchedule = new NotificationSchedule();
             $notificationSchedule->setToken($token);
@@ -701,7 +701,11 @@ class NotificationController extends Controller
             }
             $em->persist($notificationSchedule);
             $em->flush();
+            
+            $stats["successful"] += 1;   
         }
+        
+        return $stats;
     }
 
 } // end class
