@@ -32,6 +32,11 @@ security:
             stateless:    true
             anonymous:    true
 
+        notification_schedule_crone:
+            pattern:      ^/admin/notification-schedule/send/scheduled
+            stateless:    true
+            anonymous:    true
+
         artist_favorite_crone:
             pattern:      ^/admin/notification/send/artist-favorite/
             stateless:    true
