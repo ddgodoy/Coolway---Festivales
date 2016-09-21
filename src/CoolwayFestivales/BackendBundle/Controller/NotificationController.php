@@ -638,7 +638,7 @@ class NotificationController extends Controller
         echo "<pre>";
         print_r($_SERVER);
         echo "</pre>";
-        
+
 
         $em = $this->getDoctrine()->getManager();
         $notifications = $em->getRepository('BackendBundle:Notification')->findBy(
@@ -681,7 +681,6 @@ class NotificationController extends Controller
     /**
      * @param $iosTokens
      * @param $notificationId
-     * @param null $name
      * @param null $text
      * Guarda las notificaciones para IOS en la nueva tabla, si $notificationId = -1 es una notificación de artista y no trae $name y $text
      */
@@ -708,4 +707,4 @@ class NotificationController extends Controller
         return $stats;
     }
 
-} // end class
+}

@@ -15,7 +15,7 @@ use CoolwayFestivales\BackendBundle\Form\FoodiesType;
 /**
  * Foodies controller.
  *
- * @Route("/admin/foodies")
+ * @Route("/admin/services")
  */
 class FoodiesController extends Controller
 {
