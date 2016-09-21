@@ -38,15 +38,12 @@ class NotificationScheduleController extends Controller
             $em->persist($notificationsScheduled[$i]);
         }
         $em->flush();
-        echo '<pre>' . $i . '</pre>';
-        return new Response('true');
 
         $count = 0;
         $apnStats = ["total" => count($notificationsScheduled), "successful" => 0, "failed" => 0];
         $notification = null;
 
         foreach ($notificationsScheduled as $scheduled) {
-            $count++;
             $iosTokens[] = $scheduled->getToken();
 
             //En caso de ser una notificación de artista el registro tendrá -1 como notificationId, leo el texto previamente almacenado
@@ -58,7 +55,7 @@ class NotificationScheduleController extends Controller
                 }
                 $text = $notification->getText();
             }
-
+            echo '<pre>Texto: ' . var_dump($text) . '</pre>';
             //intento enviar la notificación, según este esquema se deben enviar una por una
             $stat = $apn->sendNotification($iosTokens,
                 $text,
@@ -67,19 +64,19 @@ class NotificationScheduleController extends Controller
                 'bingbong.aiff',
                 $notification->getFeast());
 
-            if ($scheduled->getNotificationId() != -1) {
-                if ($stat["successful"] > 0) {
-                    $notification->setDelivery(true);
-                    $apnStats["successful"] += 1;
-                    //por petición de mauro cuando la notificación es enviada se borra el registro de la tabla temporal
-                    $em->remove($scheduled);
-                    //$em->flush();
-                } else {
-                    $notification->setDelivery(false);
-                    $apnStats["failed"] += 1;
-                    $scheduled->setStatus(false);
-                }
+            echo '<pre>' . var_dump($stat) . '</pre>';
+
+            if ($stat["successful"] > 0) {
+                $apnStats["successful"] += 1;
+                //por petición de mauro cuando la notificación es enviada se borra el registro de la tabla temporal
+                $em->remove($scheduled);
+                //$em->flush();
+            } else {
+                $apnStats["failed"] += 1;
+                $scheduled->setStatus(false);
             }
+
+            break;
         }
 
         $em->flush();
