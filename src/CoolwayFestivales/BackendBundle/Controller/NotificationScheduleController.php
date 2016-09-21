@@ -23,7 +23,6 @@ class NotificationScheduleController extends Controller
      */
     public function notificationSendScheduled()
     {
-        $start = microtime(true);
         set_time_limit(0);
         ini_set('memory_limit', '2G');
         $apn = $this->get('coolway_app.apn');
@@ -56,7 +55,7 @@ class NotificationScheduleController extends Controller
                 }
                 $text = $notification->getText();
             }
-            echo '<pre>Texto: ' . var_dump($text) . '</pre>';
+
             //intento enviar la notificación, según este esquema se deben enviar una por una
             $stat = $apn->sendNotification($iosTokens,
                 $text,
@@ -64,8 +63,6 @@ class NotificationScheduleController extends Controller
                 $notification->getFeast()->getApnAppId(),
                 'bingbong.aiff',
                 $notification->getFeast());
-
-            echo '<pre>' . var_dump($stat) . '</pre>';
 
             if ($stat["successful"] > 0) {
                 $apnStats["successful"] += 1;
@@ -76,14 +73,12 @@ class NotificationScheduleController extends Controller
                 $apnStats["failed"] += 1;
                 $scheduled->setStatus(false);
             }
-            if ($count == 15) {
-                break;
-            }
+//            if ($count == 15) {
+//                break;
+//            }
         }
 
         $em->flush();
-        $time_elapsed_secs = microtime(true) - $start;
-        echo '<pre>' . $time_elapsed_secs . '</pre>';
 
         return new Response('true');
     }

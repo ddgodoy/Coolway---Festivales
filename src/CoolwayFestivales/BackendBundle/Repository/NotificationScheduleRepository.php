@@ -18,7 +18,7 @@ class NotificationScheduleRepository extends EntityRepository
             "SELECT ns FROM BackendBundle:NotificationSchedule ns WHERE ns.status = 0 ORDER BY ns.notificationId ASC"
         );
         $q->setFirstResult(0);
-        $q->setMaxResults(25);
+        $q->setMaxResults(10);
         return $q->getResult();
     }
 }
