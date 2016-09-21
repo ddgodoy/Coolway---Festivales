@@ -18,10 +18,24 @@ use CoolwayFestivales\BackendBundle\Entity\NotificationStats;
 class NotificationScheduleController extends Controller
 {
     /**
-     * @Route("/send/scheduled/", name="notification_send_scheduled")
+     * @Route("/send/scheduled", name="notification_send_scheduled")
      * @Method("GET")
      */
     public function notificationSendScheduled()
+    {
+        return $this->taskSendScheduled();
+    }
+
+    /**
+     * @Route("/send/scheduled2", name="notification_send_scheduled2")
+     * @Method("GET")
+     */
+    public function notificationSendScheduled2()
+    {
+        return $this->taskSendScheduled();
+    }
+
+    private function taskSendScheduled()
     {
         set_time_limit(0);
         ini_set('memory_limit', '2G');
