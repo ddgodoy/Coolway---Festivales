@@ -33,6 +33,11 @@ class NotificationScheduleController extends Controller
          */
         $notificationsScheduled = $em->getRepository('BackendBundle:NotificationSchedule')->findForProcess();
         $notificationRepo = $em->getRepository('BackendBundle:Notification');
+        for ($i = 0; $i < count($notificationsScheduled); $i++) {
+            $notificationsScheduled[$i]->setStatus(true);
+            $em->persist($notificationsScheduled[$i]);
+            $em->flush();
+        }
 
         $count = 0;
         $apnStats = ["total" => count($notificationsScheduled), "successful" => 0, "failed" => 0];
