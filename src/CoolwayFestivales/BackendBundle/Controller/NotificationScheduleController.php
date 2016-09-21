@@ -33,6 +33,7 @@ class NotificationScheduleController extends Controller
          */
         $notificationsScheduled = $em->getRepository('BackendBundle:NotificationSchedule')->findForProcess();
         echo '<pre>Total de registros: ' . count($notificationsScheduled) . '</pre>';
+        return new Response('true');
         $notificationRepo = $em->getRepository('BackendBundle:Notification');
         for ($i = 0; $i < count($notificationsScheduled); $i++) {
             $notificationsScheduled[$i]->setStatus(true);
@@ -87,6 +88,6 @@ class NotificationScheduleController extends Controller
 
         $em->flush();
 
-        return new Response('true');
+//        return new Response('true');
     }
 }
