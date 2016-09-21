@@ -23,6 +23,7 @@ class NotificationScheduleController extends Controller
      */
     public function notificationSendScheduled()
     {
+        $start = microtime(true);
         set_time_limit(0);
         ini_set('memory_limit', '2G');
         $apn = $this->get('coolway_app.apn');
@@ -45,7 +46,7 @@ class NotificationScheduleController extends Controller
 
         foreach ($notificationsScheduled as $scheduled) {
             $iosTokens[] = $scheduled->getToken();
-
+            $count++;
             //En caso de ser una notificación de artista el registro tendrá -1 como notificationId, leo el texto previamente almacenado
             if ($scheduled->getNotificationId() == -1) {
                 $text = $scheduled->getText();
@@ -75,10 +76,14 @@ class NotificationScheduleController extends Controller
                 $apnStats["failed"] += 1;
                 $scheduled->setStatus(false);
             }
-
+            if ($count == 10) {
+                break;
+            }
         }
 
         $em->flush();
+        $time_elapsed_secs = microtime(true) - $start;
+        echo '<pre>' . $time_elapsed_secs . '</pre>';
 
         return new Response('true');
     }
