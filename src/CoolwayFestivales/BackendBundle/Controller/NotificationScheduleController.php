@@ -76,7 +76,7 @@ class NotificationScheduleController extends Controller
                 $apnStats["failed"] += 1;
                 $scheduled->setStatus(false);
             }
-            if ($count == 10) {
+            if ($count == 20) {
                 break;
             }
         }
