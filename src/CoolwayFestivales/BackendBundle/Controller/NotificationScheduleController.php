@@ -32,14 +32,14 @@ class NotificationScheduleController extends Controller
          * Traigo las 25 notificaciones necesarias a ser procesadas
          */
         $notificationsScheduled = $em->getRepository('BackendBundle:NotificationSchedule')->findForProcess();
-        echo '<pre>Total de registros: ' . count($notificationsScheduled) . '</pre>';
-        return new Response('true');
         $notificationRepo = $em->getRepository('BackendBundle:Notification');
         for ($i = 0; $i < count($notificationsScheduled); $i++) {
             $notificationsScheduled[$i]->setStatus(true);
             $em->persist($notificationsScheduled[$i]);
         }
         $em->flush();
+        echo '<pre>' . $i . '</pre>';
+        return new Response('true');
 
         $count = 0;
         $apnStats = ["total" => count($notificationsScheduled), "successful" => 0, "failed" => 0];
@@ -77,17 +77,13 @@ class NotificationScheduleController extends Controller
                 } else {
                     $notification->setDelivery(false);
                     $apnStats["failed"] += 1;
+                    $scheduled->setStatus(false);
                 }
-
-                //Esta lógica estaba así en el controlador de notificaciones
-                $notification->setSend(true);
-                $em->persist($notification);
-                //$em->flush();
             }
         }
 
         $em->flush();
 
-//        return new Response('true');
+        return new Response('true');
     }
 }
