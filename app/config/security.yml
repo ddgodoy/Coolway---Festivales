@@ -63,7 +63,7 @@ security:
         - { path: ^/admin/notification/ios/test,                              roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/notification/send/all,                              roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/notification/send/artist-favorite,                  roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/notification-schedule/send/scheduled/,              roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/notification-schedule/send/scheduled,               roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/weather/update,                                     roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login$,                                             roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/,                                                   roles: [ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_COOLWAY, ROLE_USER] }
