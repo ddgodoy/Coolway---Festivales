@@ -71,7 +71,7 @@ class NotificationScheduleController extends Controller
                     $apnStats["successful"] += 1;
                     //por petición de mauro cuando la notificación es enviada se borra el registro de la tabla temporal
                     $em->remove($scheduled);
-                    $em->flush();
+                    //$em->flush();
                 } else {
                     $notification->setDelivery(false);
                     $apnStats["failed"] += 1;
@@ -80,27 +80,11 @@ class NotificationScheduleController extends Controller
                 //Esta lógica estaba así en el controlador de notificaciones
                 $notification->setSend(true);
                 $em->persist($notification);
-                $em->flush();
+                //$em->flush();
             }
         }
 
-        //TODO: vi que en algunos puntos se implementaba una lógica para guardar estadísticas acerca de las notificaciones
-        //sin embargo en la notificación de artistas no tiene dicha lógica y como aquí se envía una por una no se puede crear de manera sencilla
-        //un registro consolidado
-//        if (count($stat) > 0) {
-//            $stats = new NotificationStats();
-//            $stats->setNotification($notification);
-//            $stats->setTotalDevices($apnStats["total"]);
-//            $stats->setTotalAndroid(0);
-//            $stats->setSuccessfulAndroid(0);
-//            $stats->setFailedAndroid(0);
-//            $stats->setTotalIOS($apnStats["total"]);
-//            $stats->setSuccessfulIOS($apnStats["successful"]);
-//            $stats->setFailedIOS($apnStats["failed"]);
-//            $stats->setSent(new \DateTime("now"));
-//            $em->persist($stats);
-//
-//        }
+        $em->flush();
 
         return new Response('true');
     }
