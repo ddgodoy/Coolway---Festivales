@@ -700,10 +700,10 @@ class NotificationController extends Controller
                 $notificationSchedule->setText($text);
             }
             $em->persist($notificationSchedule);
-            $em->flush();
             
             $stats["successful"] += 1;   
         }
+        $em->flush();
         
         return $stats;
     }

@@ -36,8 +36,8 @@ class NotificationScheduleController extends Controller
         for ($i = 0; $i < count($notificationsScheduled); $i++) {
             $notificationsScheduled[$i]->setStatus(true);
             $em->persist($notificationsScheduled[$i]);
-            $em->flush();
         }
+        $em->flush();
 
         $count = 0;
         $apnStats = ["total" => count($notificationsScheduled), "successful" => 0, "failed" => 0];
