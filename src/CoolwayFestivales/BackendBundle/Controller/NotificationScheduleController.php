@@ -76,7 +76,6 @@ class NotificationScheduleController extends Controller
                 $scheduled->setStatus(false);
             }
 
-            break;
         }
 
         $em->flush();
