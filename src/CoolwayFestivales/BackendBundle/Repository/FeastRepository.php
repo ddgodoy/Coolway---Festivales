@@ -50,8 +50,19 @@ class FeastRepository extends EntityRepository
     //
     public function updateMapFeastValues($feast_id, $lat, $long, $image)
     {
-        $q = $this->getEntityManager()->createQuery("UPDATE BackendBundle:Feast f SET f.latitude = $lat, f.longitude = $long, f.path = '$image' WHERE f.id = $feast_id");
-        $q->execute();
+        $em = $this->getEntityManager();
+
+        $feast = $em->getRepository('BackendBundle:Feast')->find($feast_id);
+        if($feast)
+        {
+            $feast->setImage($image);
+            $feast->setLatitude($lat);
+            $feast->setLongitude($long);
+
+            $em->persist($feast);
+            $em->flush();
+        }
+
     }
 
 } // end class
