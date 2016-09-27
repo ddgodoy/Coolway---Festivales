@@ -60,7 +60,7 @@ class FeastType extends AbstractType
                 'label' => 'GCM App ID'
             ))
             ->add('apn_sandbox', null, array(
-                'label' => 'APN Sandbox'
+                'label' => 'APN Production'
             ))
             ->add('apn_pass_phrase', null, array(
                 'label' => 'APN Pass Phrase'
