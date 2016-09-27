@@ -72,7 +72,7 @@ class APN
         $message->setId($this->appId);
         $message->setToken($deviceToken);
         $message->setBadge(null);
-        $message->setSound(null);
+        $message->setSound('bingbong.aiff');
         $message->setAlert($text);
         $response = $this->client->send($message);
         if ($response->getCode() == Response::RESULT_OK) {
