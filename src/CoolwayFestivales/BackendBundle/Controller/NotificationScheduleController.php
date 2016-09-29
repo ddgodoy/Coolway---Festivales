@@ -40,7 +40,6 @@ class NotificationScheduleController extends Controller
         set_time_limit(0);
         ini_set('memory_limit', '2G');
         $apn = $this->get('coolway_app.apn');
-        $iosTokens = array();
         $em = $this->getDoctrine()->getManager();
         /**
          * Traigo las 25 notificaciones necesarias a ser procesadas
@@ -58,7 +57,6 @@ class NotificationScheduleController extends Controller
         $notification = null;
 
         foreach ($notificationsScheduled as $scheduled) {
-            $iosTokens[] = $scheduled->getToken();
             $count++;
             //En caso de ser una notificación de artista el registro tendrá -1 como notificationId, leo el texto previamente almacenado
             if ($scheduled->getNotificationId() == -1) {
@@ -71,7 +69,7 @@ class NotificationScheduleController extends Controller
             }
 
             //intento enviar la notificación, según este esquema se deben enviar una por una
-            $stat = $apn->sendNotification($iosTokens,
+            $stat = $apn->sendNotification(array($scheduled->getToken()),
                 $text,
                 5,
                 $notification->getFeast()->getApnAppId(),
