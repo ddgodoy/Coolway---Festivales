@@ -64,8 +64,6 @@ class NotificationScheduleController extends Controller
             //En caso de ser una notificación de artista el registro tendrá -1 como notificationId, leo el texto previamente almacenado
             if ($scheduled->getNotificationId() == -1) {
                 $text = $scheduled->getText();
-                echo 'ID de fest: '.$scheduled->getFestId();
-                exit();
                 $feast = $feastRepo->findOneById($scheduled->getFestId());
                 echo 'ID de fest: '.$feast->getId();
                 exit();
