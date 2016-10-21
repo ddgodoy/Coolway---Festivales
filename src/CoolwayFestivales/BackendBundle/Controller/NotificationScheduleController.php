@@ -63,8 +63,6 @@ class NotificationScheduleController extends Controller
             if ($scheduled->getNotificationId() == -1) {
                 $text = $scheduled->getText();
                 $feast = $feastRepo->findOneById($scheduled->getFestId());
-                echo 'ID de fest: '.$feast->getId();
-                exit();
             } else {
                 if (!$notification || $notification->getId() != $scheduled->getNotificationId()) {
                     $notification = $notificationRepo->findOneById($scheduled->getNotificationId());
