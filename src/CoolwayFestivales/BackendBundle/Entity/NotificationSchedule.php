@@ -53,7 +53,10 @@ class NotificationSchedule
      */
     private $text;
 
-
+    /**
+     * @ORM\Column(name="fest_id", type="integer", nullable=true)
+     */
+    private $festId;
 
 
     /**
@@ -179,5 +182,28 @@ class NotificationSchedule
     public function getText()
     {
         return $this->text;
+    }
+
+    /**
+     * Set festId
+     *
+     * @param integer $festId
+     * @return NotificationSchedule
+     */
+    public function setFestId($festId)
+    {
+        $this->festId = $festId;
+
+        return $this;
+    }
+
+    /**
+     * Get festId
+     *
+     * @return integer 
+     */
+    public function getFestId()
+    {
+        return $this->festId;
     }
 }

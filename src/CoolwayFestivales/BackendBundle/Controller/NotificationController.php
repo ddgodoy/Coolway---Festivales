@@ -613,7 +613,7 @@ class NotificationController extends Controller
 //                        $upcoming->getFeastStage()->getFeast()->getApnAppId(),
 //                        'bingbong.aiff',
 //                        $upcoming->getFeastStage()->getFeast());
-                    $this->scheduledNotifications($iosTokens, -1, $description);
+                    $this->scheduledNotifications($iosTokens, -1, $description, null, $upcoming->getFeastStage()->getFeast()->getId());
 
                 }
 
@@ -684,7 +684,7 @@ class NotificationController extends Controller
      * @param null $text
      * Guarda las notificaciones para IOS en la nueva tabla, si $notificationId = -1 es una notificación de artista y no trae $name y $text
      */
-    private function scheduledNotifications($iosTokens, $notificationId, $text = null)
+    private function scheduledNotifications($iosTokens, $notificationId, $text = null, $feastId = null)
     {
         $em = $this->getDoctrine()->getManager();
         $stats = ["total" => count($iosTokens), "successful" => 0, "failed" => 0];
@@ -697,6 +697,7 @@ class NotificationController extends Controller
             $notificationSchedule->setStatus(0);
             if ($notificationId == -1) {
                 $notificationSchedule->setText($text);
+                $notificationSchedule->setFestId($feastId);
             }
             $em->persist($notificationSchedule);
             

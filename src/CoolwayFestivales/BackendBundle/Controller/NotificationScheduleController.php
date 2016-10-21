@@ -56,25 +56,28 @@ class NotificationScheduleController extends Controller
         $apnStats = ["total" => count($notificationsScheduled), "successful" => 0, "failed" => 0];
         $notification = null;
 
+        $feastRepo = $em->getRepository('BackendBundle:Feast');
         foreach ($notificationsScheduled as $scheduled) {
             $count++;
             //En caso de ser una notificación de artista el registro tendrá -1 como notificationId, leo el texto previamente almacenado
             if ($scheduled->getNotificationId() == -1) {
                 $text = $scheduled->getText();
+                $feast = $feastRepo->findOneById($scheduled->getFestId());
             } else {
                 if (!$notification || $notification->getId() != $scheduled->getNotificationId()) {
                     $notification = $notificationRepo->findOneById($scheduled->getNotificationId());
                 }
                 $text = $notification->getText();
+                $feast = $notification->getFeast();
             }
 
             //intento enviar la notificación, según este esquema se deben enviar una por una
             $stat = $apn->sendNotification(array($scheduled->getToken()),
                 $text,
                 5,
-                $notification->getFeast()->getApnAppId(),
+                $feast->getApnAppId(),
                 'bingbong.aiff',
-                $notification->getFeast());
+                $feast);
 
             if ($stat["successful"] > 0) {
                 $apnStats["successful"] += 1;
