@@ -613,7 +613,7 @@ class NotificationController extends Controller
 //                        $upcoming->getFeastStage()->getFeast()->getApnAppId(),
 //                        'bingbong.aiff',
 //                        $upcoming->getFeastStage()->getFeast());
-                    $this->scheduledNotifications($iosTokens, -1, $description, null, $upcoming->getFeastStage()->getFeast()->getId());
+                    $this->scheduledNotifications($iosTokens, -1, $description, $upcoming->getFeastStage()->getFeast()->getId());
 
                 }
 
