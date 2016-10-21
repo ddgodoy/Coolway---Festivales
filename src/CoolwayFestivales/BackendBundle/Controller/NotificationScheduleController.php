@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\HttpFoundation\Response;
 use CoolwayFestivales\BackendBundle\Entity\NotificationStats;
+use CoolwayFestivales\BackendBundle\Entity\Feast;
+use CoolwayFestivales\BackendBundle\Repository\FeastRepository;
 
 /**
  * Notification Schedule controller.
