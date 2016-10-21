@@ -73,8 +73,6 @@ class NotificationScheduleController extends Controller
                 $feast = $notification->getFeast();
             }
 
-            echo $feast->getId();
-            exit();
             //intento enviar la notificación, según este esquema se deben enviar una por una
             $stat = $apn->sendNotification(array($scheduled->getToken()),
                 $text,
