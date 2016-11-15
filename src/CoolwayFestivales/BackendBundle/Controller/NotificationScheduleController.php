@@ -84,12 +84,13 @@ class NotificationScheduleController extends Controller
             if ($stat["successful"] > 0) {
                 $apnStats["successful"] += 1;
                 //por petición de mauro cuando la notificación es enviada se borra el registro de la tabla temporal
-                $em->remove($scheduled);
+                //$em->remove($scheduled);
                 //$em->flush();
             } else {
                 $apnStats["failed"] += 1;
-                $scheduled->setStatus(false);
+                //$scheduled->setStatus(false);
             }
+            $em->remove($scheduled);
 //            if ($count == 15) {
 //                break;
 //            }
