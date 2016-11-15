@@ -37,6 +37,15 @@ class NotificationScheduleController extends Controller
         return $this->taskSendScheduled();
     }
 
+    /**
+     * @Route("/send/scheduled3", name="notification_send_scheduled3")
+     * @Method("GET")
+     */
+    public function notificationSendScheduled3()
+    {
+        return $this->taskSendScheduled();
+    }
+
     private function taskSendScheduled()
     {
         set_time_limit(0);
