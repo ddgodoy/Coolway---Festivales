@@ -23,45 +23,45 @@ class APN
     public function sendNotification($tokens, $text, $badge, $appId, $sound, $feast)
     {
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
-//        if(isset($appId))
-//        {
-//            $this->appId = $appId;
-//            if($feast->getApnSandbox())
-//                $environment = 1;
-//            else
-//                $environment = 0;
-//
-//            $filePem = null;
-//            $fileOption1 = "/var/www/vhosts/gravedadprod.mobi/httpdocs/web/uploads/festivals/pem/".$feast->getApnPemFile();
-//            $fileOption2 = "/var/www/coolway-festivales/web/uploads/festivals/pem/".$feast->getApnPemFile();
-//
-//
-//            if(file_exists($fileOption1))
-//            {
-//                $filePem = $fileOption1;
-//
-//            }
-//            elseif (file_exists($fileOption2))
-//                $filePem = $fileOption2;
-//
-//            if($filePem)
-//            {
-//                foreach ($tokens as $token) {
-//                    $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
-//                    $response = $this->sendNew($token, $text, $filePem, $environment, $badge,  $sound);
-//                    $this->client->close();
-//
-//                    if ($response) {
-//                        $stats["successful"] += 1;
-//                    } else {
-//                        $stats["failed"] += 1;
-//                    }
-//
-//                }
-//            }
-//
-//
-//        }
+        if(isset($appId))
+        {
+            $this->appId = $appId;
+            if($feast->getApnSandbox())
+                $environment = 1;
+            else
+                $environment = 0;
+
+            $filePem = null;
+            $fileOption1 = "/var/www/vhosts/gravedadprod.mobi/httpdocs/web/uploads/festivals/pem/".$feast->getApnPemFile();
+            $fileOption2 = "/var/www/coolway-festivales/web/uploads/festivals/pem/".$feast->getApnPemFile();
+
+
+            if(file_exists($fileOption1))
+            {
+                $filePem = $fileOption1;
+
+            }
+            elseif (file_exists($fileOption2))
+                $filePem = $fileOption2;
+
+            if($filePem)
+            {
+                foreach ($tokens as $token) {
+                    $this->client->open($environment, $filePem, $feast->getApnPassPhrase());
+                    $response = $this->sendNew($token, $text, $filePem, $environment, $badge,  $sound);
+                    $this->client->close();
+
+                    if ($response) {
+                        $stats["successful"] += 1;
+                    } else {
+                        $stats["failed"] += 1;
+                    }
+
+                }
+            }
+
+
+        }
 
         return $stats;
 

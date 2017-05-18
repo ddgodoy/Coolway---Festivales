@@ -63,11 +63,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NotificationScheduleController.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="NotificationScheduleController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationScheduleController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="531">
-              <caret line="56" column="19" selection-start-line="56" selection-start-column="19" selection-end-line="56" selection-end-column="19" />
+            <state relative-caret-position="6">
+              <caret line="84" column="19" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -86,7 +86,7 @@
       <file leaf-file-name="NotificationController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2001">
+            <state relative-caret-position="8838">
               <caret line="502" column="37" selection-start-line="502" selection-start-column="28" selection-end-line="502" selection-end-column="37" />
               <folding />
             </state>
@@ -97,30 +97,30 @@
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="101">
-              <caret line="25" column="0" selection-start-line="25" selection-start-column="2" selection-end-line="63" selection-end-column="11" />
+              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="63" selection-end-column="9" />
               <folding>
-                <element signature="e#60#112#0#PHP" expanded="false" />
-                <marker date="1494419577115" expanded="true" signature="699:1969" ph="{...}" />
-                <marker date="1494419577115" expanded="true" signature="1202:1280" ph="{...}" />
-                <marker date="1494419577115" expanded="true" signature="1402:1951" ph="{...}" />
-                <marker date="1494419577115" expanded="true" signature="1466:1934" ph="..." />
-                <marker date="1494419577115" expanded="true" signature="1755:1831" ph="..." />
-                <marker date="1494419577115" expanded="true" signature="1839:1911" ph="..." />
+                <marker date="1495110819355" expanded="true" signature="672:1891" ph="//..." />
+                <marker date="1495110819355" expanded="true" signature="697:1891" ph="{...}" />
+                <marker date="1495110819355" expanded="true" signature="1174:1244" ph="{...}" />
+                <marker date="1495110819355" expanded="true" signature="1358:1879" ph="{...}" />
+                <marker date="1495110819355" expanded="true" signature="1418:1864" ph="..." />
+                <marker date="1495110819355" expanded="true" signature="1697:1769" ph="..." />
+                <marker date="1495110819355" expanded="true" signature="1777:1845" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GCM.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GCM.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/GCM.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
-              <caret line="24" column="10" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
+            <state relative-caret-position="348">
+              <caret line="24" column="8" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
               <folding>
-                <element signature="e#60#94#0#PHP" expanded="false" />
-                <marker date="1494419576987" expanded="true" signature="882:1599" ph="..." />
-                <marker date="1494419576987" expanded="true" signature="1043:1139" ph="..." />
-                <marker date="1494419576987" expanded="true" signature="1049:1138" ph="..." />
+                <marker date="1495110832892" expanded="true" signature="728:1554" ph="//..." />
+                <marker date="1495110832892" expanded="true" signature="872:1553" ph="..." />
+                <marker date="1495110832892" expanded="true" signature="1023:1113" ph="..." />
+                <marker date="1495110832892" expanded="true" signature="1029:1112" ph="..." />
               </folding>
             </state>
           </provider>
@@ -202,9 +202,9 @@
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Entity/NotificationSchedule.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Repository/FeastStageArtistRepository.php" />
+        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationScheduleController.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php" />
         <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/GCM.php" />
-        <option value="$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationScheduleController.php" />
       </list>
     </option>
   </component>
@@ -251,6 +251,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -349,36 +351,8 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Coolway" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Coolway" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CoolwayFestivales" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BackendBundle" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Controller" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -500,7 +474,8 @@
       <workItem from="1481896037964" duration="763000" />
       <workItem from="1481906494279" duration="2078000" />
       <workItem from="1482171280370" duration="403000" />
-      <workItem from="1494419531037" duration="143000" />
+      <workItem from="1494419531037" duration="754000" />
+      <workItem from="1495110776060" duration="61000" />
     </task>
     <task id="LOCAL-00001" summary="Modificación de controlador de Notificación, cuando es IOS guarda las notificaciones en una tabla auxiliar.&#10;Creación de Endpoint para enviar 25 notificaciones que previamente están guardadas en la tabla auxiliar, una vez enviada se borra, si no se envía se deja el registro igual.">
       <created>1474328505963</created>
@@ -653,7 +628,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="144188000" />
+    <option name="totallyTimeSpent" value="144860000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1001,11 +976,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1474551784677" expanded="true" signature="416:503" ph="SELECT f FRO... BackendBundle" />
-            <marker date="1474551784677" expanded="true" signature="808:861" ph="SELECT f FRO... BackendBundle" />
-            <marker date="1474551784677" expanded="true" signature="1094:1258" ph="SELECT f.id BackendBundle" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1027,9 +997,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1473342342590" expanded="true" signature="404:468" ph="SELECT vc FR... BackendBundle" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1037,7 +1004,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1045,9 +1011,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1473342342590" expanded="true" signature="371:456" ph="SELECT t FRO... BackendBundle" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1098,35 +1061,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="101">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="2" selection-end-line="63" selection-end-column="11" />
-          <folding>
-            <element signature="e#60#112#0#PHP" expanded="false" />
-            <marker date="1494419577115" expanded="true" signature="699:1969" ph="{...}" />
-            <marker date="1494419577115" expanded="true" signature="1202:1280" ph="{...}" />
-            <marker date="1494419577115" expanded="true" signature="1402:1951" ph="{...}" />
-            <marker date="1494419577115" expanded="true" signature="1466:1934" ph="..." />
-            <marker date="1494419577115" expanded="true" signature="1755:1831" ph="..." />
-            <marker date="1494419577115" expanded="true" signature="1839:1911" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/GCM.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="24" column="10" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
-          <folding>
-            <element signature="e#60#94#0#PHP" expanded="false" />
-            <marker date="1494419576987" expanded="true" signature="882:1599" ph="..." />
-            <marker date="1494419576987" expanded="true" signature="1043:1139" ph="..." />
-            <marker date="1494419576987" expanded="true" signature="1049:1138" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/ApiBundle/Controller/NotificationController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="594">
@@ -1137,7 +1071,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2001">
+        <state relative-caret-position="8838">
           <caret line="502" column="37" selection-start-line="502" selection-start-column="28" selection-end-line="502" selection-end-column="37" />
           <folding />
         </state>
@@ -1145,9 +1079,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Controller/NotificationScheduleController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="531">
-          <caret line="56" column="19" selection-start-line="56" selection-start-column="19" selection-end-line="56" selection-end-column="19" />
+        <state relative-caret-position="6">
+          <caret line="84" column="19" selection-start-line="84" selection-start-column="19" selection-end-line="84" selection-end-column="19" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/APN.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="101">
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="63" selection-end-column="9" />
+          <folding>
+            <marker date="1495110819355" expanded="true" signature="672:1891" ph="//..." />
+            <marker date="1495110819355" expanded="true" signature="697:1891" ph="{...}" />
+            <marker date="1495110819355" expanded="true" signature="1174:1244" ph="{...}" />
+            <marker date="1495110819355" expanded="true" signature="1358:1879" ph="{...}" />
+            <marker date="1495110819355" expanded="true" signature="1418:1864" ph="..." />
+            <marker date="1495110819355" expanded="true" signature="1697:1769" ph="..." />
+            <marker date="1495110819355" expanded="true" signature="1777:1845" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CoolwayFestivales/BackendBundle/Services/GCM.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="24" column="8" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
+          <folding>
+            <marker date="1495110832892" expanded="true" signature="728:1554" ph="//..." />
+            <marker date="1495110832892" expanded="true" signature="872:1553" ph="..." />
+            <marker date="1495110832892" expanded="true" signature="1023:1113" ph="..." />
+            <marker date="1495110832892" expanded="true" signature="1029:1112" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
