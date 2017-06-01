@@ -23,3 +23,5 @@ parameters:
     apn_pem_path: app/config/cer_festivales_push_dev.pem
     apn_sandbox: 1
     apn_pass_phrase: coolway
+    ionic_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwMTIxNmMxZi01OGQxLTRlOGEtYmQ0Yy0wMjBhYTFkZTEwMmEifQ.WQaB6ExDn8C3Xgoa5pXn6urScOPstcTxShOf1zYN3nA'
+    ionic_profile: 'dev'

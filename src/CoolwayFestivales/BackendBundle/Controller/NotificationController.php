@@ -390,68 +390,31 @@ class NotificationController extends Controller
         if ($notification) {
 
             $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast' => $notification->getFeast()->getId()));
-            $androidTokens = array();
-            $iosTokens = array();
+            $tokens = array();
 
             foreach ($devices as $device) {
-                if ($device->getOs() == 1)
-                    $iosTokens[] = $device->getToken();
-                else
-                    $androidTokens[] = $device->getToken();
+                $tokens[] = $device->getToken();
             }
 
-            $gcmStats = array();
-            $apnStats = array();
-            $gcmStats["total"] = 0;
-            $gcmStats["successful"] = 0;
-            $gcmStats["failed"] = 0;
-            $apnStats["total"] = 0;
-            $apnStats["successful"] = 0;
-            $apnStats["failed"] = 0;
-
-            $gcmAppId = $notification->getFeast()->getGcmAppId();
-            $apnAppId = $notification->getFeast()->getApnAppId();
+            $stats = array();
+            $stats["total"] = 0;
+            $stats["successful"] = 0;
+            $stats["failed"] = 0;
 
 
-            if (sizeof($androidTokens) > 0 && isset($gcmAppId)) {
-                $gcm = $this->get('coolway_app.gcm');
-                $gcmStats = $gcm->sendNotification($androidTokens,
-                    $notification->getName(),
-                    $notification->getText(),
-                    'admin-notification',
-                    $notification->getFeast()->getGcmAppId(),
-                    false,
-                    600,
-                    false,
-                    $notification->getFeast());
+            if (sizeof($tokens) > 0) {
+                $ionic = $this->get('push_notification.ionic');
+                $stats = $ionic->sendNotification($tokens, $notification->getName(), $notification->getText());
             }
 
-            if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
-//                $apn = $this->get('coolway_app.apn');
-//                $apnStats = $apn->sendNotification($iosTokens,
-//                    $notification->getText(),
-//                    5,
-//                    $notification->getFeast()->getApnAppId(),
-//                    'bingbong.aiff',
-//                    $notification->getFeast());
-                //$apnStats = ["total" => count($tokens), "successful" => 0, "failed" => 0];;
-                $apnStats = $this->scheduledNotifications($iosTokens, $notification->getId());
-            }
-
-            if (count($apnStats) > 0 ||
-                count($gcmStats) > 0
-            ) {
-                $stats = new NotificationStats();
-                $stats->setNotification($notification);
-                $stats->setTotalDevices($gcmStats["total"] + $apnStats["total"]);
-                $stats->setTotalAndroid($gcmStats["total"]);
-                $stats->setSuccessfulAndroid($gcmStats["successful"]);
-                $stats->setFailedAndroid($gcmStats["failed"]);
-                $stats->setTotalIOS($apnStats["total"]);
-                $stats->setSuccessfulIOS($apnStats["successful"]);
-                $stats->setFailedIOS($apnStats["failed"]);
-                $stats->setSent(new \DateTime("now"));
-                $em->persist($stats);
+            if (count($stats) > 0) {
+                $statsObj = new NotificationStats();
+                $statsObj->setNotification($notification);
+                $statsObj->setTotalDevices($stats["total"]);
+                $statsObj->setSuccessful($stats["successful"]);
+                $statsObj->setFailed($stats["failed"]);
+                $statsObj->setSent(new \DateTime("now"));
+                $em->persist($statsObj);
                 $notification->setDelivery(true);
             } else
                 $notification->setDelivery(false);
@@ -478,62 +441,31 @@ class NotificationController extends Controller
             if ($notification) {
 
                 $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast' => $notification->getFeast()->getId()));
-                $androidTokens = array();
-                $iosTokens = array();
+                $tokens = array();
 
                 foreach ($devices as $device) {
-                    if ($device->getOs() == 1)
-                        $iosTokens[] = $device->getToken();
-                    else
-                        $androidTokens[] = $device->getToken();
+                    $tokens[] = $device->getToken();
                 }
 
-                $gcmStats = array();
-                $apnStats = array();
-                $gcmStats["total"] = 0;
-                $gcmStats["successful"] = 0;
-                $gcmStats["failed"] = 0;
-                $apnStats["total"] = 0;
-                $apnStats["successful"] = 0;
-                $apnStats["failed"] = 0;
+                $stats = array();
+                $stats["total"] = 0;
+                $stats["successful"] = 0;
+                $stats["failed"] = 0;
 
-                $gcmAppId = $notification->getFeast()->getGcmAppId();
-                $apnAppId = $notification->getFeast()->getApnAppId();
-                if (sizeof($androidTokens) > 0 && isset($gcmAppId)) {
-                    $gcm = $this->get('coolway_app.gcm');
-                    $gcmStats = $gcm->sendNotification($androidTokens,
+                if (sizeof($tokens) > 0) {
+                    $ionic = $this->get('push_notification.ionic');
+                    $stats = $ionic->sendNotification($tokens,
                         $notification->getName(),
-                        $notification->getText(),
-                        'admin-notification',
-                        $notification->getFeast()->getGcmAppId(),
-                        false,
-                        600,
-                        false,
-                        $notification->getFeast());
+                        $notification->getText());
                 }
 
-                if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
-//                    $apn = $this->get('coolway_app.apn');
-//                    $apnStats = $apn->sendNotification($iosTokens,
-//                        $notification->getText(),
-//                        5,
-//                        $notification->getFeast()->getApnAppId(),
-//                        'bingbong.aiff',
-//                        $notification->getFeast());
-                    $apnStats = $this->scheduledNotifications($iosTokens, $notification->getId());
-                }
-
-                if (count($apnStats) > 0 || count($gcmStats) > 0) {
-                    $stats = new NotificationStats();
-                    $stats->setNotification($notification);
-                    $stats->setTotalDevices($gcmStats["total"] + $apnStats["total"]);
-                    $stats->setTotalAndroid($gcmStats["total"]);
-                    $stats->setSuccessfulAndroid($gcmStats["successful"]);
-                    $stats->setFailedAndroid($gcmStats["failed"]);
-                    $stats->setTotalIOS($apnStats["total"]);
-                    $stats->setSuccessfulIOS($apnStats["successful"]);
-                    $stats->setFailedIOS($apnStats["failed"]);
-                    $stats->setSent(new \DateTime("now"));
+                if (count($stats) > 0 ) {
+                    $statsObj = new NotificationStats();
+                    $statsObj->setNotification($notification);
+                    $statsObj->setTotalDevices($stats["total"]);
+                    $statsObj->setSuccessful($stats["successful"]);
+                    $statsObj->setFailed($stats["failed"]);
+                    $statsObj->setSent(new \DateTime("now"));
                     $em->persist($stats);
                     $notification->setDelivery(true);
                 } else
@@ -561,151 +493,30 @@ class NotificationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $upcomingArtists = $em->getRepository('BackendBundle:FeastStageArtist')->getUpcomingArtists();
 
-        $cont = 0;
         foreach ($upcomingArtists as $upcoming) {
             if ($upcoming) {
 
                 $devices = $em->getRepository('BackendBundle:ArtistFavorites')->getDeviceByArtistFavorite($upcoming->getArtist()->getId(), $upcoming->getFeastStage()->getFeast()->getId());
-                $androidTokens = array();
-                $iosTokens = array();
+                $tokens = array();
 
                 foreach ($devices as $device) {
-                    if ($device->getOs() == 1)
-                        $iosTokens[] = $device->getToken();
-                    else
-                        $androidTokens[] = $device->getToken();
+                        $tokens[] = $device->getToken();
                 }
 
-                $gcmStats = array();
-                $apnStats = array();
-                $gcmStats["total"] = 0;
-                $gcmStats["successful"] = 0;
-                $gcmStats["failed"] = 0;
-                $apnStats["total"] = 0;
-                $apnStats["successful"] = 0;
-                $apnStats["failed"] = 0;
-
                 $artistName = $upcoming->getArtist()->getName();
-
                 $title = 'Va a empezar el concierto!!!';
                 $description = 'El concierto de ' . $artistName . ' está a punto de comenzar!!!';
 
-                $gcmAppId = $upcoming->getFeastStage()->getFeast()->getGcmAppId();
-                $apnAppId = $upcoming->getFeastStage()->getFeast()->getApnAppId();
-                if (sizeof($androidTokens) > 0 && isset($gcmAppId)) {
-                    $gcm = $this->get('coolway_app.gcm');
-                    $gcm->sendNotification($androidTokens,
-                        $title,
-                        $description,
-                        'artist-notification-' . $cont,
-                        $upcoming->getFeastStage()->getFeast()->getGcmAppId(),
-                        false,
-                        600,
-                        false,
-                        $upcoming->getFeastStage()->getFeast());
+                if (sizeof($tokens) > 0 && isset($gcmAppId)) {
+                    $ionic = $this->get('push_notification.ionic');
+                    $ionic->sendNotification($tokens, $title, $description);
                 }
-
-                if (sizeof($iosTokens) > 0 && isset($apnAppId)) {
-//                    $apn = $this->get('coolway_app.apn');
-//                    $apn->sendNotification($iosTokens,
-//                        $description,
-//                        5,
-//                        $upcoming->getFeastStage()->getFeast()->getApnAppId(),
-//                        'bingbong.aiff',
-//                        $upcoming->getFeastStage()->getFeast());
-                    $this->scheduledNotifications($iosTokens, -1, $description, $upcoming->getFeastStage()->getFeast()->getId());
-
-                }
-
             }
 
-            $cont++;
         }
 
 
         return new Response('true');
-    }
-
-    /**
-     * @Route("/ios/test", name="notification_ios_test")
-     * @Method("GET")
-     */
-    public function iOSTestAction()
-    {
-        set_time_limit (0);
-        ini_set('memory_limit','2G');
-
-        echo "<pre>";
-        print_r($_SERVER);
-        echo "</pre>";
-
-
-        $em = $this->getDoctrine()->getManager();
-        $notifications = $em->getRepository('BackendBundle:Notification')->findBy(
-                array(),
-                array('id' => 'DESC'),
-                1
-            );
-        foreach ($notifications as $notification) {
-            if ($notification) {
-
-                $devices = $em->getRepository('SafetyBundle:Device')->findBy(
-                    array('feast' => $notification->getFeast()->getId(), 'os' => 1),
-                    array(),
-                    25
-                );
-                $iosTokens = array();
-
-                foreach ($devices as $device) {
-                        $iosTokens[] = $device->getToken();
-                }
-                $apnAppId = $notification->getFeast()->getApnAppId();
-                if (sizeof($iosTokens) > 0 /* && isset($apnAppId)*/) {
-//                    $apn = $this->get('coolway_app.apn');
-//                    $apn->sendNotification($iosTokens,
-//                        $notification->getText(),
-//                        5,
-//                        $notification->getFeast()->getApnAppId(),
-//                        'bingbong.aiff',
-//                        $notification->getFeast());
-
-                    $this->scheduledNotifications($iosTokens, $notification->getId());
-                }
-            }
-        }
-
-
-        return new Response('true');
-    }
-
-    /**
-     * @param $iosTokens
-     * @param $notificationId
-     * @param null $text
-     * Guarda las notificaciones para IOS en la nueva tabla, si $notificationId = -1 es una notificación de artista y no trae $name y $text
-     */
-    private function scheduledNotifications($iosTokens, $notificationId, $text = null, $feastId = null)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $stats = ["total" => count($iosTokens), "successful" => 0, "failed" => 0];
-        
-        foreach ($iosTokens as $token) {
-            $notificationSchedule = new NotificationSchedule();
-            $notificationSchedule->setToken($token);
-            $notificationSchedule->setNotificationId($notificationId);
-            $notificationSchedule->setSendDate(new \DateTime());
-            $notificationSchedule->setStatus(0);
-            if ($notificationId == -1) {
-                $notificationSchedule->setText($text);
-                $notificationSchedule->setFestId($feastId);
-            }
-            $em->persist($notificationSchedule);
-            
-            $stats["successful"] += 1;   
-        }
-        $em->flush();
-        
-        return $stats;
     }
 
 }

@@ -45,47 +45,21 @@ class NotificationStats
      */
     private $totalDevices;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="total_android", type="integer")
-     */
-    private $totalAndroid;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="successful_android", type="integer")
+     * @ORM\Column(name="successful", type="integer")
      */
-    private $successfulAndroid;
+    private $successful;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="failed_android", type="integer")
+     * @ORM\Column(name="failed", type="integer")
      */
-    private $failedAndroid;
+    private $failed;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="total_ios", type="integer")
-     */
-    private $totalIOS;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="successful_ios", type="integer")
-     */
-    private $successfulIOS;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="failed_ios", type="integer")
-     */
-    private $failedIOS;
 
     /**
      * Get id
@@ -166,141 +140,50 @@ class NotificationStats
         return $this->totalDevices;
     }
 
+
     /**
-     * Set totalAndroid
+     * Set successful
      *
-     * @param integer $totalAndroid
+     * @param integer $successful
      * @return NotificationStats
      */
-    public function setTotalAndroid($totalAndroid)
+    public function setSuccessful($successful)
     {
-        $this->totalAndroid = $totalAndroid;
+        $this->successful = $successful;
 
         return $this;
     }
 
     /**
-     * Get totalAndroid
+     * Get successful
      *
      * @return integer
      */
-    public function getTotalAndroid()
+    public function getSuccessful()
     {
-        return $this->totalAndroid;
+        return $this->successful;
     }
 
     /**
-     * Set successfulAndroid
+     * Set failed
      *
-     * @param integer $successfulAndroid
+     * @param integer $failed
      * @return NotificationStats
      */
-    public function setSuccessfulAndroid($successfulAndroid)
+    public function setFailed($failed)
     {
-        $this->successfulAndroid = $successfulAndroid;
+        $this->failed = $failed;
 
         return $this;
     }
 
     /**
-     * Get successfulAndroid
+     * Get failed
      *
      * @return integer
      */
-    public function getSuccessfulAndroid()
+    public function getFailed()
     {
-        return $this->successfulAndroid;
-    }
-
-    /**
-     * Set failedAndroid
-     *
-     * @param integer $failedAndroid
-     * @return NotificationStats
-     */
-    public function setFailedAndroid($failedAndroid)
-    {
-        $this->failedAndroid = $failedAndroid;
-
-        return $this;
-    }
-
-    /**
-     * Get failedAndroid
-     *
-     * @return integer
-     */
-    public function getFailedAndroid()
-    {
-        return $this->failedAndroid;
-    }
-
-    /**
-     * Set totalIOS
-     *
-     * @param integer $totalIOS
-     * @return NotificationStats
-     */
-    public function setTotalIOS($totalIOS)
-    {
-        $this->totalIOS = $totalIOS;
-
-        return $this;
-    }
-
-    /**
-     * Get totalIOS
-     *
-     * @return integer
-     */
-    public function getTotalIOS()
-    {
-        return $this->totalIOS;
-    }
-
-    /**
-     * Set successfulIOS
-     *
-     * @param integer $successfulIOS
-     * @return NotificationStats
-     */
-    public function setSuccessfulIOS($successfulIOS)
-    {
-        $this->successfulIOS = $successfulIOS;
-
-        return $this;
-    }
-
-    /**
-     * Get successfulIOS
-     *
-     * @return integer
-     */
-    public function getSuccessfulIOS()
-    {
-        return $this->successfulIOS;
-    }
-
-    /**
-     * Set failedIOS
-     *
-     * @param integer $failedIOS
-     * @return NotificationStats
-     */
-    public function setFailedIOS($failedIOS)
-    {
-        $this->failedIOS = $failedIOS;
-
-        return $this;
-    }
-
-    /**
-     * Get failedIOS
-     *
-     * @return integer
-     */
-    public function getFailedIOS()
-    {
-        return $this->failedIOS;
+        return $this->failed;
     }
 }
