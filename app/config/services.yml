@@ -9,5 +9,5 @@ services:
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
 
     push_notification.ionic:
-        class: AppBundle\Services\IonicPush
+        class: CoolwayFestivales\BackendBundle\Services\IonicPush
         arguments: [%ionic_token%, %ionic_profile%]
