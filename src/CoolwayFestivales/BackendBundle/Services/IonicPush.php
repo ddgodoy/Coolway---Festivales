@@ -52,17 +52,26 @@ class IonicPush
             $notification['message'] = $message;
             $notification['payload'] = $payload;
 
-            $response = $this->client->notify($token, $notification);
-            $response->getBody()->rewind();
-            $response = json_decode($response->getBody()->getContents(), true);
+
+            try{
+                $response = $this->client->notify($token, $notification);
 
 
-            if($response['meta']['status'] == 201)
                 $stats['successful'] += 1;
-            else
+//                $response->getBody()->rewind();
+//                $response = json_decode($response->getBody()->getContents(), true);
+            }catch(\Exception $e){
                 $stats['failed'] += 1;
-        }
+            }
 
+
+//
+//            if($response['meta']['status'] == 201)
+//                $stats['successful'] += 1;
+//            else
+//                $stats['failed'] += 1;
+        }
+        var_dump($stats);
         return $stats;
     }
 }
