@@ -519,4 +519,25 @@ class NotificationController extends Controller
         return new Response('true');
     }
 
+
+  
+    /**
+     * @Route("/send/test", name="notification_send_test")
+     * @Method("GET")
+     */
+    public function notificationSendArtistFavoriteAction()
+    {
+	$tokens = [
+		'cpinilv5PFQ:APA91bEGOppRSsa4OxXYwgB4AvcxtCvgHeMxQqGXOE1B20GArV9f-dFpg6UI5j6SNGlpOHxhYGelXcjbSm24Y4CnrMvCdsAQW8mg1xGDMOdLtKUeb4ruK3r6VvUazt8flgkMW9KEgXJ7',
+		'c3_dGdxArvI:APA91bEpTkGdu5DBZVqMWMsoZ0XxZN1gEoK0MknHCorgYFroHV2E1bhYN-P95MR_7cjL_8xFjyKb7DyEeDH7f_yLbxjutWk4AmsoI8V8aS845S3Df7YZTj_Rm05bAOdPHYgB1t-EsSpZ'
+	];
+
+	$ionic = $this->get('push_notification.ionic');
+        $ionic->sendNotification($tokens, 'test from php', 'testing service php');
+
+        return new Response('true');
+    }
+
+
+
 }
