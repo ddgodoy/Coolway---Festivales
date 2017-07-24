@@ -2,7 +2,9 @@
 
 namespace CoolwayFestivales\BackendBundle\Services;
 
-use Dmitrovskiy\IonicPush\PushProcessor;
+use Tomloprod\IonicApi\Exception\RequestException;
+use Tomloprod\IonicApi\Push;
+
 
 /**
  * Class IonicPush
@@ -14,7 +16,7 @@ class IonicPush
     /**
      * @var Client
      */
-    private $client;
+    private $ionicPushApi;
 
     /**
      * IonicPush constructor.
@@ -24,11 +26,9 @@ class IonicPush
      */
     public function __construct($token, $profile)
     {
-        $this->client = new PushProcessor(
-            $profile,
-            $token
-        );
+        $this->ionicPushApi = new Push($profile, $token);
     }
+
 
     /**
      * Send push notification
@@ -44,34 +44,92 @@ class IonicPush
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
         $chunks = array_chunk($tokens, 100);
 
+        /**
+         * ANDROID [OPTIONAL] CONFIG PARAMETERS
+         */
+
+        // Filename of the Icon to display with the notification (string)
+        $icon = "icon";
+
+        // Filename or URI of an image file to display with the notification (string)
+        $image = "image";
+
+        // Indicates whether each notification message results in a new entry on the notification center on Android.
+        // If not set, each request creates a new notification.
+// If set, and a notification with the same tag is already being shown, the new notification replaces the existing one in notification center.
+        $tag = "yourTagIfYouNeedIt";
+
+// When this parameter is set to true, it indicates that the message should not be sent until the device becomes active. (boolean)
+        $delayWhileIdle = false;
+
+// Identifies a group of messages that can be collapsed, so that only the last message gets sent when delivery can be resumed. (string)
+        $collapseKey = "group1";
+
+
+        /**
+         * IOS [OPTIONAL] CONFIG PARAMETERS
+         */
+
+// Message Priority. A value of 10 will cause APNS to attempt immediate delivery.
+// A value of 5 will attempt a delivery which is convenient for battery life. (integer)
+        $priority = 10;
+
+// The number to display as the badge of the app icon (integer)
+        $badge = 1;
+
+        // Alert Title, only applicable for iWatch devices
+        $iWatchTitle = $title;
+
+
+        // Assign the previously defined configuration parameters to each platform, as well as the title and message:
+        $notificationConfig = [
+            'title' => $title,
+            'message' => $message,
+            'android' => [
+                'tag' => $tag,
+                'icon' => $icon,
+                'image' => $image,
+                'delay_while_idle' => $delayWhileIdle,
+                'collapse_key' => $collapseKey
+            ],
+            'ios' => [
+                'priority' => $priority,
+                'badge' => $badge,
+                'title' => $iWatchTitle
+            ]
+        ];
+
+        // [OPTIONAL] You can also pass custom data to the notification. Default => []
+        $notificationPayload = $payload;
+
+        // [OPTIONAL] And define, if you need it, a silent notification. Default => false
+        $silent = false;
+
+        // [OPTIONAL] Or/and even a scheduled notification for an indicated datetime. Default => ''
+        $scheduled = '';
+        // [OPTIONAL] Filename of audio file to play when a notification is received. Setting this to default will use the default device notification sound. Default => 'default'
+        $sound = 'default';
+
+        // Configure notification:
+        $this->ionicPushApi->notifications->setConfig($notificationConfig, $notificationPayload, $silent, $scheduled, $sound);
+
+
         foreach ($chunks as $token) {
-           // $devices = array($token);
-            $notification = array();
 
-            $notification['title'] = $title;
-            $notification['message'] = $message;
-            $notification['payload'] = $payload;
+            try {
+                // Send notification...
+                $response = $this->ionicPushApi->notifications->sendNotification($token); // ...to some devices
 
+                if($response)
+                    $stats['successful'] += 1;
+                else
+                    $stats['failed'] += 1;
 
-            try{
-                $response = $this->client->notify($token, $notification);
-
-
-                $stats['successful'] += 1;
-//                $response->getBody()->rewind();
-//                $response = json_decode($response->getBody()->getContents(), true);
-            }catch(\Exception $e){
+            } catch (RequestException $e) {
                 $stats['failed'] += 1;
             }
-
-
-//
-//            if($response['meta']['status'] == 201)
-//                $stats['successful'] += 1;
-//            else
-//                $stats['failed'] += 1;
         }
-        var_dump($stats);
+
         return $stats;
     }
 }

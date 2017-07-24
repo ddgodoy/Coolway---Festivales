@@ -30,7 +30,8 @@
         "zendframework/zendservice-google-gcm": "^1.0",
         "zendframework/zendservice-apple-apns": "^1.2",
         "jms/security-extra-bundle": "^1.0",
-        "dmitrovskiy/ionic-push-php": "^1.0"
+        "dmitrovskiy/ionic-push-php": "^1.0",
+        "tomloprod/ionic-push-php": "^1.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

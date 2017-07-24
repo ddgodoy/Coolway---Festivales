@@ -529,11 +529,13 @@ class NotificationController extends Controller
     {
 	$tokens = [
 		'cpinilv5PFQ:APA91bEGOppRSsa4OxXYwgB4AvcxtCvgHeMxQqGXOE1B20GArV9f-dFpg6UI5j6SNGlpOHxhYGelXcjbSm24Y4CnrMvCdsAQW8mg1xGDMOdLtKUeb4ruK3r6VvUazt8flgkMW9KEgXJ7',
-		'c3_dGdxArvI:APA91bEpTkGdu5DBZVqMWMsoZ0XxZN1gEoK0MknHCorgYFroHV2E1bhYN-P95MR_7cjL_8xFjyKb7DyEeDH7f_yLbxjutWk4AmsoI8V8aS845S3Df7YZTj_Rm05bAOdPHYgB1t-EsSpZ'
+		'efBRMrVM44s:APA91bFu8NDTAEQzAwyavzFdfqIYCyQICBd3Q_p8x_wQjfvVHRghItYdgf6nZj2RWRYmsWz0WHUqeX7wGg6nrqr--OWwIE63XfjTPwxm0ud41CExkpVqlGyJjtNQ2slrPFZtrAJ1oTxf'
 	];
 
-	$ionic = $this->get('push_notification.ionic');
-        $ionic->sendNotification($tokens, 'test from php', 'testing service php');
+	    $ionic = $this->get('push_notification.ionic');
+        $response = $ionic->sendNotification($tokens, 'test from php', 'testing service php');
+
+        print_r($response);
 
         return new Response('true');
     }
