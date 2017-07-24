@@ -525,7 +525,7 @@ class NotificationController extends Controller
      * @Route("/send/test", name="notification_send_test")
      * @Method("GET")
      */
-    public function notificationSendArtistFavoriteAction()
+    public function notificationSendTestAction()
     {
 	$tokens = [
 		'cpinilv5PFQ:APA91bEGOppRSsa4OxXYwgB4AvcxtCvgHeMxQqGXOE1B20GArV9f-dFpg6UI5j6SNGlpOHxhYGelXcjbSm24Y4CnrMvCdsAQW8mg1xGDMOdLtKUeb4ruK3r6VvUazt8flgkMW9KEgXJ7',
