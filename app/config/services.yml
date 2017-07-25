@@ -10,4 +10,3 @@ services:
 
     push_notification.ionic:
         class: CoolwayFestivales\BackendBundle\Services\IonicPush
-        arguments: [%ionic_token%, %ionic_profile%]

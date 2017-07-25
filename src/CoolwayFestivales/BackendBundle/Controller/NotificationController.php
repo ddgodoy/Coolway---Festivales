@@ -402,9 +402,12 @@ class NotificationController extends Controller
             $stats["failed"] = 0;
 
 
-            if (sizeof($tokens) > 0) {
+            $ionicToken = $notification->getFeast()->getToken();
+            $ionicProfile = $notification->getFeast()->getProfile();
+
+            if (sizeof($tokens) > 0 && isset($ionicToken)) {
                 $ionic = $this->get('push_notification.ionic');
-                $stats = $ionic->sendNotification($tokens, $notification->getName(), $notification->getText());
+                $stats = $ionic->sendNotification($ionicToken, $ionicProfile, $tokens, $notification->getName(), $notification->getText());
             }
 
             if (count($stats) > 0) {
@@ -452,9 +455,15 @@ class NotificationController extends Controller
                 $stats["successful"] = 0;
                 $stats["failed"] = 0;
 
-                if (sizeof($tokens) > 0) {
+                $ionicToken = $notification->getFeast()->getToken();
+                $ionicProfile = $notification->getFeast()->getProfile();
+
+                if (sizeof($tokens) > 0 && isset($ionicToken)) {
                     $ionic = $this->get('push_notification.ionic');
-                    $stats = $ionic->sendNotification($tokens,
+                    $stats = $ionic->sendNotification(
+                        $ionicToken,
+                        $ionicProfile,
+                        $tokens,
                         $notification->getName(),
                         $notification->getText());
                 }
@@ -507,9 +516,12 @@ class NotificationController extends Controller
                 $title = 'Va a empezar el concierto!!!';
                 $description = 'El concierto de ' . $artistName . ' está a punto de comenzar!!!';
 
-                if (sizeof($tokens) > 0 && isset($gcmAppId)) {
+                $ionicToken = $upcoming->getFeastStage()->getFeast()->getToken();
+                $ionicProfile = $upcoming->getFeastStage()->getFeast()->getProfile();
+
+                if (sizeof($tokens) > 0 && isset($ionicToken)) {
                     $ionic = $this->get('push_notification.ionic');
-                    $ionic->sendNotification($tokens, $title, $description);
+                    $ionic->sendNotification($ionicToken, $ionicProfile, $tokens, $title, $description);
                 }
             }
 

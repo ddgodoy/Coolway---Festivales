@@ -50,25 +50,11 @@ class FeastType extends AbstractType
             ->add('schedule_active', null, array('label' => 'Horarios activados'
             ))
             //new fields
-            ->add('gcm_token', null, array(
-                'label' => 'GCM Token'
+            ->add('token', null, array(
+                'label' => 'Ionic Token'
             ))
-            ->add('apn_app_id', null, array(
-                'label' => 'APN App ID'
-            ))
-            ->add('gcm_app_id', null, array(
-                'label' => 'GCM App ID'
-            ))
-            ->add('apn_sandbox', null, array(
-                'label' => 'APN Production'
-            ))
-            ->add('apn_pass_phrase', null, array(
-                'label' => 'APN Pass Phrase'
-            ))
-            ->add('apn_pem', 'file', array(
-                'label' => 'Archivo .PEM',
-                'mapped' => false,
-                'required' => false
+            ->add('profile', null, array(
+                'label' => 'Ionic Profile'
             ))
         ;
     }

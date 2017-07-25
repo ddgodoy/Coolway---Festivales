@@ -83,34 +83,16 @@ class Feast
     protected $schedule_active;
 
     /**
-     * @ORM\Column(name="gcm_token",type="string", length=255, nullable=true)
+     * @ORM\Column(name="ionic_token",type="string", length=255, nullable=true)
      */
-    private $gcm_token;
+    private $token;
 
     /**
-     * @ORM\Column(name="apn_app_id",type="string", length=255, nullable=true)
+     * @ORM\Column(name="ionic_profile",type="string", length=255, nullable=true)
      */
-    private $apn_app_id;
+    private $profile;
 
-    /**
-     * @ORM\Column(name="apn_pem_file",type="string", length=255, nullable=true)
-     */
-    private $apn_pem_file;
 
-    /**
-     * @ORM\Column(name="apn_sandbox",type="boolean", nullable=true)
-     */
-    private $apn_sandbox;
-
-    /**
-     * @ORM\Column(name="apn_pass_phrase",type="string", length=255, nullable=true)
-     */
-    private $apn_pass_phrase;
-
-    /**
-     * @ORM\Column(name="gcm_app_id",type="string", length=255, nullable=true)
-     */
-    private $gcm_app_id;
 
     public function __construct() {}
 
@@ -319,142 +301,50 @@ class Feast
     }
 
     /**
-     * Set gcm_token
+     * Set token
      *
-     * @param string $gcmToken
+     * @param string $token
      * @return Feast
      */
-    public function setGcmToken($gcmToken)
+    public function setToken($token)
     {
-        $this->gcm_token = $gcmToken;
+        $this->token = $token;
 
         return $this;
     }
 
     /**
-     * Get gcm_token
+     * Get token
      *
      * @return string 
      */
-    public function getGcmToken()
+    public function getToken()
     {
-        return $this->gcm_token;
+        return $this->token;
     }
 
     /**
-     * Set apn_app_id
+     * Set profile
      *
-     * @param string $apnAppId
+     * @param string $profile
      * @return Feast
      */
-    public function setApnAppId($apnAppId)
+    public function setProfile($profile)
     {
-        $this->apn_app_id = $apnAppId;
+        $this->profile = $profile;
 
         return $this;
     }
 
     /**
-     * Get apn_app_id
+     * Get profile
      *
-     * @return string 
+     * @return string
      */
-    public function getApnAppId()
+    public function getProfile()
     {
-        return $this->apn_app_id;
-    }
-
-    /**
-     * Set apn_sandbox
-     *
-     * @param boolean $apnSandbox
-     * @return Feast
-     */
-    public function setApnSandbox($apnSandbox)
-    {
-        $this->apn_sandbox = $apnSandbox;
-
-        return $this;
-    }
-
-    /**
-     * Get apn_sandbox
-     *
-     * @return boolean 
-     */
-    public function getApnSandbox()
-    {
-        return $this->apn_sandbox;
-    }
-
-    /**
-     * Set apn_pass_phrase
-     *
-     * @param string $apnPassPhrase
-     * @return Feast
-     */
-    public function setApnPassPhrase($apnPassPhrase)
-    {
-        $this->apn_pass_phrase = $apnPassPhrase;
-
-        return $this;
-    }
-
-    /**
-     * Get apn_pass_phrase
-     *
-     * @return string 
-     */
-    public function getApnPassPhrase()
-    {
-        return $this->apn_pass_phrase;
+        return $this->profile;
     }
 
 
-
-    /**
-     * Set apn_pem_file
-     *
-     * @param string $apnPemFile
-     * @return Feast
-     */
-    public function setApnPemFile($apnPemFile)
-    {
-        $this->apn_pem_file = $apnPemFile;
-
-        return $this;
-    }
-
-    /**
-     * Get apn_pem_file
-     *
-     * @return string 
-     */
-    public function getApnPemFile()
-    {
-        return $this->apn_pem_file;
-    }
-
-    /**
-     * Set gcm_app_id
-     *
-     * @param string $gcmAppId
-     * @return Feast
-     */
-    public function setGcmAppId($gcmAppId)
-    {
-        $this->gcm_app_id = $gcmAppId;
-
-        return $this;
-    }
-
-    /**
-     * Get gcm_app_id
-     *
-     * @return string 
-     */
-    public function getGcmAppId()
-    {
-        return $this->gcm_app_id;
-    }
 }

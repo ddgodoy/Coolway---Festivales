@@ -13,34 +13,21 @@ use Tomloprod\IonicApi\Push;
  */
 class IonicPush
 {
-    /**
-     * @var Client
-     */
-    private $ionicPushApi;
-
-    /**
-     * IonicPush constructor.
-     *
-     * @param string $token
-     * @param string $profile
-     */
-    public function __construct($token, $profile)
-    {
-        $this->ionicPushApi = new Push($profile, $token);
-    }
 
 
     /**
-     * Send push notification
-     *
+     * @param $ionicToken
+     * @param $ionicProfile
      * @param $tokens
      * @param $title
      * @param $message
-     * @param $payload
+     * @param array $payload
      * @return array
      */
-    public function sendNotification($tokens, $title, $message, $payload = array())
+    public function sendNotification($ionicToken, $ionicProfile, $tokens, $title, $message, $payload = array())
     {
+        $ionicPushApi = new Push($ionicToken, $ionicProfile;
+
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
         $chunks = array_chunk($tokens, 100);
 
@@ -56,13 +43,13 @@ class IonicPush
 
         // Indicates whether each notification message results in a new entry on the notification center on Android.
         // If not set, each request creates a new notification.
-// If set, and a notification with the same tag is already being shown, the new notification replaces the existing one in notification center.
+        // If set, and a notification with the same tag is already being shown, the new notification replaces the existing one in notification center.
         $tag = "yourTagIfYouNeedIt";
 
-// When this parameter is set to true, it indicates that the message should not be sent until the device becomes active. (boolean)
+        // When this parameter is set to true, it indicates that the message should not be sent until the device becomes active. (boolean)
         $delayWhileIdle = false;
 
-// Identifies a group of messages that can be collapsed, so that only the last message gets sent when delivery can be resumed. (string)
+        // Identifies a group of messages that can be collapsed, so that only the last message gets sent when delivery can be resumed. (string)
         $collapseKey = "group1";
 
 
@@ -70,11 +57,11 @@ class IonicPush
          * IOS [OPTIONAL] CONFIG PARAMETERS
          */
 
-// Message Priority. A value of 10 will cause APNS to attempt immediate delivery.
-// A value of 5 will attempt a delivery which is convenient for battery life. (integer)
+        // Message Priority. A value of 10 will cause APNS to attempt immediate delivery.
+        // A value of 5 will attempt a delivery which is convenient for battery life. (integer)
         $priority = 10;
 
-// The number to display as the badge of the app icon (integer)
+        // The number to display as the badge of the app icon (integer)
         $badge = 1;
 
         // Alert Title, only applicable for iWatch devices
@@ -111,14 +98,14 @@ class IonicPush
         $sound = 'default';
 
         // Configure notification:
-        $this->ionicPushApi->notifications->setConfig($notificationConfig, $notificationPayload, $silent, $scheduled, $sound);
+        $ionicPushApi->notifications->setConfig($notificationConfig, $notificationPayload, $silent, $scheduled, $sound);
 
 
         foreach ($chunks as $token) {
 
             try {
                 // Send notification...
-                $response = $this->ionicPushApi->notifications->sendNotification($token); // ...to some devices
+                $response = $ionicPushApi->notifications->sendNotification($token); // ...to some devices
 
                 if($response)
                     $stats['successful'] += 1;
