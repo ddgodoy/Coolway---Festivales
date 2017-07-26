@@ -26,7 +26,7 @@ class IonicPush
      */
     public function sendNotification($ionicToken, $ionicProfile, $tokens, $title, $message, $payload = array())
     {
-        $ionicPushApi = new Push($ionicToken, $ionicProfile;
+        $ionicPushApi = new Push($ionicToken, $ionicProfile);
 
         $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
         $chunks = array_chunk($tokens, 100);
