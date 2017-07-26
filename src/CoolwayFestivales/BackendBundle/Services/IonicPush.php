@@ -24,12 +24,12 @@ class IonicPush
      * @param array $payload
      * @return array
      */
-    public function sendNotification($ionicToken, $ionicProfile, $tokens, $title, $message, $payload = array())
+    public function sendNotification($ionicToken, $ionicProfile, $deviceTokens, $title, $message, $payload = array())
     {
-        $ionicPushApi = new Push($ionicToken, $ionicProfile);
+        $ionicPushApi = new Push($ionicProfile, $ionicToken);
 
-        $stats = ["total" => count($tokens), "successful" => 0, "failed" => 0];
-        $chunks = array_chunk($tokens, 100);
+        $stats = ["total" => count($deviceTokens), "successful" => 0, "failed" => 0];
+        $chunks = array_chunk($deviceTokens, 100);
 
         /**
          * ANDROID [OPTIONAL] CONFIG PARAMETERS
@@ -101,21 +101,24 @@ class IonicPush
         $ionicPushApi->notifications->setConfig($notificationConfig, $notificationPayload, $silent, $scheduled, $sound);
 
 
-        foreach ($chunks as $token) {
+       foreach ($chunks as $tokens) {
 
             try {
                 // Send notification...
-                $response = $ionicPushApi->notifications->sendNotification($token); // ...to some devices
+
+
+                $response = $ionicPushApi->notifications->sendNotification($tokens); // ...to some devices
+		
 
                 if($response)
-                    $stats['successful'] += 1;
+                    $stats['successful'] += count($tokens);
                 else
-                    $stats['failed'] += 1;
+                    $stats['failed'] += count($tokens);
 
             } catch (RequestException $e) {
-                $stats['failed'] += 1;
+                $stats['failed'] += count($tokens);
             }
-        }
+      }
 
         return $stats;
     }

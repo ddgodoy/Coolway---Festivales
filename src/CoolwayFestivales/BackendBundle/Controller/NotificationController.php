@@ -539,13 +539,15 @@ class NotificationController extends Controller
      */
     public function notificationSendTestAction()
     {
+	$ionicToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmYzQ3Nzg3OS1mMDI0LTQ5ODAtYWMyMS1jNDk0NDExZWY2YjIifQ.zf2VbRWhyNctqOSSlgDfM4hhSOoiQ95ndZH8HfkGf1Y';
+	$ionicProfile = 'dev';
+
 	$tokens = [
-		'cpinilv5PFQ:APA91bEGOppRSsa4OxXYwgB4AvcxtCvgHeMxQqGXOE1B20GArV9f-dFpg6UI5j6SNGlpOHxhYGelXcjbSm24Y4CnrMvCdsAQW8mg1xGDMOdLtKUeb4ruK3r6VvUazt8flgkMW9KEgXJ7',
-		'efBRMrVM44s:APA91bFu8NDTAEQzAwyavzFdfqIYCyQICBd3Q_p8x_wQjfvVHRghItYdgf6nZj2RWRYmsWz0WHUqeX7wGg6nrqr--OWwIE63XfjTPwxm0ud41CExkpVqlGyJjtNQ2slrPFZtrAJ1oTxf'
+		'fE7mXfgIetg:APA91bGgIwH2va_vAJu8KKjKIMqQKJF7xASm_vJDuZQ219GlOYnyuP7zKnv09GVZJMF794lv1uN9jEDBJZTSifnqk1mLAxWYtug5i4E_aA8i-eDNt7eK7205Bvlx2vCMB3BsBjU8DnU9'
 	];
 
-	    $ionic = $this->get('push_notification.ionic');
-        $response = $ionic->sendNotification($tokens, 'test from php', 'testing service php');
+	$ionic = $this->get('push_notification.ionic');
+        $response = $ionic->sendNotification($ionicToken, $ionicProfile, $tokens, 'test from php', 'testing service php');
 
         print_r($response);
 
