@@ -389,38 +389,18 @@ class NotificationController extends Controller
 
         if ($notification) {
 
-            $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast' => $notification->getFeast()->getId()));
-            $tokens = array();
-
-            foreach ($devices as $device) {
-                $tokens[] = $device->getToken();
-            }
-
-            $stats = array();
-            $stats["total"] = 0;
-            $stats["successful"] = 0;
-            $stats["failed"] = 0;
-
-
             $ionicToken = $notification->getFeast()->getToken();
             $ionicProfile = $notification->getFeast()->getProfile();
 
-            if (sizeof($tokens) > 0 && isset($ionicToken)) {
+            if (isset($ionicToken)) {
                 $ionic = $this->get('push_notification.ionic');
-                $stats = $ionic->sendNotification($ionicToken, $ionicProfile, $tokens, $notification->getName(), $notification->getText());
+                $stats = $ionic->sendNotification(
+                        $ionicToken,
+                        $ionicProfile,
+                        array(),
+                        $notification->getName(),
+                        $notification->getText());
             }
-
-            if (count($stats) > 0) {
-                $statsObj = new NotificationStats();
-                $statsObj->setNotification($notification);
-                $statsObj->setTotalDevices($stats["total"]);
-                $statsObj->setSuccessful($stats["successful"]);
-                $statsObj->setFailed($stats["failed"]);
-                $statsObj->setSent(new \DateTime("now"));
-                $em->persist($statsObj);
-                $notification->setDelivery(true);
-            } else
-                $notification->setDelivery(false);
 
             $notification->setSend(true);
             $em->persist($notification);
@@ -443,42 +423,18 @@ class NotificationController extends Controller
         foreach ($notifications as $notification) {
             if ($notification) {
 
-                $devices = $em->getRepository('SafetyBundle:Device')->findBy(array('feast' => $notification->getFeast()->getId()));
-                $tokens = array();
-
-                foreach ($devices as $device) {
-                    $tokens[] = $device->getToken();
-                }
-
-                $stats = array();
-                $stats["total"] = 0;
-                $stats["successful"] = 0;
-                $stats["failed"] = 0;
-
                 $ionicToken = $notification->getFeast()->getToken();
                 $ionicProfile = $notification->getFeast()->getProfile();
 
-                if (sizeof($tokens) > 0 && isset($ionicToken)) {
+                if (isset($ionicToken)) {
                     $ionic = $this->get('push_notification.ionic');
                     $stats = $ionic->sendNotification(
                         $ionicToken,
                         $ionicProfile,
-                        $tokens,
+                        array(),
                         $notification->getName(),
                         $notification->getText());
                 }
-
-                if (count($stats) > 0 ) {
-                    $statsObj = new NotificationStats();
-                    $statsObj->setNotification($notification);
-                    $statsObj->setTotalDevices($stats["total"]);
-                    $statsObj->setSuccessful($stats["successful"]);
-                    $statsObj->setFailed($stats["failed"]);
-                    $statsObj->setSent(new \DateTime("now"));
-                    $em->persist($stats);
-                    $notification->setDelivery(true);
-                } else
-                    $notification->setDelivery(false);
 
                 $notification->setSend(true);
                 $em->persist($notification);
