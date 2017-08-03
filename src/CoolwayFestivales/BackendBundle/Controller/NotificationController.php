@@ -419,12 +419,13 @@ class NotificationController extends Controller
         ini_set('memory_limit','2G');
         $em = $this->getDoctrine()->getManager();
         $notifications = $em->getRepository('BackendBundle:Notification')->findForBatch();
-
+		print_r(count($notifications));
+		die('aaa');
         foreach ($notifications as $notification) {
-            if ($notification) {
-
-                $ionicToken = $notification->getFeast()->getToken();
+           	$ionicToken = $notification->getFeast()->getToken();
                 $ionicProfile = $notification->getFeast()->getProfile();
+		print_r($notification->getName());
+		die('aaa');
 
                 if (isset($ionicToken)) {
                     $ionic = $this->get('push_notification.ionic');
@@ -434,12 +435,12 @@ class NotificationController extends Controller
                         array(),
                         $notification->getName(),
                         $notification->getText());
+		       $notification->setSend(true);
+		       $em->persist($notification);
+		       $em->flush();
                 }
 
-                $notification->setSend(true);
-                $em->persist($notification);
-                $em->flush();
-            }
+ 
         }
 
 
